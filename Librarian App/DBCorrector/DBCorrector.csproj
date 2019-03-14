@@ -8,12 +8,10 @@
 
   <ItemGroup>
     <None Remove="#settings.cmd" />
-    <None Remove="%24make.cmd" />
+    <None Remove="%24create_structure.cmd" />
     <None Remove="build_d.cmd" />
     <None Remove="build_n_run_d.cmd" />
     <None Remove="build_n_run_r.cmd" />
-    <None Remove="build_n_start_d.cmd" />
-    <None Remove="build_n_start_r.cmd" />
     <None Remove="build_r.cmd" />
     <None Remove="clean_all.cmd" />
     <None Remove="clean_rebuild_d.cmd" />
@@ -21,13 +19,9 @@
     <None Remove="rebuild_d.cmd" />
     <None Remove="rebuild_n_run_d.cmd" />
     <None Remove="rebuild_n_run_r.cmd" />
-    <None Remove="rebuild_n_start_d.cmd" />
-    <None Remove="rebuild_n_start_r.cmd" />
     <None Remove="rebuild_r.cmd" />
     <None Remove="run_d.cmd" />
     <None Remove="run_r.cmd" />
-    <None Remove="start_d.cmd" />
-    <None Remove="start_r.cmd" />
   </ItemGroup>
 
   <ItemGroup>

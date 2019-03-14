@@ -2,5 +2,5 @@
 
 namespace DBCorrector
 {
-    enum UtilityCommand { Make = 1 }
+    enum UtilityCommand { CreateStructure = 1 }
 }

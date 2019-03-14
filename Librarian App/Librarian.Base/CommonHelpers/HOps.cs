@@ -25,6 +25,15 @@ public static T Exchange<T>(ref T variable,T newValue) where T: class
    T prev = variable; variable = newValue; return prev;
 }
 
+public static bool IsOneOf([HOptional] object obj,params object[] objects)
+{
+   HArgChecking.VerifyNotNull( objects );
+   foreach (object o in objects)
+      if ( object.Equals( o, obj ) )
+         return true;
+   return false;
+}
+
 /// <exception cref="ArgumentNullException" />
 public static bool Try(Action action)
 {

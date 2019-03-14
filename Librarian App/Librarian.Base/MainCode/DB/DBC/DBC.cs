@@ -17,9 +17,12 @@ namespace Librarian.DB
 
         public DbSet<User_Item> Users { get; set; }
 
-        public DBC()
+        public DBC(): this( true )
+        {}
+        public DBC(bool ensureCreated)
         {
-            Database.EnsureCreated();
+            if ( ensureCreated )
+                Database.EnsureCreated();
         }
 
         /// <exception cref="InvalidOperationException" />

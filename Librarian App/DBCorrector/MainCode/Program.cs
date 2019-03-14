@@ -11,26 +11,36 @@ namespace DBCorrector
         static readonly string
             AssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
         static string
-            ServerName, DatabaseName;
+            ServerName, DatabaseName, CommandName, CommandParameter;
         static UtilityCommand
             Command;
 
         static void PrintSyntax()
         {
+            HConsole.PrintIntensive(
+               "=== Синтаксис: ===" );
             HConsole.PrintExpressive(
-               "Синтаксис: {0} \"<сервер>\" \"<БД>\" \"<команда>\"",
+               "{0} \"<сервер>\" \"<БД>\" \"<команда>\" \"[параметр команды]\"",
                AssemblyName );
             HConsole.PrintIntensive(
                "=== Список команд (не чувствительно к регистру): ===" );
             HConsole.PrintExpressive(
                "{0} {1} создание БД (\"Database.EnsureCreated\")",
-               UtilityCommand.Make, HConsole.LongDash );
+               UtilityCommand.CreateStructure, HConsole.LongDash );
+            HConsole.PrintIntensive(
+               "=== Примеры команд: ===" );
+            HConsole.Print(
+               "DBCorrector \"(localdb)\\MSSQLLocalDB\" \"Librarian\" \"{0}\"",
+               UtilityCommand.CreateStructure );
         }
 
         static int Main(string[] args)
         {
             HProgram.SpecifyMainThread(); // указать главный поток для библиотеки CommonHelpers
             Console.Title = AssemblyName;
+
+            AppDomain.CurrentDomain.UnhandledException += AppDomainUnhandledException_Handler;
+            Console.CancelKeyPress += Console_CancelKeyPress;
 
             HConsole.PrintIntensive( $"*** УТИЛИТА [{AssemblyName.ToUpper()}]: ***" );
 
@@ -39,26 +49,28 @@ namespace DBCorrector
                 PrintSyntax();
                 return 0; // нет ошибки
             }
-            if ( args.Length != 3 )
+            if ( !HOps.IsOneOf( args.Length, 3, 4 ) )
             {
-                HConsole.PrintError( "Ожидалось 3 параметра (в аргументах командной строки)." );
+                HConsole.PrintError(
+                    "Ожидалось 3 либо 4 параметра (в аргументах командной строки)." );
                 goto INCORRECT_CMD;
             }
-            ServerName = args[ 0 ].Trim();
-            DatabaseName = args[ 1 ].Trim();
-            string commandName = args[ 2 ].Trim();
-            if ( ServerName=="" || DatabaseName=="" || commandName=="" )
+            ServerName  = args[ 0 ].Trim();
+            DatabaseName= args[ 1 ].Trim();
+            CommandName = args[ 2 ].Trim();
+            CommandParameter = args.Length>=4 ? args[ 3 ].Trim() : null;
+            if ( ServerName=="" || DatabaseName=="" || CommandName=="" || CommandParameter=="" )
             {
-                HConsole.PrintError( "Пустые параметры (в аргументах командной строки)" );
+                HConsole.PrintError( "Пустые параметры (в аргументах командной строки)." );
                 goto INCORRECT_CMD;
             }
 
-            if ( commandName.Equals( UtilityCommand.Make.ToString(),
+            if ( CommandName.Equals( UtilityCommand.CreateStructure.ToString(),
                                      StringComparison.InvariantCultureIgnoreCase ) )
-                Command = UtilityCommand.Make;
+                Command = UtilityCommand.CreateStructure;
             else
             {
-                HConsole.PrintError( $"Неопознанная команда: \"{commandName}\"." );
+                HConsole.PrintError( $"Неопознанная команда: \"{CommandName}\"." );
                 goto INCORRECT_CMD;
             }
 
