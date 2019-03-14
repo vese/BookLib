@@ -1,0 +1,61 @@
+﻿<Project InitialTargets="_VerifyProperties_" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!--=============================================================================================-->
+<PropertyGroup>
+   <_ProductName_>DBCorrector App</_ProductName_>
+   <_ProductTitle_>Приложение DBCorrector</_ProductTitle_>
+   <Product>$(_ProductTitle_)</Product>
+   <Product Condition=" '$(Configuration)' == 'Debug' ">$(Product) (Debug)</Product>
+   <Product Condition=" '$(Configuration)' == 'Release' ">$(Product) (Release)</Product>
+</PropertyGroup>
+<!--=============================================================================================-->
+<!--<Import Project="$(MSBuildProjectName).codegen.props" />-->
+<!--=============================================================================================-->
+<PropertyGroup>
+   <_BinaryRootFolder_>bin</_BinaryRootFolder_>
+   <_ObjectRootFolder_>obj</_ObjectRootFolder_>
+
+   <_FrameworkFolderName_>netcoreapp2.1</_FrameworkFolderName_>
+
+   <_OutputFolder_Debug_>$(_BinaryRootFolder_)\Debug\$(_FrameworkFolderName_)</_OutputFolder_Debug_>
+   <_OutputFolder_Release_>$(_ObjectRootFolder_)\Release\$(_FrameworkFolderName_)</_OutputFolder_Release_>
+
+   <_VSCacheFolder_>$(MSBuildProjectDirectory)\.vs</_VSCacheFolder_>
+
+   <_RemoveVSCacheFolderOnCleanup_ />
+   <!--<_RemoveVSCacheFolderOnCleanup_>False</_RemoveVSCacheFolderOnCleanup_>-->
+   <_RemoveVSCacheFolderOnCleanup_ Condition=" '$(_RemoveVSCacheFolderOnCleanup_)' == '' ">True</_RemoveVSCacheFolderOnCleanup_>
+</PropertyGroup>
+<PropertyGroup>
+   <_OutputFolder_ />
+   <_OutputFolder_ Condition=" '$(Configuration)' == 'Debug' ">$(_OutputFolder_Debug_)</_OutputFolder_>
+   <_OutputFolder_ Condition=" '$(Configuration)' == 'Release' ">$(_OutputFolder_Release_)</_OutputFolder_>
+</PropertyGroup>
+<!--=============================================================================================-->
+
+<ItemGroup>
+   <_CleanAll_Folders_
+      Condition="Exists('$(_BinaryRootFolder_)')"
+      Include="$(_BinaryRootFolder_)" />
+   <_CleanAll_Folders_
+      Condition="Exists('$(_ObjectRootFolder_)')"
+      Include="$(_ObjectRootFolder_)" />
+   <_CleanAll_Folders_
+      Condition=" '$(_RemoveVSCacheFolderOnCleanup_)' == 'True' AND Exists( '$(_VSCacheFolder_)' ) "
+      Include="$(_VSCacheFolder_)" />
+</ItemGroup>
+
+<!--=============================================================================================-->
+<Target Name="_VerifyProperties_">
+<!--
+   <Error Condition=" '$(_XProperty_)' != '' "
+          Text="Property &quot;_XProperty_&quot; was not defined." />
+   <Error
+      Condition=" '$(XVariable)' != '' "
+      Text="Environment variable &quot;XVariable&quot; was not defined." />
+   <Error
+      Condition=" '$(XVariable)' != '1' "
+      Text="Not defined flag property: &quot;XVariable&quot; (environment variable)." />
+-->
+</Target>
+<!--=============================================================================================-->
+</Project>

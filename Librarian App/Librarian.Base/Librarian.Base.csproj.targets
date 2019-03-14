@@ -1,0 +1,76 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!--=============================================================================================-->
+<Import Project="$(MSBuildProjectFile).props" />
+<Import Project="$(MSBuildProjectName).codegen.targets" />
+<!--=============================================================================================-->
+<Target Name="BeforeRebuild" DependsOnTargets="_PreBuildAction_" />
+<Target Name="AfterBuild" DependsOnTargets="_PostBuildAction_" />
+<Target Name="Clean" DependsOnTargets="_CleanAssemblyReferences_" />
+<!--=============================================================================================-->
+
+<Target Name="_CleanAll_">
+   <RemoveDir
+      Directories="@(_CleanAll_Folders_)" />
+   <Delete
+      Files="@(_CleanAll_Files_)" />
+</Target>
+
+<Target
+   Name="_CleanAssemblyReferences_"
+   Condition=" '@(_CleanAssemblyReferences_Files_)' != '' ">
+   <Message
+      Text="* Removing files from assembly reference folder ..."
+      Importance="high" />
+   <Delete
+      Files="@(_CleanAssemblyReferences_Files_)" />
+</Target>
+
+<!--=============================================================================================-->
+
+<Target Name="_VerifyBuildParameters_">
+   <Error Condition=" '$(Platform)' == '' "
+          Text="Project property was not specified: &quot;Platform&quot;." />
+   <Error Condition=" '$(Configuration)' == '' "
+          Text="Project property was not specified: &quot;Configuration&quot;." />
+</Target>
+
+<!--=============================================================================================-->
+
+<Target
+   Name="_CopyFilesToAssemblyReferenceFolder_"
+   Condition=" '$(_AssemblyReferenceFolder_)' != '' AND
+               '@(_CopyFilesToAssemblyReferenceFolder_Files_)' != '' ">
+   <Error Condition=" !Exists( '$(_AssemblyReferenceFolder_)' ) "
+          Text="Assembly reference folder not found: &quot;$(_AssemblyReferenceFolder_)&quot;." />
+   <Message
+      Text="* Copying output files to assembly ferefence folder ..."
+      Importance="high" />
+   <Copy
+      SourceFiles='@(_CopyFilesToAssemblyReferenceFolder_Files_)'
+      DestinationFolder='$(_AssemblyReferenceFolder_)' />
+</Target>
+
+<Target
+   Name="_CopyFilesToApplicationOutputFolder_"
+   Condition=" '$(_ApplicationOutputFolder_)' != '' AND
+               '@(_CopyFilesToApplicationOutputFolder_Files_)' != '' AND
+               Exists( '$(_ApplicationOutputFolder_)' ) ">
+   <Message
+      Text="* Copying output files to application output folder ..."
+      Importance="high" />
+   <Copy
+      SourceFiles='@(_CopyFilesToApplicationOutputFolder_Files_)'
+      DestinationFolder='$(_ApplicationOutputFolder_)' />
+</Target>
+
+<!--=============================================================================================-->
+
+<Target
+   Name="_PreBuildAction_"
+   DependsOnTargets="_VerifyBuildParameters_;_CleanAssemblyReferences_;_GenerateCode_" />
+<Target
+   Name="_PostBuildAction_"
+   DependsOnTargets="_VerifyBuildParameters_;_CopyFilesToAssemblyReferenceFolder_;_CopyFilesToApplicationOutputFolder_" />
+
+<!--=============================================================================================-->
+</Project>

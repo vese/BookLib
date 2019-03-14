@@ -1,0 +1,61 @@
+﻿<!--================================================================================================
+## PROPERTIES FOR AUTOMATIC CODE GENERATION
+## ___ Result files (“Properties” subfolder): ___
+## "Librarian_Base_Info.auto.cs"
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!--=============================================================================================-->
+<PropertyGroup>
+   <_OutputFileName_Librarian_Base_Info_>Librarian_Base_Info.auto.cs</_OutputFileName_Librarian_Base_Info_>
+   <!--<_OutputFileName_XValues_>XValues.auto.cs</_OutputFileName_XValues_>-->
+
+   <!--<_MetaOutputFolder_>META</_MetaOutputFolder_>-->
+
+   <_OutputFile_Librarian_Base_Info_CS_>Properties\$(_OutputFileName_Librarian_Base_Info_)</_OutputFile_Librarian_Base_Info_CS_>
+   <!--<_OutputFile_XValues_CS_>$(_MetaOutputFolder_)\$(_OutputFileName_XValues_)</_OutputFile_XValues_CS_>-->
+</PropertyGroup>
+<ItemGroup>
+   <!--<_CopyFilesToMetaOutputFolder_Files_ Include="$(MSBuildProjectDirectory)\xfile.x" />-->
+</ItemGroup>
+<!--=============================================================================================-->
+<Import Project="Librarian_Base_Info.cs.props" />
+<!--<Import Project="XValues.cs.props" />-->
+<!--=============================================================================================-->
+<PropertyGroup>
+<_CSAutogenComments_>//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+// This code file is generated automatically (by scripts of Librarian.Base project).
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</_CSAutogenComments_>
+</PropertyGroup>
+<!--=============================================================================================-->
+<ItemGroup>
+   <_Librarian_Base_Info_CS_ Include="x">
+      <Text>$(_CSAutogenComments_)$(_Librarian_Base_Info_CS_)</Text>
+   </_Librarian_Base_Info_CS_>
+<!--
+   <_XValues_CS_ Include="x">
+      <Text>$(_CSAutogenComments_)$(_XValues_CS_)</Text>
+   </_XValues_CS_>
+-->
+</ItemGroup>
+<!--=============================================================================================-->
+<Target Name="_VerifyProperties_">
+   <Error Condition=" '$(_ProductName_)' != '' "
+          Text="Property &quot;_ProductName_&quot; was not defined." />
+   <Error Condition=" '$(_ProductTitle_)' != '' "
+          Text="Property &quot;_ProductTitle_&quot; was not defined." />
+   <Error Condition=" '$(Version)' != '' "
+          Text="Property &quot;Version&quot; was not defined." />
+   <Error Condition=" '$(TargetFramework)' != '' "
+          Text="Property &quot;TargetFramework&quot; was not defined." />
+   <Error Condition=" '$(Description)' != '' "
+          Text="Property &quot;Description&quot; was not defined." />
+   <Error Condition=" '$(Company)' != '' "
+          Text="Property &quot;Company&quot; was not defined." />
+   <Error Condition=" '$(Authors)' != '' "
+          Text="Property &quot;Authors&quot; was not defined." />
+   <Error Condition=" '$(Copyright)' != '' "
+          Text="Property &quot;Copyright&quot; was not defined." />
+</Target>
+<!--=============================================================================================-->
+</Project>

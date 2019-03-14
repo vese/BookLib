@@ -1,0 +1,47 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!--=============================================================================================-->
+
+<Target
+   Name="_GenerateFile_Librarian_Base_Info_CS_">
+   <Message
+      Text="* Generating file: &quot;$(_OutputFile_Librarian_Base_Info_CS_)&quot; ..."
+      Importance="high" />
+   <WriteLinesToFile
+      File="$(_OutputFile_Librarian_Base_Info_CS_)"
+      Lines="@(_Librarian_Base_Info_CS_->'%(Text)')"
+      Encoding="UTF-8"
+      Overwrite="True" />
+</Target>
+<!--
+<Target
+   Name="_GenerateFile_XValues_CS_">
+   <Message
+      Text="* Generating file: &quot;$(_XValues_CS_File_)&quot; ..."
+      Importance="high" />
+   <WriteLinesToFile
+      File="$(_XValues_CS_File_)"
+      Lines="@(_XValues_CS_->'%(Text)')"
+      Encoding="UTF-8"
+      Overwrite="True" />
+</Target>
+-->
+
+<Target
+   Name="_CopyFilesToMetaOutputFolder_"
+   Condition=" '$(_MetaOutputFolder_)' != '' AND
+               '@(_CopyFilesToMetaOutputFolder_Files_)' != '' ">
+   <Message
+      Text="* Copying files to meta output folder ..."
+      Importance="high" />
+   <Copy
+      SourceFiles='@(_CopyFilesToMetaOutputFolder_Files_)'
+      DestinationFolder='$(_MetaOutputFolder_)' />
+</Target>
+
+<Target
+   Name="_GenerateCode_"
+   DependsOnTargets=" _GenerateFile_Librarian_Base_Info_CS_;
+                      _CopyFilesToMetaOutputFolder_ " />
+
+<!--=============================================================================================-->
+</Project>

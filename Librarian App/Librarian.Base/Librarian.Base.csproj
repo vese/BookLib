@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Description>Базовый модуль приложения Librarian</Description>
+    <Authors>Веселов, Китаев, Перов, Чиркин</Authors>
+    <Copyright></Copyright>
+    <Company>Релэкс</Company>
+    <Version>2019.03.14.0</Version>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <RootNamespace>Librarian.Base</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <NoWarn>1701;1702;1591;3021</NoWarn>
+    <DefineConstants>TRACE;RELEASE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>Librarian.Base.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591;3021</NoWarn>
+    <DefineConstants></DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="#settings.cmd" />
+    <None Remove="build_d.cmd" />
+    <None Remove="build_r.cmd" />
+    <None Remove="clean_all.cmd" />
+    <None Remove="clean_rebuild_d.cmd" />
+    <None Remove="clean_rebuild_r.cmd" />
+    <None Remove="generate_code.cmd" />
+    <None Remove="rebuild_d.cmd" />
+    <None Remove="rebuild_r.cmd" />
+  </ItemGroup>
+
+</Project>
