@@ -104,11 +104,6 @@
         <member name="M:CommonHelpers.HThread.Sleep(System.TimeSpan)">
             <exception cref="T:System.ArgumentOutOfRangeException" />
         </member>
-        <member name="T:Librarian.DB.DBConstants">
-            <summary>
-            Различные константные характеристики БД (размеры, длины, и.т.п.)
-            </summary>
-        </member>
         <member name="T:Librarian.DB.DBC">
             <summary>
             Контекст базы данных
@@ -125,6 +120,16 @@
         <member name="T:Librarian.DB.User_Item">
             <summary>
             Пользователи системы
+            </summary>
+        </member>
+        <member name="T:Librarian.DB.DBConstants">
+            <summary>
+            Различные константные характеристики БД (размеры, длины, и.т.п.)
+            </summary>
+        </member>
+        <member name="T:Librarian.DB.DBTableNames">
+            <summary>
+            Имена таблиц в SQL
             </summary>
         </member>
         <member name="M:Librarian.OpFailedExceptionCreator.Do(System.Action)">

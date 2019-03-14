@@ -14,11 +14,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Релэкс")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Базовый модуль приложения Librarian")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("2019.3.14.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2019.03.14.0")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("2019.3.14.1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2019.03.14.1")]
 [assembly: System.Reflection.AssemblyProductAttribute("Модуль Librarian.Base (Debug)")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Librarian.Base")]
-[assembly: System.Reflection.AssemblyVersionAttribute("2019.3.14.0")]
+[assembly: System.Reflection.AssemblyVersionAttribute("2019.3.14.1")]
 
 // Создано классом WriteCodeFragment MSBuild.
 

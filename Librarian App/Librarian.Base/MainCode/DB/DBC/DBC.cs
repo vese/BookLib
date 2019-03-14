@@ -25,6 +25,13 @@ namespace Librarian.DB
                 Database.EnsureCreated();
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User_Item>()
+                .Property(p => p.CreationDate)
+                .HasDefaultValueSql("GETDATE()");
+        }
+
         /// <exception cref="InvalidOperationException" />
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

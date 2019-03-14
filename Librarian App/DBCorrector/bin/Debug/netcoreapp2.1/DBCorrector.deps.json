@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "07afe23e5023dd058d8e70c94c8bbcfdfbb1ac54"
+    "signature": "86b8c8de6392bfbee6a2b61836be1d2158e28969"
   },
   "compilationOptions": {},
   "targets": {
@@ -9,12 +9,14 @@
       "DBCorrector/1.0.0": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore.SqlServer": "2.2.3",
-          "Librarian.Base": "2019.3.14.0"
+          "Microsoft.EntityFrameworkCore.Tools": "2.2.3",
+          "Librarian.Base": "2019.3.14.1"
         },
         "runtime": {
           "DBCorrector.dll": {}
         }
       },
+      "Microsoft.CSharp/4.5.0": {},
       "Microsoft.EntityFrameworkCore/2.2.3": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Abstractions": "2.2.3",
@@ -44,6 +46,18 @@
         }
       },
       "Microsoft.EntityFrameworkCore.Analyzers/2.2.3": {},
+      "Microsoft.EntityFrameworkCore.Design/2.2.3": {
+        "dependencies": {
+          "Microsoft.CSharp": "4.5.0",
+          "Microsoft.EntityFrameworkCore.Relational": "2.2.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Design.dll": {
+            "assemblyVersion": "2.2.3.0",
+            "fileVersion": "2.2.3.19047"
+          }
+        }
+      },
       "Microsoft.EntityFrameworkCore.Relational/2.2.3": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "2.2.3"
@@ -65,6 +79,11 @@
             "assemblyVersion": "2.2.3.0",
             "fileVersion": "2.2.3.19047"
           }
+        }
+      },
+      "Microsoft.EntityFrameworkCore.Tools/2.2.3": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Design": "2.2.3"
         }
       },
       "Microsoft.Extensions.Caching.Abstractions/2.2.0": {
@@ -501,11 +520,11 @@
           "System.Runtime": "4.1.0"
         }
       },
-      "Librarian.Base/2019.3.14.0": {
+      "Librarian.Base/2019.3.14.1": {
         "runtime": {
           "Librarian.Base.dll": {
-            "assemblyVersion": "2019.3.14.0",
-            "fileVersion": "2019.3.14.0"
+            "assemblyVersion": "2019.3.14.1",
+            "fileVersion": "2019.3.14.1"
           }
         }
       }
@@ -516,6 +535,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Microsoft.CSharp/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-EGoBmf3Na2ppbhPePDE9PlX81r1HuOZH5twBrq7couJZiPTjUnD3648balerQJO6EJ8Sj+43+XuRwQ7r+3tE3w==",
+      "path": "microsoft.csharp/4.5.0",
+      "hashPath": "microsoft.csharp.4.5.0.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore/2.2.3": {
       "type": "package",
@@ -538,6 +564,13 @@
       "path": "microsoft.entityframeworkcore.analyzers/2.2.3",
       "hashPath": "microsoft.entityframeworkcore.analyzers.2.2.3.nupkg.sha512"
     },
+    "Microsoft.EntityFrameworkCore.Design/2.2.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ieO8DTCxp5fe39pv0C8UljOqRVyeYgNNB52vkwYyTIZdPnjEVbTot4GsubHy3JspmvG09uYgU64Ll9/LYDjkiA==",
+      "path": "microsoft.entityframeworkcore.design/2.2.3",
+      "hashPath": "microsoft.entityframeworkcore.design.2.2.3.nupkg.sha512"
+    },
     "Microsoft.EntityFrameworkCore.Relational/2.2.3": {
       "type": "package",
       "serviceable": true,
@@ -551,6 +584,13 @@
       "sha512": "sha512-IeUcuu+Jmj73L0zhNNHy7WUuiM7Dq42Sm9xDub6TCj3nfFhMUR+1XQhzcKTveTRHf6l+0maArEtQ2VU5jvbUZA==",
       "path": "microsoft.entityframeworkcore.sqlserver/2.2.3",
       "hashPath": "microsoft.entityframeworkcore.sqlserver.2.2.3.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.Tools/2.2.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-p0MeXtESRNYKhQXWSnODoI3aQQYgZT5XVo1KDuXOsAyPtAbe0QGwXm4efGE4F1FqfaRU8wGsHRsk3V0E9zQFPw==",
+      "path": "microsoft.entityframeworkcore.tools/2.2.3",
+      "hashPath": "microsoft.entityframeworkcore.tools.2.2.3.nupkg.sha512"
     },
     "Microsoft.Extensions.Caching.Abstractions/2.2.0": {
       "type": "package",
@@ -888,7 +928,7 @@
       "path": "system.threading.tasks/4.0.11",
       "hashPath": "system.threading.tasks.4.0.11.nupkg.sha512"
     },
-    "Librarian.Base/2019.3.14.0": {
+    "Librarian.Base/2019.3.14.1": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

@@ -14,7 +14,7 @@ namespace DBCorrector
         static void CreateStructure_Command()
         {
             if ( CommandParameter != null )
-               ThrowCommandParamsNotSupportedError();
+               ThrowCommandParamsNotSupported();
             PrintOperation( "Создание структуры данных (\"Database.EnsureCreated\")" );
             try
             {

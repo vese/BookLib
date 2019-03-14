@@ -25,13 +25,19 @@ namespace DBCorrector
             HConsole.PrintIntensive(
                "=== Список команд (не чувствительно к регистру): ===" );
             HConsole.PrintExpressive(
-               "{0} {1} создание БД (\"Database.EnsureCreated\")",
+               "{0} {1} создание структуры БД (\"Database.EnsureCreated\")",
                UtilityCommand.CreateStructure, HConsole.LongDash );
+            HConsole.PrintExpressive(
+               "{0} {1} уничтожение структуры БД; параметр: [NotInTransaction]",
+               UtilityCommand.DestroyStructure, HConsole.LongDash );
             HConsole.PrintIntensive(
                "=== Примеры команд: ===" );
             HConsole.Print(
                "DBCorrector \"(localdb)\\MSSQLLocalDB\" \"Librarian\" \"{0}\"",
                UtilityCommand.CreateStructure );
+            HConsole.Print(
+               "DBCorrector \"(localdb)\\MSSQLLocalDB\" \"Librarian\" \"{0}\"",
+               UtilityCommand.DestroyStructure );
         }
 
         static int Main(string[] args)
@@ -65,10 +71,9 @@ namespace DBCorrector
                 goto INCORRECT_CMD;
             }
 
-            if ( CommandName.Equals( UtilityCommand.CreateStructure.ToString(),
-                                     StringComparison.InvariantCultureIgnoreCase ) )
-                Command = UtilityCommand.CreateStructure;
-            else
+            if (!(
+                MatchCommad( UtilityCommand.CreateStructure ) ||
+                MatchCommad( UtilityCommand.DestroyStructure ) ))
             {
                 HConsole.PrintError( $"Неопознанная команда: \"{CommandName}\"." );
                 goto INCORRECT_CMD;
@@ -99,6 +104,14 @@ namespace DBCorrector
 INCORRECT_CMD:
             PrintSyntax();
             return 1; // ошибка
+        }
+
+        static bool MatchCommad(UtilityCommand command)
+        {
+            bool rslt = CommandName.Equals( command.ToString(),
+                StringComparison.OrdinalIgnoreCase );
+            if ( rslt ) Command = command;
+            return rslt;
         }
 
         static void AppDomainUnhandledException_Handler( object sender,

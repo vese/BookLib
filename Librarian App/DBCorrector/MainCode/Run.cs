@@ -26,6 +26,9 @@ namespace DBCorrector
                 case UtilityCommand.CreateStructure:
                     CreateStructure_Command();
                     break;
+                case UtilityCommand.DestroyStructure:
+                    DestroyStructure_Command();
+                    break;
                 default:
                     throw new HDeadCodeBranchException();
                 }
@@ -37,6 +40,14 @@ namespace DBCorrector
                     throw new HAppFailureException( e.Message );
             }
             PrintDone();
+        }
+
+        /// <exception cref="HAppFailureException" />
+        static void ThrowNotImplementedCommand()
+        {
+            HConsole.PrintError( $"Команда \"{CommandName}\" не реализована." );
+            PrintSyntax();
+            throw new HAppFailureException(""); // ошибка уже распечатана
         }
 
         /// <exception cref="ArgumentNullException" />
@@ -55,19 +66,20 @@ namespace DBCorrector
         }
         /// <exception cref="ArgumentNullException" />
         /// <exception cref="HAppFailureException" />
-        static void ThrowCommandParamsNotSupportedError()
+        static void ThrowCommandParamsNotSupported()
         {
             ThrowCommandParametersError(
                 $"Команда \"{CommandName}\" не поддерживает параметров." );
         }
-        /// <exception cref="ArgumentNullException" />
+        /// <exception cref="InvalidOperationException" />
         /// <exception cref="HAppFailureException" />
-        static void ThrowIncorrectCommandParameter(string parameter)
+        static void ThrowIncorrectCommandParameter()
         {
-            HArgChecking.VerifyNotNull( parameter );
+            if ( CommandParameter == null )
+                throw new InvalidOperationException();
             ThrowCommandParametersError(
                 $"Некорректный параметр для команды \"{CommandName}\": "+
-                $"\"{parameter}\" (значение)." );
+                $"\"{CommandParameter}\" (значение)." );
         }
 
         static void PrintCommand()
@@ -82,6 +94,13 @@ namespace DBCorrector
         static void PrintDone()
         {
             HConsole.PrintExpressive( "Выполнено." );
+        }
+
+        /// <exception cref="HAppFailureException" />
+        static bool HasNotInTransactionParameter()
+        {
+            return CommandParameter.Equals( "NotInTransaction",
+                                            StringComparison.OrdinalIgnoreCase );
         }
     }
 }

@@ -11,12 +11,15 @@ namespace Librarian.DB
     /// <summary>
     /// Пользователи системы
     /// </summary>
-    [Table("Users")]
+    [Table(DBTableNames.Users)]
     public class User_Item
     {
        [Key]
        [Required]
        public Guid ID { get; set; }
+
+       [Required]
+       public DateTime CreationDate { get; set; }
 
        [Required]
        [Column(TypeName = DBConstants.NormalNameType_Expression)]
@@ -39,5 +42,7 @@ namespace Librarian.DB
 
        [Required]
        public bool IsActiveUser { get; set; }
+
+       public string ASPIdentity { get; set; }
     }
 }

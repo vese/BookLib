@@ -16,4 +16,11 @@ namespace Librarian.DB
         public const int TinyName_MaxLength = 10;
         public const string TinyNameType_Expression = "nvarchar(10)";
    }
+   /// <summary>
+   /// Имена таблиц в SQL
+   /// </summary>
+   public class DBTableNames
+   {
+       public const string Users = "Users";
+   }
 }
