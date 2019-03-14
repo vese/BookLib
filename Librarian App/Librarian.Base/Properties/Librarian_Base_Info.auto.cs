@@ -8,7 +8,7 @@ namespace Librarian.Base {
 
 //**************************************************************************************************
 /// <summary>
-/// Assembly information and related.
+/// Assembly information and related
 /// </summary>
 public static partial class Librarian_Base_Info {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

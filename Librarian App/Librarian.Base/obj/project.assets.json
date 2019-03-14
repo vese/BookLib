@@ -3621,11 +3621,11 @@
   "project": {
     "version": "2019.3.14",
     "restore": {
-      "projectUniqueName": "D:\\SERG_CS\\Librarian App\\Librarian.Base\\Librarian.Base.csproj",
+      "projectUniqueName": "D:\\SERG_CS\\booklib\\Librarian App\\Librarian.Base\\Librarian.Base.csproj",
       "projectName": "Librarian.Base",
-      "projectPath": "D:\\SERG_CS\\Librarian App\\Librarian.Base\\Librarian.Base.csproj",
+      "projectPath": "D:\\SERG_CS\\booklib\\Librarian App\\Librarian.Base\\Librarian.Base.csproj",
       "packagesPath": "C:\\Users\\Dmitrian\\.nuget\\packages\\",
-      "outputPath": "D:\\SERG_CS\\Librarian App\\Librarian.Base\\obj\\",
+      "outputPath": "D:\\SERG_CS\\booklib\\Librarian App\\Librarian.Base\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
