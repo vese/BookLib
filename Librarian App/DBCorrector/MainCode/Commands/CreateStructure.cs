@@ -18,7 +18,7 @@ namespace DBCorrector
             PrintOperation( "Создание структуры данных (\"Database.EnsureCreated\")" );
             try
             {
-               using (var db = new DBC())
+               using (var db = new DBC(true))
                {}
             }
             catch (Exception e)
