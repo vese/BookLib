@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="#settings.cmd" />
+    <None Remove="%24make.cmd" />
     <None Remove="build_d.cmd" />
     <None Remove="build_n_run_d.cmd" />
     <None Remove="build_n_run_r.cmd" />

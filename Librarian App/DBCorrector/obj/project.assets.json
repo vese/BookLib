@@ -3474,11 +3474,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\SERG_CS\\Librarian App\\DBCorrector\\DBCorrector.csproj",
+      "projectUniqueName": "D:\\SERG_CS\\booklib\\Librarian App\\DBCorrector\\DBCorrector.csproj",
       "projectName": "DBCorrector",
-      "projectPath": "D:\\SERG_CS\\Librarian App\\DBCorrector\\DBCorrector.csproj",
+      "projectPath": "D:\\SERG_CS\\booklib\\Librarian App\\DBCorrector\\DBCorrector.csproj",
       "packagesPath": "C:\\Users\\Dmitrian\\.nuget\\packages\\",
-      "outputPath": "D:\\SERG_CS\\Librarian App\\DBCorrector\\obj\\",
+      "outputPath": "D:\\SERG_CS\\booklib\\Librarian App\\DBCorrector\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
