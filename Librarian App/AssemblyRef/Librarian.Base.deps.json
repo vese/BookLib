@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.1": {
-      "Librarian.Base/2019.03.14.1": {
+      "Librarian.Base/2019.03.15.0": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore.SqlServer": "2.2.3",
           "Microsoft.EntityFrameworkCore.Tools": "2.2.3"
@@ -522,7 +522,7 @@
     }
   },
   "libraries": {
-    "Librarian.Base/2019.03.14.1": {
+    "Librarian.Base/2019.03.15.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

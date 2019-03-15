@@ -3619,7 +3619,7 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
-    "version": "1.0.0",
+    "version": "2019.3.15",
     "restore": {
       "projectUniqueName": "D:\\SERG_CS\\booklib\\Librarian App\\DBCorrector\\DBCorrector.csproj",
       "projectName": "DBCorrector",

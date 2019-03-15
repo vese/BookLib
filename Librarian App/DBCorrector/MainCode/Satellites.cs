@@ -5,6 +5,9 @@ namespace DBCorrector
     enum UtilityCommand
     {
         CreateStructure = 1,
-        DestroyStructure
+        DestroyStructure,
+        RecreateStructure,
+        DeleteData,
+        FillTest
     }
 }

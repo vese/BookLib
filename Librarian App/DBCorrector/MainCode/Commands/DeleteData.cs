@@ -13,7 +13,7 @@ namespace DBCorrector
     {
         /// <exception cref="HAppFailureException" />
         /// <exception cref="OperationFailedException" />
-        static void DestroyStructure_Command()
+        static void DeleteData_Command()
         {
             bool inTransaction = true;
             if ( CommandParameter != null )
@@ -21,16 +21,16 @@ namespace DBCorrector
                     inTransaction = false;
                 else
                     ThrowIncorrectCommandParameter();
-            DoDestroyStructure( inTransaction );
+            DoDeleteData( inTransaction );
         }
 
         /// <exception cref="OperationFailedException" />
-        static void DoDestroyStructure(bool inTransaction)
+        static void DoDeleteData(bool inTransaction)
         {
-            HConsole.PrintOperation( "Уничтожение структуры данных" );
+            HConsole.PrintOperation( "Удаление данных (очистка таблиц)" );
             QueryTextBuilder.Clear();
             AppendQueryLine( "BEGIN TRY" );
-            ComposeDropTablesScript();
+            ComposeDeleteTablesScript();
             AppendQueryLine( "END TRY" );
             AppendQueryLine( "BEGIN CATCH" );
             AppendQueryLine( "THROW" );
@@ -52,20 +52,13 @@ namespace DBCorrector
             }
         }
 
-        static void ComposeDropTablesScript()
+        static void ComposeDeleteTablesScript()
         {
-            AppendDropTable( DBTableNames.Users );
+            AppendDeleteTable( DBTableNames.Users );
         }
-
-        static void AppendQueryLine(string text)
+        static void AppendDeleteTable(string tableName)
         {
-            QueryTextBuilder.AppendLine( text );
-        }
-        static void AppendDropTable(string tableName)
-        {
-            QueryTextBuilder.AppendFormat(
-                "if OBJECT_ID('{0}','U') is not null drop table [{0}]",
-                tableName );
+            QueryTextBuilder.AppendFormat( "delete [{0}]", tableName );
             QueryTextBuilder.AppendLine();
         }
     }

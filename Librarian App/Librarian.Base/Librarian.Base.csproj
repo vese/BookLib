@@ -7,7 +7,7 @@
     <Authors>Веселов, Китаев, Перов, Чиркин</Authors>
     <Copyright></Copyright>
     <Company>Релэкс</Company>
-    <Version>2019.03.14.1</Version>
+    <Version>2019.03.15.0</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RootNamespace>Librarian.Base</RootNamespace>
   </PropertyGroup>

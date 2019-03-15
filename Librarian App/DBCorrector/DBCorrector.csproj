@@ -4,11 +4,22 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Description>Утилита DBCorrector (консольная программа)</Description>
+    <Authors>Веселов, Китаев, Перов, Чиркин</Authors>
+    <Copyright></Copyright>
+    <Company>Релэкс</Company>
+    <Version>2019.03.15.0</Version>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <RootNamespace>DBCorrector</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="#settings.cmd" />
     <None Remove="%24create_structure.cmd" />
+    <None Remove="%24delete_data.cmd" />
+    <None Remove="%24destroy_structure.cmd" />
+    <None Remove="%24fill_test_with_cleanup.cmd" />
+    <None Remove="%24recreate_structure.cmd" />
     <None Remove="build_d.cmd" />
     <None Remove="build_n_run_d.cmd" />
     <None Remove="build_n_run_r.cmd" />

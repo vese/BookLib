@@ -17,7 +17,7 @@ public const string
    AssemblyName         = "Librarian.Base",
    ModuleName           = "Librarian.Base.dll",
    ProductTitle         = "Модуль Librarian.Base",
-   VersionString        = "2019.03.14.1",
+   VersionString        = "2019.03.15.0",
    TargetFramework      = "netcoreapp2.1",
    CompanyName          = "Релэкс",
    ProductName          = "Librarian.Base DLL",
