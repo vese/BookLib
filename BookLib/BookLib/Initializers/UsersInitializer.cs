@@ -15,6 +15,8 @@ namespace BookLib.Initializers
             string adminPassword = "123456";
             string userName = "user";
             string userPassword = "123456";
+            string user1Name = "user1";
+            string user1Password = "123456";
             if (await roleManager.FindByNameAsync("admin") == null)
             {
                 await roleManager.CreateAsync(new IdentityRole("admin"));
@@ -36,6 +38,15 @@ namespace BookLib.Initializers
             {
                 ApplicationUser user = new ApplicationUser { UserName = userName };
                 IdentityResult result = await userManager.CreateAsync(user, userPassword);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, "user");
+                }
+            }
+            if (await userManager.FindByNameAsync(user1Name) == null)
+            {
+                ApplicationUser user = new ApplicationUser { UserName = user1Name };
+                IdentityResult result = await userManager.CreateAsync(user, user1Password);
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(user, "user");

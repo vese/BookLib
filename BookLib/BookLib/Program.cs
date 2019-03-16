@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using BookLib.Data;
 using BookLib.Initializers;
 using BookLib.Models.DBModels;
 using Microsoft.AspNetCore;
@@ -28,6 +29,9 @@ namespace BookLib
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     UsersInitializer.InitializeAsync(userManager, rolesManager).Wait();
+
+                    var context = services.GetRequiredService<ApplicationDbContext>();
+                    LibDataInitializer.Initialize(context);
                 }
                 catch (Exception ex)
                 {

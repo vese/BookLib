@@ -10,7 +10,7 @@ namespace BookLib.Data
     public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-
+        
         public virtual DbSet<Author> Author { get; set; }
         public virtual DbSet<Availability> Availability { get; set; }
         public virtual DbSet<Book> Book { get; set; }
@@ -27,6 +27,7 @@ namespace BookLib.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            
             modelBuilder.Entity<Author>(entity =>
             {
                 entity.Property(e => e.Name).IsRequired();
