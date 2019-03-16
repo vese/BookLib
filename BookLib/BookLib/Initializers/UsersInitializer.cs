@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BookLib.Models.DBModels;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace BookLib.Initializers
 {
     public class UsersInitializer
     {
-        public static async Task InitializeAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task InitializeAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             string adminName = "admin";
             string adminPassword = "123456";
@@ -24,7 +25,7 @@ namespace BookLib.Initializers
             }
             if (await userManager.FindByNameAsync(adminName) == null)
             {
-                IdentityUser admin = new IdentityUser { UserName = adminName };
+                ApplicationUser admin = new ApplicationUser { UserName = adminName };
                 IdentityResult result = await userManager.CreateAsync(admin, adminPassword);
                 if (result.Succeeded)
                 {
@@ -33,7 +34,7 @@ namespace BookLib.Initializers
             }
             if (await userManager.FindByNameAsync(userName) == null)
             {
-                IdentityUser user = new IdentityUser { UserName = userName };
+                ApplicationUser user = new ApplicationUser { UserName = userName };
                 IdentityResult result = await userManager.CreateAsync(user, userPassword);
                 if (result.Succeeded)
                 {

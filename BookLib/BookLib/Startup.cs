@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using BookLib.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using BookLib.Models.DBModels;
 
 namespace BookLib
 {
@@ -36,7 +37,7 @@ namespace BookLib
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(opt =>
+            services.AddDefaultIdentity<ApplicationUser>(opt =>
             {
                 opt.Password.RequiredLength = 6;   // минимальная длина
                 opt.Password.RequireNonAlphanumeric = false;   // требуются ли не алфавитно-цифровые символы
