@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 using BookLib.Models.DBModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookLib.Data
 {
-    public class ApplicationDbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
-        public ApplicationDbContext() { }
-        
-        public virtual ISet<Author> Author { get; set; }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
+        public virtual DbSet<Author> Author { get; set; }
         public virtual DbSet<Availability> Availability { get; set; }
         public virtual DbSet<Book> Book { get; set; }
         public virtual DbSet<BookOnHands> BookOnHands { get; set; }
