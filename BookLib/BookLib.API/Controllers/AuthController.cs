@@ -1,4 +1,5 @@
-﻿using BookLib.Models.DBModels;
+﻿using BookLib.Data.ViewModels;
+using BookLib.Models.DBModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -18,18 +19,13 @@ namespace BookLib.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public class AuthUser
-        {
-            public string Name { get; set; }
-            public string Pass { get; set; }
-        }
 
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody]AuthUser authUser, [FromServices]UserManager<ApplicationUser> userManager)
         {
             var user = userManager.FindByNameAsync(authUser.Name).Result;
-            if (await userManager.CheckPasswordAsync(user, authUser.Pass))
+            if (user == null || await userManager.CheckPasswordAsync(user, authUser.Pass))
             {
                 string role = (await userManager.GetRolesAsync(user)).FirstOrDefault();
                 var claims = new List<Claim>
@@ -76,7 +72,7 @@ namespace BookLib.API.Controllers
             return res;
         }
 
-        [Route("adm")]
+        [Route("admin")]
         [Authorize(Roles = "admin")]
         public ActionResult<string> GetAdm()
         {
