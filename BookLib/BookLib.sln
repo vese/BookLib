@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLib.Data", "BookLib.Dat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLib.Cons", "BookLib.Cons\BookLib.Cons.csproj", "{B8703E6D-D75E-4D76-81F8-C20DC0879C50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLib.API", "BookLib.API\BookLib.API.csproj", "{4112DBA2-085D-4DEA-A88E-CECB889531AC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B8703E6D-D75E-4D76-81F8-C20DC0879C50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8703E6D-D75E-4D76-81F8-C20DC0879C50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8703E6D-D75E-4D76-81F8-C20DC0879C50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4112DBA2-085D-4DEA-A88E-CECB889531AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4112DBA2-085D-4DEA-A88E-CECB889531AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4112DBA2-085D-4DEA-A88E-CECB889531AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4112DBA2-085D-4DEA-A88E-CECB889531AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
