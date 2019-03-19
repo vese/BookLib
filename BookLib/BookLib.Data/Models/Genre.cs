@@ -14,7 +14,7 @@ namespace BookLib.Models.DBModels
         public string Name { get; set; }
         public int IdCategory { get; set; }
 
-        public Category IdCategoryNavigation { get; set; }
-        public ICollection<Book> Books { get; set; }
+        public virtual Category IdCategoryNavigation { get; set; }
+        public virtual ICollection<Book> Books { get; set; }
     }
 }

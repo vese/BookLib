@@ -17,10 +17,10 @@ namespace BookLib.Models.DBModels
             BooksOnHands = new HashSet<BookOnHands>();
         }
 
-        public ICollection<ReadBook> ReadBooks { get; set; }
-        public ICollection<SheduledBook> SheduledBooks { get; set; }
-        public ICollection<Comment> Comments { get; set; }
-        public ICollection<QueueOnBook> QueuesOnBook { get; set; }
-        public ICollection<BookOnHands> BooksOnHands { get; set; }
+        public virtual ICollection<ReadBook> ReadBooks { get; set; }
+        public virtual ICollection<SheduledBook> SheduledBooks { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<QueueOnBook> QueuesOnBook { get; set; }
+        public virtual ICollection<BookOnHands> BooksOnHands { get; set; }
     }
 }

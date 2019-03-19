@@ -12,7 +12,7 @@ namespace BookLib.Models.DBModels
         public string Text { get; set; }
         public int? Mark { get; set; }
 
-        public Book IdBookNavigation { get; set; }
-        public ApplicationUser IdUserNavigation { get; set; }
+        public virtual Book IdBookNavigation { get; set; }
+        public virtual ApplicationUser IdUserNavigation { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace BookLib.Models.DBModels
         public int IdBook { get; set; }
         public string IdUser { get; set; }
 
-        public Book IdBookNavigation { get; set; }
-        public ApplicationUser IdUserNavigation { get; set; }
+        public virtual Book IdBookNavigation { get; set; }
+        public virtual ApplicationUser IdUserNavigation { get; set; }
     }
 }

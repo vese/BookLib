@@ -23,14 +23,14 @@ namespace BookLib.Models.DBModels
         public int IdCategory { get; set; }
         public int? IdGenre { get; set; }
 
-        public Author IdAuthorNavigation { get; set; }
-        public Category IdCategoryNavigation { get; set; }
-        public Genre IdGenreNavigation { get; set; }
-        public Publisher IdPublisherNavigation { get; set; }
-        public Series IdSeriesNavigation { get; set; }
-        public Availability Availability { get; set; }
-        public ICollection<Comment> Comments { get; set; }
-        public ICollection<ReadBook> ReadBooks { get; set; }
-        public ICollection<SheduledBook> SheduledBooks { get; set; }
+        public virtual Author IdAuthorNavigation { get; set; }
+        public virtual Category IdCategoryNavigation { get; set; }
+        public virtual Genre IdGenreNavigation { get; set; }
+        public virtual Publisher IdPublisherNavigation { get; set; }
+        public virtual Series IdSeriesNavigation { get; set; }
+        public virtual Availability Availability { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<ReadBook> ReadBooks { get; set; }
+        public virtual ICollection<SheduledBook> SheduledBooks { get; set; }
     }
 }

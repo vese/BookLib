@@ -11,7 +11,7 @@ namespace BookLib.Models.DBModels
         public string IdUser { get; set; }
         public int Position { get; set; }
 
-        public Availability IdBookNavigation { get; set; }
-        public ApplicationUser IdUserNavigation { get; set; }
+        public virtual Availability IdBookNavigation { get; set; }
+        public virtual ApplicationUser IdUserNavigation { get; set; }
     }
 }

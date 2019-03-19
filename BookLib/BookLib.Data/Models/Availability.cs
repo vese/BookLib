@@ -18,8 +18,8 @@ namespace BookLib.Models.DBModels
         public int OnHandsCount { get; set; }
         public int ExpiredCount { get; set; }
 
-        public Book IdBookNavigation { get; set; }
-        public ICollection<BookOnHands> BooksOnHands { get; set; }
-        public ICollection<QueueOnBook> QueuesOnBook { get; set; }
+        public virtual Book IdBookNavigation { get; set; }
+        public virtual ICollection<BookOnHands> BooksOnHands { get; set; }
+        public virtual ICollection<QueueOnBook> QueuesOnBook { get; set; }
     }
 }
