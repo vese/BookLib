@@ -20,17 +20,18 @@ namespace BookLib.API.Controllers
     public class AuthController : ControllerBase
     {
 
+        [Route("login")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post([FromBody]AuthUser authUser, [FromServices]UserManager<ApplicationUser> userManager)
+        public async Task<IActionResult> Login([FromBody]LoginUser loginUser, [FromServices]UserManager<ApplicationUser> userManager)
         {
-            var user = userManager.FindByNameAsync(authUser.Name).Result;
-            if (user == null || await userManager.CheckPasswordAsync(user, authUser.Pass))
+            var user = userManager.FindByNameAsync(loginUser.Name).Result;
+            if (user != null || await userManager.CheckPasswordAsync(user, loginUser.Pass))
             {
                 string role = (await userManager.GetRolesAsync(user)).FirstOrDefault();
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, authUser.Name),
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, loginUser.Name),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType, role)
                 };
                 ClaimsIdentity claimsIdentity =
@@ -51,9 +52,10 @@ namespace BookLib.API.Controllers
                 var response = new
                 {
                     access_token = encodedJwt,
-                    username = authUser.Name
+                    username = loginUser.Name,
+                    role = role
                 };
-
+                
                 return new OkObjectResult(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
             }
             else
@@ -61,6 +63,36 @@ namespace BookLib.API.Controllers
                 ModelState.TryAddModelError("login_failure", "Invalid username or password.");
                 return BadRequest(ModelState);
             }
+        }
+
+        [Route("register")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromBody]RegisterUser registerUser, [FromServices]UserManager<ApplicationUser> userManager)
+        {
+            var oldUser = userManager.FindByNameAsync(registerUser.Name).Result;
+            if (oldUser != null)
+            {
+                ModelState.TryAddModelError("registration_failure", "User with this name already exists.");
+                return BadRequest(ModelState);
+            }
+            var user = new ApplicationUser()
+            {
+                UserName = registerUser.Name
+            };
+            var result = await userManager.CreateAsync(user, registerUser.Pass);
+            if (!result.Succeeded)
+            {
+                ModelState.TryAddModelError("registrarion_failure", "Unable to create new user.");
+                return BadRequest(ModelState);
+            }
+            result = await userManager.AddToRoleAsync(user, "user");
+            if (!result.Succeeded)
+            {
+                ModelState.TryAddModelError("registrarion_failure", "Unable to add user to role.");
+                return BadRequest(ModelState);
+            }
+            return new OkObjectResult("Account created");
         }
 
         [HttpGet]
