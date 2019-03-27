@@ -1,7 +1,6 @@
 ﻿using BookLib.Data.ViewModels;
 using BookLib.Models.DBModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -19,16 +18,26 @@ namespace BookLib.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        UserManager<ApplicationUser> _userManager;
+
+        public AuthController(UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+        }
 
         [Route("login")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody]LoginUser loginUser, [FromServices]UserManager<ApplicationUser> userManager)
+        public async Task<IActionResult> Login([FromBody]LoginUser loginUser)
         {
-            var user = userManager.FindByNameAsync(loginUser.Name).Result;
-            if (user != null || await userManager.CheckPasswordAsync(user, loginUser.Pass))
+            if (!ModelState.IsValid)
             {
-                string role = (await userManager.GetRolesAsync(user)).FirstOrDefault();
+                return BadRequest(ModelState);
+            }
+            var user = _userManager.FindByNameAsync(loginUser.Name).Result;
+            if (user != null || await _userManager.CheckPasswordAsync(user, loginUser.Pass))
+            {
+                string role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, loginUser.Name),
@@ -68,9 +77,13 @@ namespace BookLib.API.Controllers
         [Route("register")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody]RegisterUser registerUser, [FromServices]UserManager<ApplicationUser> userManager)
+        public async Task<IActionResult> Register([FromBody]RegisterUser registerUser)
         {
-            var oldUser = userManager.FindByNameAsync(registerUser.Name).Result;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var oldUser = _userManager.FindByNameAsync(registerUser.Name).Result;
             if (oldUser != null)
             {
                 ModelState.TryAddModelError("registration_failure", "User with this name already exists.");
@@ -80,13 +93,13 @@ namespace BookLib.API.Controllers
             {
                 UserName = registerUser.Name
             };
-            var result = await userManager.CreateAsync(user, registerUser.Pass);
+            var result = await _userManager.CreateAsync(user, registerUser.Pass);
             if (!result.Succeeded)
             {
                 ModelState.TryAddModelError("registrarion_failure", "Unable to create new user.");
                 return BadRequest(ModelState);
             }
-            result = await userManager.AddToRoleAsync(user, "user");
+            result = await _userManager.AddToRoleAsync(user, "user");
             if (!result.Succeeded)
             {
                 ModelState.TryAddModelError("registrarion_failure", "Unable to add user to role.");
@@ -104,15 +117,17 @@ namespace BookLib.API.Controllers
             return res;
         }
 
+        [HttpGet]
         [Route("admin")]
         [Authorize(Roles = "admin")]
-        public ActionResult<string> GetAdm()
+        public ActionResult<string> GetAdmin()
         {
             string res = string.Empty;
             User.Claims.ToList().ForEach(u => res += u.Value + " ");
             return res;
         }
 
+        [HttpGet]
         [Route("user")]
         [Authorize(Roles = "user")]
         public ActionResult<string> GetUser()
