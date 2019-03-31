@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BookLib.Data.ViewModels
+﻿namespace BookLib.Data.ViewModels
 {
     public class ViewBook
     {
@@ -22,6 +18,7 @@ namespace BookLib.Data.ViewModels
         public string Series { get; set; }
         public string Category { get; set; }
         public string Genre { get; set; }
+        public int CommentsCount { get; set; }
         public int Mark { get; set; }
         public int FreeCount { get; set; }
     }

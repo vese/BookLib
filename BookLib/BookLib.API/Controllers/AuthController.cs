@@ -25,6 +25,7 @@ namespace BookLib.API.Controllers
             _userManager = userManager;
         }
 
+        // POST: api/Auth/Login
         [Route("login")]
         [HttpPost]
         [AllowAnonymous]
@@ -60,9 +61,9 @@ namespace BookLib.API.Controllers
 
                 var response = new
                 {
-                    access_token = encodedJwt,
-                    username = loginUser.Name,
-                    role = role
+                    AccessToken = encodedJwt,
+                    Username = loginUser.Name,
+                    Role = role
                 };
                 
                 return new OkObjectResult(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
@@ -74,6 +75,7 @@ namespace BookLib.API.Controllers
             }
         }
 
+        // POST: api/Auth/Register
         [Route("register")]
         [HttpPost]
         [AllowAnonymous]
@@ -108,6 +110,7 @@ namespace BookLib.API.Controllers
             return new OkObjectResult("Account created");
         }
 
+        // GET: api/Auth
         [HttpGet]
         [Authorize]
         public ActionResult<string> Get()
@@ -117,6 +120,7 @@ namespace BookLib.API.Controllers
             return res;
         }
 
+        // GET: api/Auth/Admin
         [HttpGet]
         [Route("admin")]
         [Authorize(Roles = "admin")]
@@ -127,6 +131,7 @@ namespace BookLib.API.Controllers
             return res;
         }
 
+        // GET: api/Auth/User
         [HttpGet]
         [Route("user")]
         [Authorize(Roles = "user")]

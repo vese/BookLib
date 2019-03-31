@@ -23,8 +23,31 @@ namespace BookLib.API.Controllers
             _context = context;
         }
 
-        [Route("filter")]
+        // GET: api/Books/SortParams
+        [Route("sortparams")]
         [HttpGet]
+        public IActionResult SortParams()
+        {
+            var response = new
+            {
+                ReleaseYears = _context.Book.Select(b => b.ReleaseYear).Distinct().ToList(),
+                Authors = _context.Author.Select(a => a.Name).ToList(),
+                Publishers = _context.Publisher.Select(a => a.Name).ToList(),
+                Series = _context.Series.Select(a => a.Name).ToList(),
+
+                Categories = _context.Category.Select(a => new
+                {
+                    Category = a.Name,
+                    Genres = a.Genres.Select(g => g.Name)
+                }).ToList()
+            };
+
+            return new OkObjectResult(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
+        // GET: api/Books/Filter
+        [Route("filter")]
+        [HttpGet("{author}")]
         public IActionResult Filter(string inName, int? releaseYear, string author, string publisher, string series, string category, string genre, bool? hasFree, ViewBook.SortProperty sort, string order)
         {
             int? authorId = _context.Author.FirstOrDefault(el => el.Name == author)?.Id;
@@ -48,6 +71,7 @@ namespace BookLib.API.Controllers
             {
                 Author = b.IdAuthorNavigation.Name,
                 Category = b.IdCategoryNavigation.Name,
+                CommentsCount = b.Comments.Count(),
                 Mark = b.Comments.Any() ? (int)b.Comments.Sum(c => c.Mark) / b.Comments.Count() : 0,
                 Description = b.Description,
                 FreeCount = b.Availability.FreeCount,
