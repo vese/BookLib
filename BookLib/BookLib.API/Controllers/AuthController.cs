@@ -110,6 +110,7 @@ namespace BookLib.API.Controllers
             return new OkObjectResult("Account created");
         }
 
+        #region Test
         // GET: api/Auth
         [HttpGet]
         [Authorize]
@@ -141,5 +142,6 @@ namespace BookLib.API.Controllers
             User.Claims.ToList().ForEach(u => res += u.Value + " ");
             return res;
         }
+        #endregion
     }
 }

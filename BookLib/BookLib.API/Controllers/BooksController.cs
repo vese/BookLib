@@ -21,22 +21,43 @@ namespace BookLib.API.Controllers
             _context = context;
         }
 
+        #region Filter
         // GET: api/Books/SortParams
         [HttpGet]
         [Route("sortparams")]
-        public IActionResult SortParams()
+        public IActionResult GetSortParams()
         {
             var response = new
             {
                 ReleaseYears = _context.Book.Select(b => b.ReleaseYear).Distinct().ToList(),
-                Authors = _context.Author.Select(a => a.Name).ToList(),
-                Publishers = _context.Publisher.Select(a => a.Name).ToList(),
-                Series = _context.Series.Select(a => a.Name).ToList(),
+                Authors = _context.Author.Select(a => new
+                {
+                    a.Id,
+                    a.Name
+                }).ToList(),
+                Publishers = _context.Publisher.Select(a => new
+                {
+                    a.Id,
+                    a.Name
+                }).ToList(),
+                Series = _context.Series.Select(a => new
+                {
+                    a.Id,
+                    a.Name
+                }).ToList(),
 
                 Categories = _context.Category.Select(a => new
                 {
-                    Category = a.Name,
-                    Genres = a.Genres.Select(g => g.Name)
+                    Category = new
+                    {
+                        a.Id,
+                        a.Name
+                    },
+                    Genres = a.Genres.Select(g => new
+                    {
+                        a.Id,
+                        g.Name
+                    })
                 }).ToList()
             };
 
@@ -46,16 +67,10 @@ namespace BookLib.API.Controllers
         // GET: api/Books/Filter
         [HttpGet]
         [Route("filter")]
-        public IActionResult Filter(string inName, int? releaseYear, string author, string publisher, string series, string category, string genre, bool? hasFree, SortProperty sort, string order)
+        public IActionResult Filter(string inName, int? releaseYear, int? authorId, int? publisherId, int? seriesId, int? categoryId, int? genreId, bool? hasFree, SortProperty sort, string order)
         {
-            int? authorId = _context.Author.FirstOrDefault(el => el.Name == author)?.Id;
-            int? publisherId = _context.Publisher.FirstOrDefault(el => el.Name == publisher)?.Id;
-            int? seriesId = _context.Publisher.FirstOrDefault(el => el.Name == series)?.Id;
-            int? categoryId = _context.Category.FirstOrDefault(el => el.Name == category)?.Id;
-            int? genreId = _context.Genre.FirstOrDefault(el => el.Name == genre)?.Id;
-
             var books = _context.Book.Where(b =>
-            (string.IsNullOrWhiteSpace(inName) || b.Name.Contains(inName)) &&
+            (string.IsNullOrWhiteSpace(inName) || b.Name.Contains(inName, StringComparison.CurrentCultureIgnoreCase)) &&
             (releaseYear == null || b.ReleaseYear == releaseYear) &&
             (hasFree == null || b.Availability.FreeCount > 0) &&
             (authorId == null || b.IdAuthor == authorId) &&
@@ -99,14 +114,17 @@ namespace BookLib.API.Controllers
 
             return new OkObjectResult(JsonConvert.SerializeObject(books, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
+        #endregion
 
+        #region Book
         // GET: api/Books
         [HttpGet]
         public IActionResult GetBook(int id, bool fullInfo = false)
         {
             if (!BookExists(id))
             {
-                return NotFound();
+                ModelState.TryAddModelError("not_found", $"Book with id = {id} does not exist.");
+                return BadRequest(ModelState);
             }
 
             var libBook = _context.Book.Find(id);
@@ -158,7 +176,6 @@ namespace BookLib.API.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult PutBook(int id, [FromBody] ViewBook book)
         {
-            var t = User;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -166,7 +183,8 @@ namespace BookLib.API.Controllers
 
             if (!BookExists(id))
             {
-                return NotFound();
+                ModelState.TryAddModelError("not_found", $"Book with id = {id} does not exist.");
+                return BadRequest(ModelState);
             }
 
             var libBook = _context.Book.Find(id);
@@ -184,7 +202,7 @@ namespace BookLib.API.Controllers
                     {
                         if (_context.Book.Any(b => b.Isbn == book.Isbn))
                         {
-                            ModelState.TryAddModelError("db_error", $"Book with ISBN = {book.Isbn} already exists.");
+                            ModelState.TryAddModelError(nameof(book.Isbn), $"Book with ISBN = {book.Isbn} already exists.");
                             return BadRequest(ModelState);
                         }
                         libBook.Isbn = book.Isbn;
@@ -200,75 +218,106 @@ namespace BookLib.API.Controllers
                         libBook.ReleaseYear = book.ReleaseYear;
                     }
 
-                    if (libBook.IdAuthorNavigation.Name != book.Author)
-                    {
-                        var oldAuthor = libBook.IdAuthorNavigation;
+                    #region Author
+                    var oldAuthor = libBook.IdAuthorNavigation;
 
-                        if (_context.Author.Any(a => a.Name == book.Author))
+                    if (book.AuthorId == null)
+                    {
+                        var newAuthor = _context.Author.Add(new Author
                         {
-                            libBook.IdAuthor = _context.Author.First(a => a.Name == book.Author).Id;
-                        }
-                        else
+                            Name = book.Author
+                        });
+
+                        _context.SaveChanges();
+
+                        libBook.IdAuthor = newAuthor.Entity.Id;
+                    }
+                    else if (_context.Author.Any(a => a.Id == book.AuthorId))
+                    {
+                        if (libBook.IdAuthor != book.AuthorId)
                         {
-                            var newAuthor = _context.Author.Add(new Author
-                            {
-                                Name = book.Author
-                            });
-                            _context.SaveChanges();
-                            libBook.IdAuthor = newAuthor.Entity.Id;
-                        }
-                        if (!oldAuthor.Books.Any())
-                        {
-                            _context.Author.Remove(oldAuthor);
+                            libBook.IdAuthor = (int)book.AuthorId;
                         }
                     }
-
-                    if (libBook.IdPublisherNavigation.Name != book.Publisher)
+                    else
                     {
-                        var oldPublisher = libBook.IdPublisherNavigation;
+                        ModelState.TryAddModelError("not_found", $"Author with id = {book.AuthorId} does not exist.");
+                        return BadRequest(ModelState);
+                    }
 
-                        if (_context.Publisher.Any(p => p.Name == book.Publisher))
+                    if (!oldAuthor.Books.Any())
+                    {
+                        _context.Author.Remove(oldAuthor);
+                    }
+                    #endregion
+
+                    #region Publisher
+                    var oldPublisher = libBook.IdPublisherNavigation;
+
+                    if (book.PublisherId == null)
+                    {
+                        var newPublisher = _context.Publisher.Add(new Publisher
                         {
-                            libBook.IdPublisher = _context.Publisher.First(p => p.Name == book.Publisher).Id;
-                        }
-                        else
+                            Name = book.Publisher
+                        });
+
+                        _context.SaveChanges();
+
+                        libBook.IdPublisher = newPublisher.Entity.Id;
+                    }
+                    else if (_context.Publisher.Any(p => p.Id == book.PublisherId))
+                    {
+                        if (libBook.IdPublisher != book.PublisherId)
                         {
-                            var newPublisher = _context.Publisher.Add(new Publisher
-                            {
-                                Name = book.Publisher
-                            });
-                            _context.SaveChanges();
-                            libBook.IdPublisher = newPublisher.Entity.Id;
-                        }
-                        if (!oldPublisher.Books.Any())
-                        {
-                            _context.Publisher.Remove(oldPublisher);
+                            libBook.IdPublisher = (int)book.PublisherId;
                         }
                     }
+                    else
+                    {
+                        ModelState.TryAddModelError("not_found", $"Publisher with id = {book.PublisherId} does not exist.");
+                        return BadRequest(ModelState);
+                    }
+
+                    if (!oldPublisher.Books.Any())
+                    {
+                        _context.Publisher.Remove(oldPublisher);
+                    }
+                    #endregion
 
                     #region Series
                     var oldSeries = libBook.IdSeriesNavigation;
 
-                    if (string.IsNullOrWhiteSpace(book.Series))
+                    if (book.HasSeries)
                     {
-                        libBook.IdSeries = null;
-                    }
-                    else if (libBook.IdSeries == null || libBook.IdSeriesNavigation.Name != book.Series)
-                    {
-                        if (_context.Series.Any(s => s.Name == book.Series))
-                        {
-                            libBook.IdSeries = _context.Series.First(s => s.Name == book.Series).Id;
-                        }
-                        else
+                        if (book.SeriesId == null)
                         {
                             var newSeries = _context.Series.Add(new Series
                             {
                                 Name = book.Series
                             });
+
                             _context.SaveChanges();
+
                             libBook.IdSeries = newSeries.Entity.Id;
                         }
+                        else if (_context.Series.Any(s => s.Id == book.SeriesId))
+                        {
+                            if (libBook.IdSeries != book.SeriesId)
+                            {
+                                libBook.IdSeries = (int)book.SeriesId;
+                            }
+                        }
+                        else
+                        {
+                            ModelState.TryAddModelError("not_found", $"Series with id = {book.SeriesId} does not exist.");
+                            return BadRequest(ModelState);
+                        }
                     }
+                    else if (libBook.IdSeries != null)
+                    {
+                        libBook.IdSeries = null;
+                    }
+
                     if (oldSeries != null && !oldSeries.Books.Any())
                     {
                         _context.Series.Remove(oldSeries);
@@ -277,73 +326,75 @@ namespace BookLib.API.Controllers
 
                     #region Category & Genre
                     var oldCategory = libBook.IdCategoryNavigation;
+
                     var oldGenre = libBook.IdGenreNavigation;
-                    if (libBook.IdCategoryNavigation.Name != book.Category)
+
+                    if (book.CategoryId == null)
                     {
-                        if (_context.Category.Any(c => c.Name == book.Category))
+                        //добавить категорию и жанр
+                        var newCategory = _context.Category.Add(new Category
                         {
-                            if (_context.Genre.Any(g => g.Name == book.Genre && g.IdCategoryNavigation.Name == book.Category))
-                            {
-                                //переместить
-                                libBook.IdCategory = _context.Category.First(c => c.Name == book.Category).Id;
+                            Name = book.Category
+                        });
 
-                                libBook.IdGenre = _context.Genre.First(g => g.Name == book.Genre && g.IdCategoryNavigation.Name == book.Category).Id;
-                            }
-                            else
-                            {
-                                //добавить жанр
-                                libBook.IdCategory = _context.Category.First(c => c.Name == book.Category).Id;
+                        _context.SaveChanges();
 
-                                var newGenre = _context.Genre.Add(new Genre
-                                {
-                                    Name = book.Genre,
-                                    IdCategory = libBook.IdCategory
-                                });
-                                _context.SaveChanges();
-                                libBook.IdGenre = newGenre.Entity.Id;
-                            }
+                        libBook.IdCategory = newCategory.Entity.Id;
+
+                        var newGenre = _context.Genre.Add(new Genre
+                        {
+                            Name = book.Genre,
+                            IdCategory = newCategory.Entity.Id
+                        });
+
+                        _context.SaveChanges();
+
+                        libBook.IdGenre = newGenre.Entity.Id;
+                    }
+                    else if (_context.Category.Any(c => c.Id == book.CategoryId))
+                    {
+                        if (libBook.IdCategory != book.CategoryId)
+                        {
+                            //переместить
+                            libBook.IdCategory = (int)book.CategoryId;
                         }
-                        else
-                        {
-                            //добавить категорию и жанр
-                            var newCategory = _context.Category.Add(new Category
-                            {
-                                Name = book.Category
-                            });
-                            _context.SaveChanges();
-                            libBook.IdCategory = newCategory.Entity.Id;
 
+                        if (book.GenreId == null)
+                        {
+                            //добавить жанр
                             var newGenre = _context.Genre.Add(new Genre
                             {
                                 Name = book.Genre,
-                                IdCategory = newCategory.Entity.Id
+                                IdCategory = (int)book.CategoryId
                             });
+
                             _context.SaveChanges();
+
                             libBook.IdGenre = newGenre.Entity.Id;
                         }
-                    }
-                    else if (libBook.IdGenreNavigation.Name != book.Genre)
-                    {
-                        if (_context.Genre.Any(g => g.Name == book.Genre && g.IdCategoryNavigation.Name == book.Category))
+                        else if (_context.Genre.Any(g => g.IdCategory == book.CategoryId && g.Id == book.GenreId))
                         {
-                            libBook.IdGenre = _context.Genre.First(g => g.Name == book.Genre && g.IdCategoryNavigation.Name == book.Category).Id;
+                            //переместить жанр
+                            libBook.IdGenre = (int)book.GenreId;
                         }
                         else
                         {
-                            var newGenre = _context.Genre.Add(new Genre
-                            {
-                                Name = book.Genre,
-                                IdCategory = _context.Category.First(c => c.Name == book.Category).Id
-                            });
-                            _context.SaveChanges();
-                            libBook.IdGenre = newGenre.Entity.Id;
+                            ModelState.TryAddModelError("not_found", $"Genre with id = {book.GenreId} does not exist or is in another category.");
+                            return BadRequest(ModelState);
                         }
                     }
+                    else
+                    {
+                        ModelState.TryAddModelError("not_found", $"Category with id = {book.CategoryId} does not exist.");
+                        return BadRequest(ModelState);
+                    }
+
                     if (!oldGenre.Books.Any())
                     {
                         _context.Genre.Remove(oldGenre);
                         _context.SaveChanges();
                     }
+
                     if (!oldCategory.Books.Any())
                     {
                         _context.Category.Remove(oldCategory);
@@ -374,7 +425,7 @@ namespace BookLib.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (_context.Book.Any(b => b.Isbn == book.Isbn || b.Name == book.Name && b.IdAuthorNavigation.Name == book.Name))
+            if (_context.Book.Any(b => b.Isbn == book.Isbn || book.AuthorId != null && b.Name == book.Name && b.IdAuthor == book.AuthorId))
             {
                 ModelState.TryAddModelError("db_error", $"Book already exists.");
                 return BadRequest(ModelState);
@@ -385,91 +436,105 @@ namespace BookLib.API.Controllers
                 try
                 {
                     #region Author
-                    int authorId;
-                    if (_context.Author.Any(a => a.Name == book.Author))
-                    {
-                        authorId = _context.Author.First(a => a.Name == book.Author).Id;
-                    }
-                    else
+                    if (book.AuthorId == null)
                     {
                         var newAuthor = _context.Author.Add(new Author
                         {
                             Name = book.Author
                         });
+
                         _context.SaveChanges();
-                        authorId = newAuthor.Entity.Id;
+
+                        book.AuthorId = newAuthor.Entity.Id;
+                    }
+                    else if (!_context.Author.Any(a => a.Id == book.AuthorId))
+                    {
+                        ModelState.TryAddModelError("not_found", $"Author with id = {book.AuthorId} does not exist.");
+                        return BadRequest(ModelState);
                     }
                     #endregion
 
                     #region Publisher
-                    int publisherId;
-                    if (_context.Publisher.Any(p => p.Name == book.Publisher))
-                    {
-                        publisherId = _context.Publisher.First(p => p.Name == book.Publisher).Id;
-                    }
-                    else
+                    if (book.PublisherId == null)
                     {
                         var newPublisher = _context.Publisher.Add(new Publisher
                         {
                             Name = book.Publisher
                         });
+
                         _context.SaveChanges();
-                        publisherId = newPublisher.Entity.Id;
+
+                        book.PublisherId = newPublisher.Entity.Id;
+                    }
+                    else if (!_context.Publisher.Any(p => p.Id == book.PublisherId))
+                    {
+                        ModelState.TryAddModelError("not_found", $"Publisher with id = {book.PublisherId} does not exist.");
+                        return BadRequest(ModelState);
                     }
                     #endregion
 
                     #region Series
-                    int? seriesId = null;
-                    if (!string.IsNullOrWhiteSpace(book.Series))
+                    if (book.HasSeries)
                     {
-                        if (_context.Series.Any(s => s.Name == book.Series))
-                        {
-                            seriesId = _context.Series.First(s => s.Name == book.Series).Id;
-                        }
-                        else
+                        if (book.SeriesId == null)
                         {
                             var newSeries = _context.Series.Add(new Series
                             {
                                 Name = book.Series
                             });
+
                             _context.SaveChanges();
-                            seriesId = newSeries.Entity.Id;
+
+                            book.SeriesId = newSeries.Entity.Id;
                         }
+                        else if(!_context.Series.Any(s => s.Id == book.SeriesId))
+                        {
+                            ModelState.TryAddModelError("not_found", $"Series with id = {book.SeriesId} does not exist.");
+                            return BadRequest(ModelState);
+                        }
+                    }
+                    else
+                    {
+                        book.SeriesId = null;
                     }
                     #endregion
 
                     #region Category
-                    int categoryId;
-                    if (_context.Category.Any(c => c.Name == book.Category))
-                    {
-                        categoryId = _context.Category.First(c => c.Name == book.Category).Id;
-                    }
-                    else
+                    if (book.CategoryId == null)
                     {
                         var newCategory = _context.Category.Add(new Category
                         {
                             Name = book.Category
                         });
+
                         _context.SaveChanges();
-                        categoryId = newCategory.Entity.Id;
+
+                        book.CategoryId = newCategory.Entity.Id;
+                    }
+                    else if (!_context.Category.Any(c => c.Id == book.CategoryId))
+                    {
+                        ModelState.TryAddModelError("not_found", $"Category with id = {book.CategoryId} does not exist.");
+                        return BadRequest(ModelState);
                     }
                     #endregion
 
                     #region Genre
-                    int genreId;
-                    if (_context.Genre.Any(g => g.Name == book.Genre && g.IdCategory == categoryId))
-                    {
-                        genreId = _context.Genre.First(g => g.Name == book.Genre && g.IdCategory == categoryId).Id;
-                    }
-                    else
+                    if (book.GenreId == null)
                     {
                         var newGenre = _context.Genre.Add(new Genre
                         {
                             Name = book.Genre,
-                            IdCategory = categoryId
+                            IdCategory = (int)book.CategoryId
                         });
+
                         _context.SaveChanges();
-                        genreId = newGenre.Entity.Id;
+
+                        book.GenreId = newGenre.Entity.Id;
+                    }
+                    else if (!_context.Genre.Any(g => g.Name == book.Genre && g.IdCategory == book.CategoryId))
+                    {
+                        ModelState.TryAddModelError("not_found", $"Genre with id = {book.GenreId} does not exist.");
+                        return BadRequest(ModelState);
                     }
                     #endregion
 
@@ -480,11 +545,11 @@ namespace BookLib.API.Controllers
                         Description = book.Description,
                         ReleaseYear = book.ReleaseYear,
 
-                        IdAuthor = authorId,
-                        IdPublisher = publisherId,
-                        IdSeries = seriesId,
-                        IdCategory = categoryId,
-                        IdGenre = genreId
+                        IdAuthor = (int)book.AuthorId,
+                        IdPublisher = (int)book.PublisherId,
+                        IdSeries = (int)book.SeriesId,
+                        IdCategory = (int)book.CategoryId,
+                        IdGenre = (int)book.GenreId
                     });
 
                     _context.SaveChanges();
@@ -567,10 +632,109 @@ namespace BookLib.API.Controllers
 
             return new OkResult();
         }
+        #endregion
+
+        #region Exists
+        // GET: api/Books/AuthorExists
+        [HttpGet]
+        [Route("authorexists")]
+        [Authorize(Roles = "admin")]
+        public IActionResult AuthorExists(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                ModelState.TryAddModelError(nameof(name), $"The {nameof(name)} field is required.");
+                return BadRequest(ModelState);
+            }
+
+            return new OkObjectResult(JsonConvert.SerializeObject(new
+            {
+                AutorExists = _context.Author.Any(a => a.Name == name)
+            }, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
+        // GET: api/Books/PublisherExists
+        [HttpGet]
+        [Route("publisherexists")]
+        [Authorize(Roles = "admin")]
+        public IActionResult PublisherExists(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                ModelState.TryAddModelError(nameof(name), $"The {nameof(name)} field is required.");
+                return BadRequest(ModelState);
+            }
+
+            return new OkObjectResult(JsonConvert.SerializeObject(new
+            {
+                PublisherExists = _context.Publisher.Any(a => a.Name == name)
+            }, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
+        // GET: api/Books/SeriesExists
+        [HttpGet]
+        [Route("seriesexists")]
+        [Authorize(Roles = "admin")]
+        public IActionResult SeriesExists(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                ModelState.TryAddModelError(nameof(name), $"The {nameof(name)} field is required.");
+                return BadRequest(ModelState);
+            }
+
+            return new OkObjectResult(JsonConvert.SerializeObject(new
+            {
+                SeriesExists = _context.Series.Any(a => a.Name == name)
+            }, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
+        // GET: api/Books/CategoryExists
+        [HttpGet]
+        [Route("categoryexists")]
+        [Authorize(Roles = "admin")]
+        public IActionResult CategoryExists(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                ModelState.TryAddModelError(nameof(name), $"The {nameof(name)} field is required.");
+                return BadRequest(ModelState);
+            }
+
+            return new OkObjectResult(JsonConvert.SerializeObject(new
+            {
+                CategoryExists = _context.Category.Any(a => a.Name == name)
+            }, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
+        // GET: api/Books/GenreExists
+        [HttpGet]
+        [Route("genreexists")]
+        [Authorize(Roles = "admin")]
+        public IActionResult GenreExists(int categoryId, string name)
+        {
+            if (!_context.Category.Any(c => c.Id == categoryId))
+            {
+                ModelState.TryAddModelError("not_found", $"Category with id = {categoryId} does not exist.");
+                return BadRequest(ModelState);
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                ModelState.TryAddModelError(nameof(name), $"The {nameof(name)} field is required.");
+                return BadRequest(ModelState);
+            }
+
+            return new OkObjectResult(JsonConvert.SerializeObject(new
+            {
+                GenreExists = _context.Genre.Any(a => a.IdCategory == categoryId && a.Name == name)
+            }, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
 
         private bool BookExists(int id)
         {
             return _context.Book.Any(e => e.Id == id);
         }
+        #endregion
     }
 }
