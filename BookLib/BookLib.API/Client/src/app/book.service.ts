@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ListBook, Book } from './BookClasses';
+import { ListBook, Book, filterParams } from './BookClasses';
 import { Observable, of } from 'rxjs';
 import { ConfigService } from './config.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -16,34 +16,59 @@ export class BookService {
     this.contrUrl = "books/";
   }
 
-  getBooks(): Observable<ListBook[]> {
-    return this.http.get<ListBook[]>(this.baseUrl + this.contrUrl + "filter");
+  getBooks(inNameString: string,
+    selectedReleaseYear: number,
+    selectedAuthorId: number,
+    selectedPublisherId: number,
+    selectedSeriesId: number,
+    selectedCategoryId: number,
+    selectedGenreId: number,
+    selectedHasFree: boolean,
+    selectedSortProperty: string,
+    selectedSortOrder: string): Observable<ListBook[]> {
+    let params: HttpParams = new HttpParams();
+    if (inNameString) {
+      params = params.set("inName", inNameString);
+    }
+    if (selectedReleaseYear) {
+      params = params.set("releaseYear", "" + selectedReleaseYear);
+    }
+    if (selectedAuthorId) {
+      params = params.set("authorId", "" + selectedAuthorId);
+    }
+    if (selectedPublisherId) {
+      params = params.set("publisherId", "" + selectedPublisherId);
+    }
+    if (selectedSeriesId) {
+      params = params.set("seriesId", "" + selectedSeriesId);
+    }
+    if (selectedCategoryId) {
+      params = params.set("categoryId", "" + selectedCategoryId);
+    }
+    if (selectedGenreId) {
+      params = params.set("genreId", "" + selectedGenreId);
+    }
+    if (selectedHasFree) {
+      params = params.set("hasFree", "" + selectedHasFree);
+    }
+    if (selectedSortProperty) {
+      params = params.set("sort", "" + selectedSortProperty);
+    }
+    if (selectedSortOrder) {
+      params = params.set("order", "" + selectedSortOrder);
+    }
+    
+    return this.http.get<ListBook[]>(this.baseUrl + this.contrUrl + "filter",
+      {
+        params: params
+      });
   }
 
   getBook(id: number): Observable<Book> {
     return this.http.get<Book>(this.baseUrl + this.contrUrl, { params: new HttpParams().set("id", "" + id) });
-    return of({
-      name: "adsd",
-      isbn: "sad",
-      author: "asd",
-      description: "dssssssssssss",
-      publisher: "sda",
-      category: "ds",
-      genre: "da",
-      releaseYear: 2017,
-      series: "dsa",
-      commentsCount: 10,
-      averageMark: 5,
-      freeCount: 10,
-      comments: [
-        {
-          text: "atlichna",
-          mark: 5
-        },
-        {
-          text: "ploho",
-          mark: 1
-        }]
-    });
+  }
+
+  getFilterParams(): Observable<filterParams> {
+    return this.http.get<filterParams>(this.baseUrl + this.contrUrl + "filterparams");
   }
 }

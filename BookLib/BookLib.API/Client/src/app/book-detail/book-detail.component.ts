@@ -9,8 +9,7 @@ import { BookService } from '../book.service';
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.css']
 })
-export class BookDetailComponent implements OnInit
-{
+export class BookDetailComponent implements OnInit {
   @Input() book: Book;
 
   constructor(
@@ -18,20 +17,16 @@ export class BookDetailComponent implements OnInit
     private bookService: BookService,
     private location: Location) { }
 
-  ngOnInit()
-  {
+  ngOnInit() {
     this.getBook();
   }
 
-  getBook(): void
-  {
+  getBook(): void {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.bookService.getBook(id)
-      .subscribe(book => this.book = book);
+    this.bookService.getBook(id).subscribe(book => this.book = book);
   }
 
-  goBack(): void
-  {
+  goBack(): void {
     this.location.back();
   }
 }

@@ -24,44 +24,69 @@ namespace BookLib.API.Controllers
         #region Filter
         // GET: api/Books/SortParams
         [HttpGet]
-        [Route("sortparams")]
-        public IActionResult GetSortParams()
+        [Route("filterparams")]
+        public IActionResult GetFilterParams()
         {
             var response = new
             {
-                ReleaseYears = _context.Book.Select(b => b.ReleaseYear).Distinct().ToList(),
-                Authors = _context.Author.Select(a => new
+                releaseYears = _context.Book.Select(b => b.ReleaseYear).Distinct().ToList(),
+                authors = _context.Author.Select(a => new
                 {
-                    a.Id,
-                    a.Name
+                    id = a.Id,
+                    name = a.Name
                 }).ToList(),
-                Publishers = _context.Publisher.Select(a => new
+                publishers = _context.Publisher.Select(a => new
                 {
-                    a.Id,
-                    a.Name
+                    id = a.Id,
+                    name = a.Name
                 }).ToList(),
-                Series = _context.Series.Select(a => new
+                series = _context.Series.Select(a => new
                 {
-                    a.Id,
-                    a.Name
+                    id = a.Id,
+                    name = a.Name
                 }).ToList(),
-
-                Categories = _context.Category.Select(a => new
+                categories = _context.Category.Select(a => new
                 {
-                    Category = new
+                    category = new
                     {
-                        a.Id,
-                        a.Name
+                        id = a.Id,
+                        name = a.Name
                     },
-                    Genres = a.Genres.Select(g => new
+                    genres = a.Genres.Select(g => new
                     {
-                        a.Id,
-                        g.Name
+                        id = g.Id,
+                        name = g.Name
                     })
-                }).ToList()
+                }).ToList(),
+                sortProperties = new[]
+                {
+                    new
+                    {
+                        value = nameof(SortProperty.Author),
+                        name = "Автор"
+                    },
+                    new
+                    {
+                        value = nameof(SortProperty.Mark),
+                        name = "Средняя оценка"
+                    },
+                    new
+                    {
+                        value = nameof(SortProperty.Name),
+                        name = "Название"
+                    },
+                    new
+                    {
+                        value = nameof(SortProperty.ReleaseYear),
+                        name = "Дата издания"
+                    }
+                }.ToList()
             };
 
-            return new OkObjectResult(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+            return new OkObjectResult(JsonConvert.SerializeObject(response, new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented
+            }));
         }
 
         // GET: api/Books/Filter
@@ -72,7 +97,7 @@ namespace BookLib.API.Controllers
             var books = _context.Book.Where(b =>
             (string.IsNullOrWhiteSpace(inName) || b.Name.Contains(inName, StringComparison.CurrentCultureIgnoreCase)) &&
             (releaseYear == null || b.ReleaseYear == releaseYear) &&
-            (hasFree == null || b.Availability.FreeCount > 0) &&
+            (hasFree == null || !(bool)hasFree || b.Availability.FreeCount > 0) &&
             (authorId == null || b.IdAuthor == authorId) &&
             (publisherId == null || b.IdPublisher == publisherId) &&
             (seriesId == null || b.IdSeries != null && b.IdSeries == seriesId) &&
