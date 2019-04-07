@@ -1,0 +1,90 @@
+<!--<div>
+  <div>
+    <label>
+      name:
+      <input [(ngModel)]="book.name" placeholder="name" />
+    </label>
+  </div>
+  <div>
+    <label>
+      ISBN:
+      <input [(ngModel)]="book.isbn" placeholder="isbn" />
+    </label>
+  </div>
+  <div>
+    <label>
+      Author:
+      <input [(ngModel)]="book.author" placeholder="author" />
+    </label>
+  </div>
+  <div>
+    <label>
+      Description:
+      <input [(ngModel)]="book.description" placeholder="description" />
+    </label>
+  </div>
+  <div>
+    <label>
+      Publisher:
+      <input [(ngModel)]="book.publisher" placeholder="publisher" />
+    </label>
+  </div>
+  <div>
+    <label>
+      Category:
+      <input [(ngModel)]="book.category" placeholder="category" />
+    </label>
+  </div>
+  <div>
+    <label>
+      Genre:
+      <input [(ngModel)]="book.genre" placeholder="genre" />
+    </label>
+  </div>
+  <div>
+    <label>
+      Series:
+      <input [(ngModel)]="book.series" placeholder="series" />
+    </label>
+  </div>
+  <div>
+    <label>
+      Release Year:
+      <input [(ngModel)]="book.releaseYear" placeholder="releaseYear" />
+    </label>
+  </div>
+  <div>
+    <label>
+      Comments Count:
+      <input [(ngModel)]="book.commentsCount" placeholder="commentsCount" />
+    </label>
+  </div>
+  <div>
+    <label>
+      Average Mark:
+      <input [(ngModel)]="book.averageMark" placeholder="averageMark" />
+    </label>
+  </div>
+  <div>
+    <label>
+      Free Count:
+      <input [(ngModel)]="book.freeCount" placeholder="freeCount" />
+    </label>
+  </div>
+  <div>
+    <li *ngFor="let comment of book.comments">
+      Comment:
+      <input [(ngModel)]="comment.text" placeholder="comment" />
+      <input [(ngModel)]="comment.mark" placeholder="comment" />
+    </li>
+  </div>
+</div>-->
+
+<h2>Books</h2>
+<ul class="books">
+  <li *ngFor="let b of books">
+    <a routerLink="/book/{{b.id}}">
+      <span class="badge">{{b.name}}</span> {{b.author}}
+    </a>
+  </li>
+</ul>

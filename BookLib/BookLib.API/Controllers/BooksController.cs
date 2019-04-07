@@ -80,18 +80,18 @@ namespace BookLib.API.Controllers
             (genreId == null || b.IdGenre == genreId)
             ).Select(b => new
             {
-                Id = b.Id,
-                Name = b.Name,
-                CroppedDescription = b.Description.Substring(0, 100),
-                ReleaseYear = b.ReleaseYear,
-                Author = b.IdAuthorNavigation.Name,
-                Publisher = b.IdPublisherNavigation.Name,
-                Category = b.IdCategoryNavigation.Name,
-                Genre = b.IdGenreNavigation.Name,
-                Series = b.IdSeriesNavigation == null ? null : b.IdSeriesNavigation.Name,
-                CommentsCount = b.Comments.Count(),
-                AverageMark = b.Comments.Any() ? (int)b.Comments.Sum(c => c.Mark) / b.Comments.Count() : 0,
-                FreeCount = b.Availability.FreeCount
+                id = b.Id,
+                name = b.Name,
+                croppedDescription = b.Description.Substring(0, 100),
+                releaseYear = b.ReleaseYear,
+                author = b.IdAuthorNavigation.Name,
+                publisher = b.IdPublisherNavigation.Name,
+                category = b.IdCategoryNavigation.Name,
+                genre = b.IdGenreNavigation.Name,
+                series = b.IdSeriesNavigation == null ? null : b.IdSeriesNavigation.Name,
+                commentsCount = b.Comments.Count(),
+                averageMark = b.Comments.Any() ? (int)b.Comments.Sum(c => c.Mark) / b.Comments.Count() : 0,
+                freeCount = b.Availability.FreeCount
             }).ToList();
 
             bool desc = (order ?? default(string)) == "desc";
@@ -99,16 +99,16 @@ namespace BookLib.API.Controllers
             switch (sort)
             {
                 case SortProperty.Name:
-                    books = books.OrderBy(b => desc ? default(string) : b.Name).OrderByDescending(b => desc ? b.Name : default(string)).ToList();
+                    books = books.OrderBy(b => desc ? default(string) : b.name).OrderByDescending(b => desc ? b.name : default(string)).ToList();
                     break;
                 case SortProperty.Author:
-                    books = books.OrderBy(b => desc ? default(string) : b.Author).OrderByDescending(b => desc ? b.Author : default(string)).ToList();
+                    books = books.OrderBy(b => desc ? default(string) : b.author).OrderByDescending(b => desc ? b.author : default(string)).ToList();
                     break;
                 case SortProperty.ReleaseYear:
-                    books = books.OrderBy(b => desc ? default(int) : b.ReleaseYear).OrderByDescending(b => desc ? b.ReleaseYear : default(int)).ToList();
+                    books = books.OrderBy(b => desc ? default(int) : b.releaseYear).OrderByDescending(b => desc ? b.releaseYear : default(int)).ToList();
                     break;
                 case SortProperty.Mark:
-                    books = books.OrderBy(b => desc ? default(int) : b.AverageMark).OrderByDescending(b => desc ? b.AverageMark : default(int)).ToList();
+                    books = books.OrderBy(b => desc ? default(int) : b.averageMark).OrderByDescending(b => desc ? b.averageMark : default(int)).ToList();
                     break;
             }
 
@@ -119,7 +119,7 @@ namespace BookLib.API.Controllers
         #region Book
         // GET: api/Books
         [HttpGet]
-        public IActionResult GetBook(int id, bool fullInfo = false)
+        public IActionResult GetBook(int id)
         {
             if (!BookExists(id))
             {
@@ -129,46 +129,28 @@ namespace BookLib.API.Controllers
 
             var libBook = _context.Book.Find(id);
 
-            if (fullInfo)
+            var book = new
             {
-                var book = new
+                name = libBook.Name,
+                isbn = libBook.Isbn,
+                description = libBook.Description,
+                releaseYear = libBook.ReleaseYear,
+                author = libBook.IdAuthorNavigation.Name,
+                publisher = libBook.IdPublisherNavigation.Name,
+                category = libBook.IdCategoryNavigation.Name,
+                genre = libBook.IdGenreNavigation.Name,
+                series = libBook.IdSeriesNavigation == null ? null : libBook.IdSeriesNavigation.Name,
+                commentsCount = libBook.Comments.Count(),
+                averageMark = libBook.Comments.Any() ? (int)libBook.Comments.Sum(c => c.Mark) / libBook.Comments.Count() : 0,
+                comments = libBook.Comments.Select(c => new
                 {
-                    Name = libBook.Name,
-                    Isbn = libBook.Isbn,
-                    Description = libBook.Description,
-                    ReleaseYear = libBook.ReleaseYear,
-                    Author = libBook.IdAuthorNavigation.Name,
-                    Publisher = libBook.IdPublisherNavigation.Name,
-                    Category = libBook.IdCategoryNavigation.Name,
-                    Genre = libBook.IdGenreNavigation.Name,
-                    Series = libBook.IdSeriesNavigation == null ? null : libBook.IdSeriesNavigation.Name,
-                    CommentsCount = libBook.Comments.Count(),
-                    AverageMark = libBook.Comments.Any() ? (int)libBook.Comments.Sum(c => c.Mark) / libBook.Comments.Count() : 0,
-                    Comments = libBook.Comments.Select(c => new
-                    {
-                        Text = c.Text,
-                        Mark = c.Mark
-                    }).ToList(),
-                    FreeCount = libBook.Availability.FreeCount
-                };
+                    text = c.Text,
+                    mark = c.Mark
+                }).ToList(),
+                freeCount = libBook.Availability.FreeCount
+            };
 
-                return new OkObjectResult(JsonConvert.SerializeObject(book, new JsonSerializerSettings { Formatting = Formatting.Indented }));
-            }
-            else
-            {
-                var book = new
-                {
-                    Isbn = libBook.Isbn,
-                    Description = libBook.Description,
-                    Comments = libBook.Comments.Select(c => new
-                    {
-                        Text = c.Text,
-                        Mark = c.Mark
-                    }).ToList()
-                };
-
-                return new OkObjectResult(JsonConvert.SerializeObject(book, new JsonSerializerSettings { Formatting = Formatting.Indented }));
-            }
+            return new OkObjectResult(JsonConvert.SerializeObject(book, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
         // PUT: api/Books
@@ -487,7 +469,7 @@ namespace BookLib.API.Controllers
 
                             book.SeriesId = newSeries.Entity.Id;
                         }
-                        else if(!_context.Series.Any(s => s.Id == book.SeriesId))
+                        else if (!_context.Series.Any(s => s.Id == book.SeriesId))
                         {
                             ModelState.TryAddModelError("not_found", $"Series with id = {book.SeriesId} does not exist.");
                             return BadRequest(ModelState);

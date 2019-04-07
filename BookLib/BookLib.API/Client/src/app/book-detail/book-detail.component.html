@@ -1,0 +1,25 @@
+<div *ngIf="book">
+  <h2>{{book.name}}</h2>
+  <div><span>ISBN: </span>{{book.isbn}}</div>
+  <div><span>Author: </span>{{book.author}}</div>
+  <div><span>Description: </span>{{book.description}}</div>
+  <div><span>Publisher: </span>{{book.publisher}}</div>
+  <div><span>Category: </span>{{book.category}}</div>
+  <div><span>Genre: </span>{{book.genre}}</div>
+  <div><span>Series: </span>{{book.series}}</div>
+  <div><span>Release year: </span>{{book.releaseYear}}</div>
+  <div><span>Comments count: </span>{{book.commentsCount}}</div>
+  <div><span>Mark: </span>{{book.averageMark}}</div>
+  <div><span>Free count: </span>{{book.freeCount}}</div>
+  <div>
+    <span>
+      Comments:
+    </span>
+  </div>
+  <ul>
+    <li *ngFor="let comment of book.comments">
+      {{comment.text}} {{comment.mark}}
+    </li>
+  </ul>
+</div>
+<button (click)="goBack()">Назад</button>
