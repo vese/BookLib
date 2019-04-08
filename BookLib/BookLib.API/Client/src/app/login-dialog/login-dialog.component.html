@@ -3,10 +3,12 @@
   <div *ngIf="loginFailed">Неверный логин или пароль!</div>
   <div mat-dialog-content>
     <mat-form-field>
-      <input matInput placeholder="Логин" [(ngModel)]="data.name">
+      <input matInput placeholder="Логин" [(formControl)]="loginFormControl">
+      <mat-error *ngIf="loginFormControl.invalid">{{getLoginErrorMessage()}}</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Пароль" [type]="hide ? 'password' : 'text'" [(ngModel)]="data.pass">
+      <input matInput placeholder="Пароль" [type]="hide ? 'password' : 'text'" [(formControl)]="passwordFormControl">
+      <mat-error *ngIf="passwordFormControl.invalid">{{getPasswordErrorMessage()}}</mat-error>
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
     </mat-form-field>
   </div>

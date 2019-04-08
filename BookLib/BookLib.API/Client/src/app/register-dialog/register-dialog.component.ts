@@ -1,5 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material';
 import { UserService, UserDialogData } from '../user.service';
 import { FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 
@@ -11,10 +11,9 @@ import { FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/
 export class RegisterDialogComponent {
 
   hide = true;
-  passConfirm: string;
   loggedIn: boolean = false;
   registerFailed: boolean;
-  failtureMessage: string;
+  failtureMessages: string[];
 
   loginFormControl = new FormControl("", [
     Validators.required,
@@ -26,8 +25,18 @@ export class RegisterDialogComponent {
     Validators.minLength(6)
   ]);
   passwordConfirmFormControl = new FormControl("", [
-    Validators.required
+    Validators.required,
+    this.checkPasswordConfirmation()
   ]);
+
+  checkPasswordConfirmation(): ValidatorFn {
+    return (c: AbstractControl): { [key: string]: boolean } | null => {
+      if (c.value != this.passwordFormControl.value) {
+        return { 'pass': true };
+      }
+      return null;
+    };
+  }
 
   getLoginErrorMessage() {
     return this.loginFormControl.hasError('required') ? 'Введите значение' :
@@ -44,11 +53,11 @@ export class RegisterDialogComponent {
 
   getPasswordConfirmErrorMessage() {
     return this.passwordConfirmFormControl.hasError('required') ? 'Введите значение' :
-      '';
+      this.passwordConfirmFormControl.hasError('pass') ? 'Пароли должны совпадать' :
+        '';
   }
 
   constructor(public dialogRef: MatDialogRef<RegisterDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: UserDialogData,
     private userService: UserService) {
     this.loggedIn = this.userService.isLoggedIn();
     if (this.loggedIn == null) {
@@ -61,17 +70,26 @@ export class RegisterDialogComponent {
   }
 
   onRegisterClick(): void {
-    if (this.data.pass == this.passConfirm) {
-      this.userService.register(this.data).subscribe(res => {
+    this.failtureMessages = [];
+    if (this.loginFormControl.valid && this.passwordFormControl.valid && this.passwordConfirmFormControl.valid) {
+      let data: UserDialogData = {
+        name: this.loginFormControl.value,
+        pass: this.passwordFormControl.value
+      }
+      this.userService.register(data).subscribe(res => {
         this.registerFailed = false;
       }, error => {
-        this.failtureMessage = "Неверный логин или пароль или пользователь уже существует!";
+        if (error.error.Name) {
+          error.error.Name.forEach(el => this.failtureMessages.push(el));
+        }
+        if (error.error.Pass) {
+          error.error.Pass.forEach(el => this.failtureMessages.push(el));
+        }
+        if (error.error.Model) {
+          error.error.Model.forEach(el => this.failtureMessages.push(el));
+        }
         this.registerFailed = true;
       });
-    }
-    else {
-      this.registerFailed = true;
-      this.failtureMessage = "Введенные пароли не совпадают!";
     }
   }
 }

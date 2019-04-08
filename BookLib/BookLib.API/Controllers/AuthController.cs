@@ -88,7 +88,7 @@ namespace BookLib.API.Controllers
             var oldUser = _userManager.FindByNameAsync(registerUser.Name).Result;
             if (oldUser != null)
             {
-                ModelState.TryAddModelError("registration_failure", "User with this name already exists.");
+                ModelState.TryAddModelError("Model", "User with this name already exists.");
                 return BadRequest(ModelState);
             }
             var user = new ApplicationUser()
@@ -98,13 +98,13 @@ namespace BookLib.API.Controllers
             var result = await _userManager.CreateAsync(user, registerUser.Pass);
             if (!result.Succeeded)
             {
-                ModelState.TryAddModelError("registrarion_failure", "Unable to create new user.");
+                ModelState.TryAddModelError("Model", "Unable to create new user.");
                 return BadRequest(ModelState);
             }
             result = await _userManager.AddToRoleAsync(user, "user");
             if (!result.Succeeded)
             {
-                ModelState.TryAddModelError("registrarion_failure", "Unable to add user to role.");
+                ModelState.TryAddModelError("Model", "Unable to add user to role.");
                 return BadRequest(ModelState);
             }
             return new OkObjectResult(JsonConvert.SerializeObject("Account created", new JsonSerializerSettings { Formatting = Formatting.Indented }));

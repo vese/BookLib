@@ -1,19 +1,23 @@
 <div *ngIf="!loggedIn && (registerFailed == null || registerFailed != null && registerFailed)">
   <h1 mat-dialog-title>Регистрация</h1>
-  <div *ngIf="registerFailed">{{failtureMessage}}</div>
+  <ul *ngIf="registerFailed">
+    <li *ngFor="let message of failtureMessages">
+      {{message}}
+    </li>
+  </ul>
   <div mat-dialog-content>
     <mat-form-field>
-      <input matInput placeholder="Логин" [(ngModel)]="data.name" [(formControl)]="loginFormControl">
+      <input matInput placeholder="Логин" [(formControl)]="loginFormControl">
       <mat-error *ngIf="loginFormControl.invalid">{{getLoginErrorMessage()}}</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Пароль" [type]="hide ? 'password' : 'text'" [(ngModel)]="data.pass" [(formControl)]="passwordFormControl">
-      <mat-error *ngIf="loginFormControl.invalid">{{getPasswordErrorMessage()}}</mat-error>
+      <input matInput placeholder="Пароль" [type]="hide ? 'password' : 'text'" [(formControl)]="passwordFormControl">
+      <mat-error *ngIf="passwordFormControl.invalid">{{getPasswordErrorMessage()}}</mat-error>
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Подтвердите пароль" [type]="hide ? 'password' : 'text'" [(ngModel)]="passConfirm" [(formControl)]="passwordConfirmFormControl">
-      <mat-error *ngIf="loginFormControl.invalid">{{getPasswordConfirmErrorMessage()}}</mat-error>
+      <input matInput placeholder="Подтвердите пароль" [type]="hide ? 'password' : 'text'" [(formControl)]="passwordConfirmFormControl">
+      <mat-error *ngIf="passwordConfirmFormControl.invalid">{{getPasswordConfirmErrorMessage()}}</mat-error>
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
     </mat-form-field>
   </div>
