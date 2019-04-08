@@ -12,9 +12,15 @@ export class UserComponent implements OnInit {
 
   name: string;
   password: string;
+  loggedIn: boolean;
 
   constructor(private userService: UserService,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog) {
+    this.loggedIn = this.userService.isLoggedIn();
+    if (this.loggedIn == null) {
+      this.userService.checkLogged().subscribe(res => this.loggedIn = true, error => this.loggedIn = false);
+    }
+  }
 
   openLoginDialog(): void {
     const dialogRef = this.dialog.open(LoginDialogComponent, {
@@ -23,8 +29,13 @@ export class UserComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.name = this.userService.getName();
+      this.loggedIn = this.userService.isLoggedIn();
     });
+  }
+
+  logout(): void {
+    this.loggedIn = false;
+    this.userService.logout();
   }
 
   ngOnInit() {

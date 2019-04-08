@@ -1,4 +1,4 @@
-<span *ngIf="!name">
+<span *ngIf="!loggedIn">
   <span>
     <button mat-raised-button (click)="openLoginDialog()">Вход</button>
   </span>
@@ -6,8 +6,8 @@
     <button mat-raised-button (click)="openLoginDialog()">Регистрация</button>
   </span>
 </span>
-<span *ngIf="name">
+<span *ngIf="loggedIn">
   <span>
-    <button mat-raised-button (click)="openLoginDialog()">Выход</button>
+    <button mat-raised-button (click)="logout()">Выход</button>
   </span>
 </span>

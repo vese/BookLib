@@ -10,13 +10,16 @@ import { UserService, UserDialogData } from '../user.service';
 export class LoginDialogComponent {
 
   hide = true;
-  loggedIn: boolean;
+  loggedIn: boolean = false;
   loginFailed: boolean = false;
 
   constructor(public dialogRef: MatDialogRef<LoginDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: UserDialogData,
     private userService: UserService) {
     this.loggedIn = this.userService.isLoggedIn();
+    if (this.loggedIn == null) {
+      this.userService.checkLogged().subscribe(res => this.loggedIn = true, error => this.loggedIn = false);
+    }
   }
 
   onNoClick(): void {

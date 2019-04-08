@@ -118,7 +118,7 @@ namespace BookLib.API.Controllers
         {
             string res = string.Empty;
             User.Claims.ToList().ForEach(u => res += u.Value + " ");
-            return res;
+            return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
         // GET: api/Auth/Admin
@@ -129,7 +129,7 @@ namespace BookLib.API.Controllers
         {
             string res = string.Empty;
             User.Claims.ToList().ForEach(u => res += u.Value + " ");
-            return res;
+            return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
         // GET: api/Auth/User
@@ -140,7 +140,7 @@ namespace BookLib.API.Controllers
         {
             string res = string.Empty;
             User.Claims.ToList().ForEach(u => res += u.Value + " ");
-            return res;
+            return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
         #endregion
     }
