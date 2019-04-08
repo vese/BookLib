@@ -12,7 +12,10 @@ import { EditBookComponent } from './edit-book/edit-book.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSelectModule, MatInputModule, MatIconModule, MatButtonModule, MatCheckboxModule } from '@angular/material';
+import { MatSelectModule, MatInputModule, MatIconModule, MatButtonModule, MatCheckboxModule, MatDialogModule } from '@angular/material';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,11 @@ import { MatSelectModule, MatInputModule, MatIconModule, MatButtonModule, MatChe
     NotificationComponent,
     HomeComponent,
     AddBookComponent,
-    EditBookComponent
+    EditBookComponent,
+    LoginDialogComponent,
+    RegisterDialogComponent,
+    UserComponent,
+    LoginDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -35,8 +42,11 @@ import { MatSelectModule, MatInputModule, MatIconModule, MatButtonModule, MatChe
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatDialogModule
   ],
+  exports: [LoginDialogComponent],
+  entryComponents: [LoginDialogComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

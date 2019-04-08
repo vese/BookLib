@@ -61,9 +61,9 @@ namespace BookLib.API.Controllers
 
                 var response = new
                 {
-                    AccessToken = encodedJwt,
-                    Username = loginUser.Name,
-                    Role = role
+                    auth_token = encodedJwt,
+                    username = loginUser.Name,
+                    role = role
                 };
                 
                 return new OkObjectResult(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));

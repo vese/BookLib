@@ -57,7 +57,7 @@ export class BookService {
     if (selectedSortOrder) {
       params = params.set("order", "" + selectedSortOrder);
     }
-    
+
     return this.http.get<ListBook[]>(this.baseUrl + this.contrUrl + "filter",
       {
         params: params
