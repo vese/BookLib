@@ -1,3 +1,27 @@
-<p>
-  register-dialog works!
-</p>
+<div *ngIf="!loggedIn && (registerFailed == null || registerFailed != null && registerFailed)">
+  <h1 mat-dialog-title>Регистрация</h1>
+  <div *ngIf="registerFailed">{{failtureMessage}}</div>
+  <div mat-dialog-content>
+    <mat-form-field>
+      <input matInput placeholder="Логин" [(ngModel)]="data.name">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Пароль" [type]="hide ? 'password' : 'text'" [(ngModel)]="data.pass">
+      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Подтвердите пароль" [type]="hide ? 'password' : 'text'" [(ngModel)]="passConfirm">
+      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Отмена</button>
+    <button mat-button (click)="onRegisterClick()" cdkFocusInitial>Регистрация</button>
+  </div>
+</div>
+<div *ngIf="registerFailed != null && !registerFailed">
+  <h1>Успешная регистрация!</h1>
+</div>
+<div *ngIf="loggedIn">
+  <h1>Успешный вход!</h1>
+</div>

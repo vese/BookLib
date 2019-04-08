@@ -107,7 +107,7 @@ namespace BookLib.API.Controllers
                 ModelState.TryAddModelError("registrarion_failure", "Unable to add user to role.");
                 return BadRequest(ModelState);
             }
-            return new OkObjectResult("Account created");
+            return new OkObjectResult(JsonConvert.SerializeObject("Account created", new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
         #region Test

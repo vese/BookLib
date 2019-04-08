@@ -14,6 +14,7 @@ export interface UserDialogData {
 })
 
 export class UserService {
+
   contrUrl: string;
   baseUrl: string;
 
@@ -59,6 +60,13 @@ export class UserService {
       localStorage.setItem('role', r.role);
       this.loggedIn = true;
     }, error => this.loggedIn = false)
+    return res;
+  }
+
+  register(data: UserDialogData): Observable<any> {
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+    let res = this.http.post(this.baseUrl + this.contrUrl + 'register/', data, { headers });
     return res;
   }
 }

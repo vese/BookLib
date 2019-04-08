@@ -29,7 +29,8 @@ import { UserComponent } from './user/user.component';
     LoginDialogComponent,
     RegisterDialogComponent,
     UserComponent,
-    LoginDialogComponent
+    LoginDialogComponent,
+    RegisterDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -45,8 +46,14 @@ import { UserComponent } from './user/user.component';
     MatCheckboxModule,
     MatDialogModule
   ],
-  exports: [LoginDialogComponent],
-  entryComponents: [LoginDialogComponent],
+  exports: [
+    LoginDialogComponent,
+    RegisterDialogComponent
+  ],
+  entryComponents: [
+    LoginDialogComponent,
+    RegisterDialogComponent
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
