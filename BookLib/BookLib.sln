@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLib.MVC", "BookLib\BookLib.MVC.csproj", "{EAF4CE7B-8B12-4849-AFD1-0C2DEF8FD55D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLib.Data", "BookLib.Data\BookLib.Data.csproj", "{E6CA8D7F-8112-40A1-B206-53F20698DC9C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLib.Cons", "BookLib.Cons\BookLib.Cons.csproj", "{B8703E6D-D75E-4D76-81F8-C20DC0879C50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLib.API", "BookLib.API\BookLib.API.csproj", "{4112DBA2-085D-4DEA-A88E-CECB889531AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLib.API", "BookLib.API\BookLib.API.csproj", "{4112DBA2-085D-4DEA-A88E-CECB889531AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EAF4CE7B-8B12-4849-AFD1-0C2DEF8FD55D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EAF4CE7B-8B12-4849-AFD1-0C2DEF8FD55D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EAF4CE7B-8B12-4849-AFD1-0C2DEF8FD55D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EAF4CE7B-8B12-4849-AFD1-0C2DEF8FD55D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E6CA8D7F-8112-40A1-B206-53F20698DC9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E6CA8D7F-8112-40A1-B206-53F20698DC9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6CA8D7F-8112-40A1-B206-53F20698DC9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
