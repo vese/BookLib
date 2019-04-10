@@ -38,11 +38,29 @@ export class Param {
   name: string
 }
 
-export class filterParams {
+export class FilterParams {
   releaseYears: number[]
   authors: Param[]
   publishers: Param[]
   series: Param[]
   categories: { category: Param, genres: Param[] }[]
   sortProperties: { name: string, value: string }[]
+}
+
+export class ViewBook {
+  name: string
+  isbn: string
+  description: string
+  releaseYear: number
+  authorId: number
+  author: string
+  publisherId: number
+  publisher: string
+  hasSeries: boolean
+  seriesId: number
+  series: string
+  categoryId: number
+  category: string
+  genreId: number
+  genre: string
 }

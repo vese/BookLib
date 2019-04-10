@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ListBook, Book, filterParams } from './BookClasses';
+import { ListBook, Book, FilterParams, ViewBook } from './BookClasses';
 import { Observable, of } from 'rxjs';
 import { ConfigService } from './config.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,9 @@ export class BookService {
   contrUrl: string;
   baseUrl: string;
 
-  constructor(private http: HttpClient, private configService: ConfigService) {
+  constructor(private http: HttpClient,
+    private configService: ConfigService,
+    private userService: UserService) {
     this.baseUrl = this.configService.getApiURI();
     this.contrUrl = "books/";
   }
@@ -68,7 +71,19 @@ export class BookService {
     return this.http.get<Book>(this.baseUrl + this.contrUrl, { params: new HttpParams().set("id", "" + id) });
   }
 
-  getFilterParams(): Observable<filterParams> {
-    return this.http.get<filterParams>(this.baseUrl + this.contrUrl + "filterparams");
+  getFilterParams(): Observable<FilterParams> {
+    return this.http.get<FilterParams>(this.baseUrl + this.contrUrl + "filterparams");
+  }
+
+  addBook(count: number, data: ViewBook): any {
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+
+    return this.http.post(this.baseUrl + this.contrUrl, data, {
+      params: new HttpParams().set("count", "" + count),
+      headers: headers
+    });
   }
 }

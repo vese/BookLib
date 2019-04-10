@@ -7,5 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent
 {
+  loggedIn: boolean;
+  isAdmin: boolean;
 
+  onLogged(params: any) {
+    this.loggedIn = params.loggedIn;
+    this.isAdmin = params.role === "admin";
+  }
 }

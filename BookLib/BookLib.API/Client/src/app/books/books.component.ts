@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ListBook, filterParams, Param } from '../BookClasses';
+import { ListBook, FilterParams, Param } from '../BookClasses';
 import { BookService } from '../book.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { BookService } from '../book.service';
   styleUrls: ['./books.component.css']
 })
 export class BooksComponent implements OnInit {
-  filterParams: filterParams;
+  filterParams: FilterParams;
   books: ListBook[];
 
   inNameString: string;
@@ -56,7 +56,6 @@ export class BooksComponent implements OnInit {
     }
     else {
       this.selectedGenreId = null;
-      this.selectedCategoryGenres = [];
       this.selectedCategoryGenres = [];
     }
   }

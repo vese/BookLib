@@ -27,9 +27,7 @@ export class UserService {
 
   isLoggedIn(): boolean {
     if (this.loggedIn == null) {
-      this.checkLogged().subscribe(res => this.loggedIn = true, error => {
-        this.logout();
-      });
+      this.checkLogged().subscribe(res => this.loggedIn = true, error => this.logout());
     }
     return this.loggedIn;
   }

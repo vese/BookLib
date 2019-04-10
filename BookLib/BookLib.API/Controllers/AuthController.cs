@@ -65,7 +65,7 @@ namespace BookLib.API.Controllers
                     username = loginUser.Name,
                     role = role
                 };
-                
+
                 return new OkObjectResult(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
             }
             else
@@ -88,7 +88,7 @@ namespace BookLib.API.Controllers
             var oldUser = _userManager.FindByNameAsync(registerUser.Name).Result;
             if (oldUser != null)
             {
-                ModelState.TryAddModelError("Model", "User with this name already exists.");
+                ModelState.TryAddModelError("Model", "Пользователь с таким именем уже существует!");
                 return BadRequest(ModelState);
             }
             var user = new ApplicationUser()
@@ -98,13 +98,13 @@ namespace BookLib.API.Controllers
             var result = await _userManager.CreateAsync(user, registerUser.Pass);
             if (!result.Succeeded)
             {
-                ModelState.TryAddModelError("Model", "Unable to create new user.");
+                ModelState.TryAddModelError("Model", "Произошла ошибка при создании пользователя!");
                 return BadRequest(ModelState);
             }
             result = await _userManager.AddToRoleAsync(user, "user");
             if (!result.Succeeded)
             {
-                ModelState.TryAddModelError("Model", "Unable to add user to role.");
+                ModelState.TryAddModelError("Model", "Произошла ошибка при создании пользователя!");
                 return BadRequest(ModelState);
             }
             return new OkObjectResult(JsonConvert.SerializeObject("Account created", new JsonSerializerSettings { Formatting = Formatting.Indented }));
@@ -116,8 +116,11 @@ namespace BookLib.API.Controllers
         [Authorize]
         public ActionResult<string> Get()
         {
-            string res = string.Empty;
-            User.Claims.ToList().ForEach(u => res += u.Value + " ");
+            var res = new
+            {
+                name = User.FindFirstValue(ClaimsIdentity.DefaultNameClaimType),
+                role = User.FindFirstValue(ClaimsIdentity.DefaultRoleClaimType)
+            };
             return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 

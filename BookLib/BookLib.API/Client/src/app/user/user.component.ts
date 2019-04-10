@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { UserService } from '../user.service';
@@ -11,6 +11,11 @@ import { RegisterDialogComponent } from '../register-dialog/register-dialog.comp
 })
 export class UserComponent implements OnInit {
 
+  @Output() onLogged = new EventEmitter<{ loggedIn: boolean, role: string }>();
+  logged() {
+    this.onLogged.emit({ loggedIn: this.loggedIn, role: localStorage.getItem("role") });
+  }
+
   name: string;
   password: string;
   loggedIn: boolean;
@@ -19,7 +24,20 @@ export class UserComponent implements OnInit {
     public dialog: MatDialog) {
     this.loggedIn = this.userService.isLoggedIn();
     if (this.loggedIn == null) {
-      this.userService.checkLogged().subscribe(res => this.loggedIn = true, error => this.loggedIn = false);
+      this.userService.checkLogged().subscribe(res => {
+        this.loggedIn = true;
+        this.name = localStorage.getItem("name");
+        this.logged();
+      }, error => {
+        this.loggedIn = false;
+        this.logged();
+      });
+    }
+    else {
+      this.logged();
+      if (this.loggedIn) {
+        this.name = localStorage.getItem("name");
+      }
     }
   }
 
@@ -30,6 +48,10 @@ export class UserComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.loggedIn = this.userService.isLoggedIn();
+      if (this.loggedIn) {
+        this.name = localStorage.getItem("name");
+      }
+      this.logged();
     });
   }
 
@@ -42,6 +64,7 @@ export class UserComponent implements OnInit {
   logout(): void {
     this.loggedIn = false;
     this.userService.logout();
+    this.logged();
   }
 
   ngOnInit() {
