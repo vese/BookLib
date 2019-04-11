@@ -121,8 +121,10 @@ export class AddBookComponent implements OnInit {
       this.bookService.addBook(this.countFormControl.value, data).subscribe(res => {
         this.failtureMessages.push("Книга успешно добавлена!")
       }, error => {
-        if (error.error.Book) {
-          error.error.Book.forEach(el => this.failtureMessages.push(el));
+        if (error.error) {
+          if (error.error.Book) {
+            error.error.Book.forEach(el => this.failtureMessages.push(el));
+          }
         }
       });
     }

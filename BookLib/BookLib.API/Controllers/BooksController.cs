@@ -185,7 +185,7 @@ namespace BookLib.API.Controllers
 
             if (!BookExists(id))
             {
-                ModelState.TryAddModelError("not_found", $"Book with id = {id} does not exist.");
+                ModelState.TryAddModelError("Book", $"Book with id = {id} does not exist.");
                 return BadRequest(ModelState);
             }
 
@@ -204,7 +204,7 @@ namespace BookLib.API.Controllers
                     {
                         if (_context.Book.Any(b => b.Isbn == book.Isbn))
                         {
-                            ModelState.TryAddModelError(nameof(book.Isbn), $"Book with ISBN = {book.Isbn} already exists.");
+                            ModelState.TryAddModelError("Book", $"Book with ISBN = {book.Isbn} already exists.");
                             return BadRequest(ModelState);
                         }
                         libBook.Isbn = book.Isbn;
@@ -243,7 +243,7 @@ namespace BookLib.API.Controllers
                     }
                     else
                     {
-                        ModelState.TryAddModelError("not_found", $"Author with id = {book.AuthorId} does not exist.");
+                        ModelState.TryAddModelError("Book", $"Author with id = {book.AuthorId} does not exist.");
                         return BadRequest(ModelState);
                     }
 
@@ -276,7 +276,7 @@ namespace BookLib.API.Controllers
                     }
                     else
                     {
-                        ModelState.TryAddModelError("not_found", $"Publisher with id = {book.PublisherId} does not exist.");
+                        ModelState.TryAddModelError("Book", $"Publisher with id = {book.PublisherId} does not exist.");
                         return BadRequest(ModelState);
                     }
 
@@ -311,7 +311,7 @@ namespace BookLib.API.Controllers
                         }
                         else
                         {
-                            ModelState.TryAddModelError("not_found", $"Series with id = {book.SeriesId} does not exist.");
+                            ModelState.TryAddModelError("Book", $"Series with id = {book.SeriesId} does not exist.");
                             return BadRequest(ModelState);
                         }
                     }
@@ -381,13 +381,13 @@ namespace BookLib.API.Controllers
                         }
                         else
                         {
-                            ModelState.TryAddModelError("not_found", $"Genre with id = {book.GenreId} does not exist or is in another category.");
+                            ModelState.TryAddModelError("Book", $"Genre with id = {book.GenreId} does not exist or is in another category.");
                             return BadRequest(ModelState);
                         }
                     }
                     else
                     {
-                        ModelState.TryAddModelError("not_found", $"Category with id = {book.CategoryId} does not exist.");
+                        ModelState.TryAddModelError("Book", $"Category with id = {book.CategoryId} does not exist.");
                         return BadRequest(ModelState);
                     }
 
@@ -409,7 +409,7 @@ namespace BookLib.API.Controllers
                 catch (Exception)
                 {
                     transaction.Rollback();
-                    ModelState.TryAddModelError("db_error", "Can not perform database action.");
+                    ModelState.TryAddModelError("Book", "Can not perform database action.");
                     return BadRequest(ModelState);
                 }
             }
