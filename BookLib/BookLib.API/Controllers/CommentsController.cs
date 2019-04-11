@@ -31,7 +31,7 @@ namespace BookLib.API.Controllers
                 c.Text,
                 c.Mark,
                 c.IdUserNavigation.UserName
-            });
+            }).ToList();
 
             return new OkObjectResult(JsonConvert.SerializeObject(comments,
                 new JsonSerializerSettings {Formatting = Formatting.Indented}));
