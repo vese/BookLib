@@ -24,9 +24,14 @@ namespace BookLib.API.Controllers
         [HttpGet]
         public IActionResult GetComment(int bookId, int beginNumber, int number)
         {
-            IEnumerable<Comment> comments = (from c in _context.Comment
+            var comments = (from c in _context.Comment
                 where c.IdBook == bookId
-                select c).Skip(beginNumber).Take(number);
+                select c).Skip(beginNumber).Take(number).Select(c => new
+            {
+                c.Text,
+                c.Mark,
+                c.IdUserNavigation.UserName
+            });
 
             return new OkObjectResult(JsonConvert.SerializeObject(comments,
                 new JsonSerializerSettings {Formatting = Formatting.Indented}));
