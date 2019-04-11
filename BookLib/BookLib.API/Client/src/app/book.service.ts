@@ -86,4 +86,16 @@ export class BookService {
       headers: headers
     });
   }
+
+  editBook(id: number, data: ViewBook): any {
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+
+    return this.http.put(this.baseUrl + this.contrUrl, data, {
+      params: new HttpParams().set("id", "" + id),
+      headers: headers
+    });
+  }
 }

@@ -11,6 +11,7 @@ import { BookService } from '../book.service';
 })
 export class BookDetailComponent implements OnInit {
   @Input() book: Book;
+  id: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,8 +23,8 @@ export class BookDetailComponent implements OnInit {
   }
 
   getBook(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.bookService.getBook(id).subscribe(book => this.book = book);
+    this.id = +this.route.snapshot.paramMap.get('id');
+    this.bookService.getBook(this.id).subscribe(book => this.book = book);
   }
 
   goBack(): void {

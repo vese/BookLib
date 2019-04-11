@@ -4,6 +4,7 @@ import { BooksComponent } from './books/books.component';
 import { HomeComponent } from './home/home.component';
 import { BookDetailComponent } from './book-detail/book-detail.component';
 import { AddBookComponent } from './add-book/add-book.component';
+import { EditBookComponent } from './edit-book/edit-book.component';
 
 const routes: Routes =
   [{
@@ -14,6 +15,9 @@ const routes: Routes =
   },
   {
     path: "book/add", component: AddBookComponent
+  },
+  {
+    path: "book/edit/:id", component: EditBookComponent
   },
   {
     path: "book/:id", component: BookDetailComponent
