@@ -1,28 +1,41 @@
-/* You can add global styles to this file, and also import other style files */
-/* Application-wide Styles */
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 h1 {
   color: #369;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Segoe UI, Helvetica, sans-serif;
   font-size: 250%;
 }
 
 h2, h3 {
   color: #444;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Segoe UI, Helvetica, sans-serif;
   font-weight: lighter;
 }
 
+span {
+  margin-right:1em;
+}
+
+mat-form-field {
+  width:100%;
+}
+
+nav {
+  padding: 1em 1em 1em 1em;
+  margin-bottom: 0.5em;
+  background: #E0E0E0;
+}
+
 body {
-  margin: 2em;
+  font-size: 90%;
+  margin: 0em;
 }
 
 body, input[type="text"], button {
   color: #888;
-  font-family: Cambria, Georgia;
+  font-family: Segoe UI, Helvetica, sans-serif;
 }
-/* everywhere else */
+
 * {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Segoe UI, Helvetica, sans-serif;
 }

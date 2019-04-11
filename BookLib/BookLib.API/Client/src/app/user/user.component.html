@@ -1,16 +1,8 @@
 <span *ngIf="!loggedIn">
-  <span>
-    <button mat-raised-button (click)="openLoginDialog()">Вход</button>
-  </span>
-  <span>
-    <button mat-raised-button (click)="openRegisterDialog()">Регистрация</button>
-  </span>
+    <span><button mat-raised-button (click)="openLoginDialog()">Вход</button></span>
+    <span><button mat-raised-button (click)="openRegisterDialog()">Регистрация</button></span>
 </span>
 <span *ngIf="loggedIn">
-  <span>
-    {{name}}
-  </span>
-  <span>
-    <button mat-raised-button (click)="logout()">Выход</button>
-  </span>
+  <span><b>{{name}}</b></span>
+  <span><button mat-raised-button (click)="logout()">Выход</button></span>
 </span>
