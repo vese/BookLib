@@ -22,19 +22,55 @@ namespace BookLib.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetComment(int bookId, int beginNumber, int number)
+        public IActionResult GetComment(int bookId, int beginNumber, int number, string order)
         {
-            var comments = (from c in _context.Comment
-                where c.IdBook == bookId
-                select c).Skip(beginNumber).Take(number).Select(c => new
-            {
-                c.Text,
-                c.Mark,
-                c.IdUserNavigation.UserName
-            }).ToList();
+            bool desc = (order ?? default(string)) == "desc";
+            var comments = _context.Comment.Where(c => c.IdBook == bookId).OrderBy(b => desc ? null : b.Mark)
+                .OrderByDescending(b => desc ? b.Mark : null).Select(c => new
+                {
+                    text = c.Text,
+                    mark = c.Mark,
+                    name = c.IdUserNavigation.UserName
+                }).ToList();
 
             return new OkObjectResult(JsonConvert.SerializeObject(comments,
                 new JsonSerializerSettings {Formatting = Formatting.Indented}));
+        }
+
+        [HttpPost]
+        public IActionResult PostComment(string text, int mark, ApplicationUser idUserNavigation, Book idBookNavigation)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var newComment = _context.Comment.Add(new Comment()
+                    {
+                        Text = text,
+                        Mark = mark,
+                        IdBookNavigation = idBookNavigation,
+                        IdBook = idBookNavigation.Id,
+                        IdUserNavigation = idUserNavigation,
+                        IdUser = idUserNavigation.Id
+                    });
+
+                    _context.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    ModelState.TryAddModelError("Comment", "Ошибка при добавлении отзыва");
+                    return BadRequest(ModelState);
+                }
+            }
+
+            return new OkResult();
         }
     }
 }
