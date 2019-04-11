@@ -63,22 +63,22 @@ namespace BookLib.API.Controllers
                     new
                     {
                         value = nameof(SortProperty.Author),
-                        name = "Автор"
+                        name = "автору"
                     },
                     new
                     {
                         value = nameof(SortProperty.Mark),
-                        name = "Средняя оценка"
+                        name = "средней оценке"
                     },
                     new
                     {
                         value = nameof(SortProperty.Name),
-                        name = "Название"
+                        name = "названию"
                     },
                     new
                     {
                         value = nameof(SortProperty.ReleaseYear),
-                        name = "Дата издания"
+                        name = "дате издания"
                     }
                 }.ToList()
             };

@@ -1,25 +1,43 @@
-<div *ngIf="book">
-  <h2>{{book.name}}</h2>
-  <div><span>ISBN: </span>{{book.isbn}}</div>
-  <div><span>Author: </span>{{book.author}}</div>
-  <div><span>Description: </span>{{book.description}}</div>
-  <div><span>Publisher: </span>{{book.publisher}}</div>
-  <div><span>Category: </span>{{book.category}}</div>
-  <div><span>Genre: </span>{{book.genre}}</div>
-  <div><span>Series: </span>{{book.series}}</div>
-  <div><span>Release year: </span>{{book.releaseYear}}</div>
-  <div><span>Comments count: </span>{{book.commentsCount}}</div>
-  <div><span>Mark: </span>{{book.averageMark}}</div>
-  <div><span>Free count: </span>{{book.freeCount}}</div>
-  <div>
-    <span>
-      Comments:
-    </span>
+<div *ngIf="book" class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <h2>{{book.name}} </h2> 
+      <p><b><a href="">{{book.author}}</a></b> </p>
+    </div>
   </div>
-  <ul>
-    <li *ngFor="let comment of book.comments">
-      {{comment.text}} {{comment.mark}}
-    </li>
-  </ul>
+  <div class="row">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+      <p><b>Серия:</b> &laquo;{{book.series}}&raquo;<br />{{book.category}} / {{book.genre}}</p>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+      <p><b>Издатель:</b> &laquo;{{book.publisher}}&raquo; ({{book.releaseYear}} год)<br/>
+      <b>ISBN:</b> {{book.isbn}}
+    </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-11 col-sm-11 col-md-9 col-lg-9">
+      <p><b class="material-icons">book</b> <b>Описание:</b> {{book.description}}</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-11 col-sm-11 col-md-9 col-lg-9">
+      <p><b>Рейтинг:</b> {{book.averageMark}}</p>
+      <p><b>Комментарии ({{book.commentsCount}}):</b></p>
+      <ul>
+        <li *ngFor="let comment of book.comments">
+          {{comment.text}} {{comment.mark}}
+        </li>
+      </ul>
+      <button (click)="goBack()">Назад</button>
+    </div>
+  </div>
+
+ <!--
+  <div><span>В наличии: </span>{{book.freeCount}}</div>
+      
+-->
 </div>
-<button (click)="goBack()">Назад</button>
+
+
