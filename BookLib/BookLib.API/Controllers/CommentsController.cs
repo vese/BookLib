@@ -22,30 +22,14 @@ namespace BookLib.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetComment(int id)
+        public IActionResult GetComment(int bookId, int beginNumber, int number)
         {
-            if (!CommentExist(id))
-            {
-                ModelState.TryAddModelError("not_found", $"Comment with id = {id} does not exist.");
-                return BadRequest(ModelState);
-            }
+            IEnumerable<Comment> comments = (from c in _context.Comment
+                where c.IdBook == bookId
+                select c).Skip(beginNumber).Take(number);
 
-            var libComment = _context.Comment.Find(id);
-
-            var comment = new
-            {
-                idBook = libComment.IdBookNavigation,
-                text = libComment.Text,
-                mark = libComment.Mark != null ? Convert.ToString(libComment.Mark) : "Mark does not exist",
-                idUser = libComment.IdUserNavigation
-            };
-
-            return new OkObjectResult(JsonConvert.SerializeObject(comment, new JsonSerializerSettings { Formatting = Formatting.Indented }));
-        }
-
-        private bool CommentExist(int id)
-        {
-            return _context.Comment.Any(e => e.Id == id);
+            return new OkObjectResult(JsonConvert.SerializeObject(comments,
+                new JsonSerializerSettings {Formatting = Formatting.Indented}));
         }
     }
 }

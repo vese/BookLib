@@ -167,11 +167,6 @@ namespace BookLib.API.Controllers
                 series = libBook.IdSeriesNavigation == null ? null : libBook.IdSeriesNavigation.Name,
                 commentsCount = libBook.Comments.Count(),
                 averageMark = libBook.Comments.Any() ? (int)libBook.Comments.Sum(c => c.Mark) / libBook.Comments.Count() : 0,
-                comments = libBook.Comments.Select(c => new
-                {
-                    text = c.Text,
-                    mark = c.Mark
-                }).ToList(),
                 freeCount = libBook.Availability.FreeCount
             };
 
