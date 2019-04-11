@@ -69,7 +69,7 @@ namespace BookLib.API.Controllers
                 }
             }
 
-            return new OkObjectResult(JsonConvert.SerializeObject("OkResult"));
+            return new OkResult();
         }
     }
 }
