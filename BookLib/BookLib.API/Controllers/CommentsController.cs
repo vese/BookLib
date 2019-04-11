@@ -38,7 +38,8 @@ namespace BookLib.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostComment(string text, int mark, ApplicationUser idUserNavigation, Book idBookNavigation)
+        [Authorize(Roles = "user")]
+        public IActionResult PostComment(string text, int mark, string idUser, int idBook)
         {
             if (!ModelState.IsValid)
             {
@@ -53,10 +54,8 @@ namespace BookLib.API.Controllers
                     {
                         Text = text,
                         Mark = mark,
-                        IdBookNavigation = idBookNavigation,
-                        IdBook = idBookNavigation.Id,
-                        IdUserNavigation = idUserNavigation,
-                        IdUser = idUserNavigation.Id
+                        IdBook = idBook,
+                        IdUser = idUser
                     });
 
                     _context.SaveChanges();
@@ -70,7 +69,7 @@ namespace BookLib.API.Controllers
                 }
             }
 
-            return new OkResult();
+            return new OkObjectResult(JsonConvert.SerializeObject("OkResult"));
         }
     }
 }
