@@ -13,6 +13,12 @@ export class ListBook {
   freeCount: number
 }
 
+export class BookComment {
+  text: string
+  mark: number
+  name: string
+}
+
 export class Book {
   name: string
   isbn: string
@@ -25,11 +31,6 @@ export class Book {
   series: string
   commentsCount: number
   averageMark: number
-  comments:
-    {
-      text: string,
-      mark: number
-    }[]
   freeCount: number
 }
 

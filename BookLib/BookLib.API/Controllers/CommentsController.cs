@@ -26,7 +26,7 @@ namespace BookLib.API.Controllers
         {
             bool desc = (order ?? default(string)) == "desc";
             var comments = _context.Comment.Where(c => c.IdBook == bookId).OrderBy(b => desc ? null : b.Mark)
-                .OrderByDescending(b => desc ? b.Mark : null).Select(c => new
+                .OrderByDescending(b => desc ? b.Mark : null).Skip(beginNumber).Take(number).Select(c => new
                 {
                     text = c.Text,
                     mark = c.Mark,
@@ -69,7 +69,7 @@ namespace BookLib.API.Controllers
                 }
             }
 
-            return new OkObjectResult(JsonConvert.SerializeObject("OkResult"));
+            return new OkResult();
         }
     }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ListBook, Book, FilterParams, ViewBook } from './BookClasses';
+import { ListBook, Book, FilterParams, ViewBook, BookComment } from './BookClasses';
 import { Observable, of } from 'rxjs';
 import { ConfigService } from './config.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -73,6 +73,16 @@ export class BookService {
 
   getFilterParams(): Observable<FilterParams> {
     return this.http.get<FilterParams>(this.baseUrl + this.contrUrl + "filterparams");
+  }
+
+  getComments(bookId: number, beginNumber: number, number: number, order: string): Observable<BookComment[]> {
+    let params = new HttpParams();
+    if (order) {
+      params = params.set("order", "" + order);
+    }
+    return this.http.get<BookComment[]>(this.baseUrl + "/comments", {
+      params: params.set("bookId", "" + bookId).set("beginNumber", "" + beginNumber).set("number", "" + number)
+    });
   }
 
   addBook(count: number, data: ViewBook): any {

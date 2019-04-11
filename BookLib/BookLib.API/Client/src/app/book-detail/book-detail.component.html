@@ -27,14 +27,20 @@
 
   <div class="row">
     <div class="col-xs-11 col-sm-11 col-md-9 col-lg-9">
+      <p><button (click)="goBack()">Назад</button></p>
       <p><b>Рейтинг:</b> {{book.averageMark}}</p>
       <p><b>Комментарии ({{book.commentsCount}}):</b></p>
-      <ul>
-        <li *ngFor="let comment of book.comments">
-          {{comment.text}} {{comment.mark}}
-        </li>
-      </ul>
-      <button (click)="goBack()">Назад</button>
+      <mat-paginator [length]="length"
+                     [pageSize]="pageSize"
+                     [pageSizeOptions]="pageSizeOptions"
+                     showFirstLastButtons
+                     (page)="getComments($event)">
+      </mat-paginator>
+      <mat-list>
+        <mat-list-item *ngFor="let comment of comments">
+          {{comment.text}} {{comment.mark}} - {{comment.name}}
+        </mat-list-item>
+      </mat-list>
     </div>
   </div>
 
