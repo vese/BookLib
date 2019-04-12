@@ -8,7 +8,7 @@ import { FormControl, Validators } from '@angular/forms';
   templateUrl: './login-dialog.component.html',
   styleUrls: ['./login-dialog.component.css']
 })
-export class LoginDialogComponent {
+export class LoginDialogComponent implements OnInit{
 
   hide = true;
   loggedIn: boolean = false;
@@ -38,7 +38,9 @@ export class LoginDialogComponent {
   }
 
   constructor(public dialogRef: MatDialogRef<LoginDialogComponent>,
-    private userService: UserService) {
+    private userService: UserService) {}
+
+  ngOnInit() {
     this.loggedIn = this.userService.isLoggedIn();
     if (this.loggedIn == null) {
       this.userService.checkLogged().subscribe(res => this.loggedIn = true, error => this.loggedIn = false);

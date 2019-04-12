@@ -3,8 +3,9 @@ import { Book, BookComment } from '../BookClasses';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { BookService } from '../book.service';
-import { PageEvent } from '@angular/material';
+import { PageEvent, MatDialog } from '@angular/material';
 import { CommentService } from '../comment.service';
+import { DeleteBookDialogComponent } from '../delete-book-dialog/delete-book-dialog.component';
 
 @Component({
   selector: 'app-book-detail',
@@ -25,7 +26,8 @@ export class BookDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private bookService: BookService,
     private commentService: CommentService,
-    private location: Location) { }
+    private location: Location,
+    public dialog: MatDialog) { }
 
   ngOnInit() {
     this.getBook();
@@ -49,5 +51,22 @@ export class BookDetailComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  openDeleteBookDialog() {
+    const dialogRef = this.dialog.open(DeleteBookDialogComponent, {
+      width: '400px',
+      data: {
+        id: this.id,
+        name: this.book.name
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(12345);
+      if (!result) {
+        this.goBack();
+      }
+    });
   }
 }

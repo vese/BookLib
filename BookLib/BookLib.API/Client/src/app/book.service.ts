@@ -97,4 +97,16 @@ export class BookService {
       headers: headers
     });
   }
+
+  deleteBook(id: number): any {
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+
+    return this.http.delete(this.baseUrl + this.contrUrl, {
+      params: new HttpParams().set("id", "" + id),
+      headers: headers
+    });
+  }
 }
