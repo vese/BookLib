@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { BookService } from '../book.service';
 import { PageEvent } from '@angular/material';
+import { CommentService } from '../comment.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -23,6 +24,7 @@ export class BookDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private bookService: BookService,
+    private commentService: CommentService,
     private location: Location) { }
 
   ngOnInit() {
@@ -41,7 +43,7 @@ export class BookDetailComponent implements OnInit {
   getComments($event): void {
     this.pageEvent = $event;
     this.comments = [];
-    this.bookService.getComments(this.id, this.pageEvent ? this.pageEvent.pageIndex * this.pageEvent.pageSize : 0
+    this.commentService.getComments(this.id, this.pageEvent ? this.pageEvent.pageIndex * this.pageEvent.pageSize : 0
       , this.pageEvent ? this.pageEvent.pageSize : this.pageSize, "asc").subscribe(res => this.comments = res);
   }
 
