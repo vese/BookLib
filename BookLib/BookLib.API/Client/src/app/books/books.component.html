@@ -2,115 +2,110 @@
   <div class="row">
 
     <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
-    <mat-form-field>
-      <mat-label>Поиск в названии</mat-label>
-      <input matInput [(ngModel)]="inNameString">
-      <button mat-button *ngIf="inNameString" matSuffix mat-icon-button aria-label="Clear" (click)="inNameString=''">
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
+      <mat-form-field>
+        <mat-label>Поиск в названии</mat-label>
+        <input matInput [(ngModel)]="inNameString" (change)="getBooks()">
+        <button mat-button *ngIf="inNameString" matSuffix mat-icon-button aria-label="Clear" (click)="inNameString=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
     </div>
 
     <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
-    <mat-form-field>
-      <mat-label>Автор</mat-label>
-      <mat-select [(value)]="selectedAuthorId">
-        <mat-option>---</mat-option>
-        <mat-option *ngFor="let author of filterParams.authors" [value]="author.id">
-          {{author.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field>
+        <mat-label>Автор</mat-label>
+        <mat-select [(value)]="selectedAuthorId" (selectionChange)="getBooks()">
+          <mat-option>---</mat-option>
+          <mat-option *ngFor="let author of filterParams.authors" [value]="author.id">
+            {{author.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
-    <mat-form-field>
-      <mat-label>Год издания</mat-label>
-      <mat-select [(value)]="selectedReleaseYear">
-        <mat-option>---</mat-option>
-        <mat-option *ngFor="let year of filterParams.releaseYears" [value]="year">
-          {{year}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field>
+        <mat-label>Год издания</mat-label>
+        <mat-select [(value)]="selectedReleaseYear" (selectionChange)="getBooks()">
+          <mat-option>---</mat-option>
+          <mat-option *ngFor="let year of filterParams.releaseYears" [value]="year">
+            {{year}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
-    <mat-form-field>
-      <mat-label>Издатель</mat-label>
-      <mat-select [(value)]="selectedPublisherId">
-        <mat-option>---</mat-option>
-        <mat-option *ngFor="let publisher of filterParams.publishers" [value]="publisher.id">
-          {{publisher.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-   </div>
+      <mat-form-field>
+        <mat-label>Издатель</mat-label>
+        <mat-select [(value)]="selectedPublisherId" (selectionChange)="getBooks()">
+          <mat-option>---</mat-option>
+          <mat-option *ngFor="let publisher of filterParams.publishers" [value]="publisher.id">
+            {{publisher.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
     <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
-    <mat-form-field>
-      <mat-label>Серия</mat-label>
-      <mat-select [(value)]="selectedSeriesId">
-        <mat-option>---</mat-option>
-        <mat-option *ngFor="let series of filterParams.series" [value]="series.id">
-          {{series.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+      <mat-form-field>
+        <mat-label>Серия</mat-label>
+        <mat-select [(value)]="selectedSeriesId" (selectionChange)="getBooks()">
+          <mat-option>---</mat-option>
+          <mat-option *ngFor="let series of filterParams.series" [value]="series.id">
+            {{series.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
     <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
-    <mat-form-field>
-      <mat-label>Категория</mat-label>
-      <mat-select [(value)]="selectedCategoryId" (selectionChange)="getCategoryGenres()">
-        <mat-option>---</mat-option>
-        <mat-option *ngFor="let category of filterParams.categories" [value]="category.category.id">
-          {{category.category.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  
+      <mat-form-field>
+        <mat-label>Категория</mat-label>
+        <mat-select [(value)]="selectedCategoryId" (selectionChange)="getCategoryGenres();getBooks()">
+          <mat-option>---</mat-option>
+          <mat-option *ngFor="let category of filterParams.categories" [value]="category.category.id">
+            {{category.category.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
     <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
-    <mat-form-field>
-      <mat-label>Жанр</mat-label>
-      <mat-select [(value)]="selectedGenreId" [disabled]="!selectedCategoryId">
-        <mat-option>---</mat-option>
-        <mat-option *ngFor="let genre of selectedCategoryGenres" [value]="genre.id">
-          {{genre.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field>
+        <mat-label>Жанр</mat-label>
+        <mat-select [(value)]="selectedGenreId" [disabled]="!selectedCategoryId" (selectionChange)="getBooks()">
+          <mat-option>---</mat-option>
+          <mat-option *ngFor="let genre of selectedCategoryGenres" [value]="genre.id">
+            {{genre.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+      <mat-checkbox [(ngModel)]="selectedHasFree" (change)="getBooks()">Только свободные</mat-checkbox>
+    </div>
   </div>
-  <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
-    <mat-checkbox [(ngModel)]="selectedHasFree">Только свободные</mat-checkbox>
+
+  <div class="row">
+    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+      <mat-form-field>
+        <mat-label>Сортировать по</mat-label>
+        <mat-select [(value)]="selectedSortProperty" (selectionChange)="getBooks()">
+          <mat-option *ngFor="let sortProperty of filterParams.sortProperties" [value]="sortProperty.value">
+            {{sortProperty.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div *ngIf="selectedSortProperty" (click)="getSortOrder()" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+      <mat-checkbox [(ngModel)]="selectedSortOrderValue" (change)="getBooks()">По возрастанию</mat-checkbox>
+    </div>
   </div>
+
+  <ol class="books">
+    <li *ngFor="let b of books">
+      <a routerLink="/book/{{b.id}}"><span>{{b.name}} ({{b.author}})</span></a>
+    </li>
+  </ol>
 </div>
-
-<div class="row">
-  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-    <mat-form-field>
-      <mat-label>Сортировать по</mat-label>
-      <mat-select [(value)]="selectedSortProperty">
-        <mat-option *ngFor="let sortProperty of filterParams.sortProperties" [value]="sortProperty.value">
-          {{sortProperty.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <span *ngIf="selectedSortProperty" (click)="getSortOrder()">
-  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-      <mat-checkbox [(ngModel)]="selectedSortOrderValue">По возрастанию</mat-checkbox>
-  </div>
-    </span>
-
-  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-    <button mat-raised-button (click)="getBooks()">Фильтровать</button>
-  </div>
-</div>
-
-<ol class="books">
-  <li *ngFor="let b of books">
-    <a routerLink="/book/{{b.id}}"><span>{{b.name}} ({{b.author}})</span></a>
-  </li>
-</ol>

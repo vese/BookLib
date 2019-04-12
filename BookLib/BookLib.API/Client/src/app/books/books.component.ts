@@ -50,6 +50,11 @@ export class BooksComponent implements OnInit {
     this.bookService.getFilterParams().subscribe(params => this.filterParams = params);
   }
 
+  getCategoryGenresAndBooks(): void {
+    this.getBooks();
+    this.getCategoryGenres();
+  }
+
   getCategoryGenres(): void {
     if (this.selectedCategoryId) {
       this.selectedCategoryGenres = this.filterParams.categories.find(category => category.category.id === this.selectedCategoryId).genres;
