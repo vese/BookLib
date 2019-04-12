@@ -19,6 +19,7 @@ export class AddBookComponent implements OnInit {
   selectedCategoryGenres: Param[];
   selectedGenreId: number;
   failtureMessages: string[];
+  disableGenre: boolean = true;
 
   nameFormControl = new FormControl("", [
     Validators.required
@@ -46,7 +47,7 @@ export class AddBookComponent implements OnInit {
   categoryFormControl = new FormControl("", [
     Validators.required
   ]);
-  genreFormControl = new FormControl("", [
+  genreFormControl = new FormControl({ value: "", disabled: this.disableGenre }, [
     Validators.required
   ]);
   countFormControl = new FormControl("", [
@@ -141,6 +142,16 @@ export class AddBookComponent implements OnInit {
     else {
       this.selectedGenreId = null;
       this.selectedCategoryGenres = [];
+    }
+  }
+
+  setDisableGenre(): void {
+    this.disableGenre = !this.selectedCategoryId && (!this.categoryFormControl.value || this.categoryFormControl.invalid);
+    if (this.disableGenre) {
+      this.genreFormControl.disable();
+    }
+    else {
+      this.genreFormControl.enable();
     }
   }
 }

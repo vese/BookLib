@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { UserService, UserDialogData } from '../user.service';
 import { FormControl, Validators } from '@angular/forms';

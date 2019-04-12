@@ -22,6 +22,7 @@ export class EditBookComponent implements OnInit {
   selectedCategoryGenres: Param[];
   selectedGenreId: number;
   failtureMessages: string[];
+  disableGenre: boolean;
 
   nameFormControl = new FormControl("", [
     Validators.required
@@ -158,6 +159,16 @@ export class EditBookComponent implements OnInit {
     else {
       this.selectedGenreId = null;
       this.selectedCategoryGenres = [];
+    }
+  }
+
+  setDisableGenre(): void {
+    this.disableGenre = !this.selectedCategoryId && (!this.categoryFormControl.value || this.categoryFormControl.invalid);
+    if (this.disableGenre) {
+      this.genreFormControl.disable();
+    }
+    else {
+      this.genreFormControl.enable();
     }
   }
 }
