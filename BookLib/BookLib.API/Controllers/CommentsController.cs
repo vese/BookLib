@@ -46,6 +46,13 @@ namespace BookLib.API.Controllers
                 return BadRequest(ModelState);
             }
 
+
+            if (_context.Comment.Any(c => c.IdBook == idBook && c.IdUser == idUser))
+            {
+                ModelState.TryAddModelError("Comment", "Отзыв на эту книгу от этого пользователя уже существует");
+                return BadRequest(ModelState);
+            }
+
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
