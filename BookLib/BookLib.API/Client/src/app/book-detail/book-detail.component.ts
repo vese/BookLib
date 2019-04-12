@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Book, BookComment } from '../BookClasses';
-import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { BookService } from '../book.service';
 import { PageEvent, MatDialog } from '@angular/material';
 import { CommentService } from '../comment.service';
@@ -22,11 +21,13 @@ export class BookDetailComponent implements OnInit {
   pageSizeOptions: number[] = [5, 10, 25, 100];
   comments: BookComment[];
 
+  filterParams: Params;
+
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private bookService: BookService,
     private commentService: CommentService,
-    private location: Location,
     public dialog: MatDialog) { }
 
   ngOnInit() {
@@ -35,10 +36,17 @@ export class BookDetailComponent implements OnInit {
   }
 
   getBook(): void {
-    this.id = +this.route.snapshot.paramMap.get('id');
-    this.bookService.getBook(this.id).subscribe(book => {
-      this.book = book;
-      this.length = book.commentsCount;
+    this.route.queryParams.subscribe(res => {
+      if (res) {
+        this.filterParams = res;
+      }
+    });
+    this.route.paramMap.subscribe(res => {
+      this.id = +res.get("id");
+      this.bookService.getBook(this.id).subscribe(book => {
+        this.book = book;
+        this.length = book.commentsCount;
+      });
     });
   }
 
@@ -50,7 +58,7 @@ export class BookDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.location.back();
+    this.router.navigate(['/filter'], { queryParams: this.filterParams });
   }
 
   openDeleteBookDialog() {

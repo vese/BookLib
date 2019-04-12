@@ -98,14 +98,14 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div *ngIf="selectedSortProperty" (click)="getSortOrder()" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-      <mat-checkbox [(ngModel)]="selectedSortOrderValue" (change)="getBooks()">По возрастанию</mat-checkbox>
+    <div *ngIf="selectedSortProperty" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+      <mat-checkbox [(ngModel)]="selectedSortOrderValue" (change)="getSortOrder();getBooks()">По возрастанию</mat-checkbox>
     </div>
   </div>
 
   <ol class="books">
     <li *ngFor="let b of books">
-      <a routerLink="/book/{{b.id}}"><span>{{b.name}} ({{b.author}})</span></a>
+      <a (click)="gotoBookDetail(b.id)"><span>{{b.name}} ({{b.author}})</span></a><!--[routerLink]="['/book', b.id, { name: 'ads'}]"-->
     </li>
   </ol>
 </div>
