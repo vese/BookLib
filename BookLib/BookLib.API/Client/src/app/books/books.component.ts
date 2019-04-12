@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { ListBook, FilterParams, Param } from '../BookClasses';
 import { BookService } from '../book.service';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-books',
@@ -83,30 +84,8 @@ export class BooksComponent implements OnInit {
       this.selectedHasFree,
       this.selectedSortProperty,
       this.selectedSortOrder).subscribe(books => this.books = books);
-  }
 
-  getFilterParams(): void {
-    this.bookService.getFilterParams().subscribe(params => {
-      this.filterParams = params;
-      this.getOptionalParams();
-    });
-  }
 
-  getCategoryGenres(): void {
-    if (this.selectedCategoryId) {
-      this.selectedCategoryGenres = this.filterParams.categories.find(category => category.category.id === this.selectedCategoryId).genres;
-    }
-    else {
-      this.selectedGenreId = null;
-      this.selectedCategoryGenres = [];
-    }
-  }
-
-  getSortOrder(): void {
-    this.selectedSortOrder = this.selectedSortOrderValue ? "asc" : "desc";
-  }
-
-  gotoBookDetail(id: number): void {
     let params: Params = {};
     if (this.inNameString) {
       params.name = this.inNameString;
@@ -138,6 +117,62 @@ export class BooksComponent implements OnInit {
         params.orderValue = this.selectedSortOrderValue;
       }
     }
-    this.router.navigate(['/book', id], { queryParams: params });
+    this.router.navigate([], { queryParams: params });
   }
+
+  getFilterParams(): void {
+    this.bookService.getFilterParams().subscribe(params => {
+      this.filterParams = params;
+      this.getOptionalParams();
+    });
+  }
+
+  getCategoryGenres(): void {
+    if (this.selectedCategoryId) {
+      this.selectedCategoryGenres = this.filterParams.categories.find(category => category.category.id === this.selectedCategoryId).genres;
+    }
+    else {
+      this.selectedGenreId = null;
+      this.selectedCategoryGenres = [];
+    }
+  }
+
+  getSortOrder(): void {
+    this.selectedSortOrder = this.selectedSortOrderValue ? "asc" : "desc";
+  }
+
+  //gotoBookDetail(id: number): void {
+  //  let params: Params = {};
+  //  if (this.inNameString) {
+  //    params.name = this.inNameString;
+  //  }
+  //  if (this.selectedReleaseYear) {
+  //    params.year = this.selectedReleaseYear;
+  //  }
+  //  if (this.selectedAuthorId) {
+  //    params.author = this.filterParams.authors.find(a => a.id === this.selectedAuthorId).name;
+  //  }
+  //  if (this.selectedPublisherId) {
+  //    params.publisher = this.filterParams.publishers.find(a => a.id === this.selectedPublisherId).name;
+  //  }
+  //  if (this.selectedSeriesId) {
+  //    params.series = this.filterParams.series.find(a => a.id === this.selectedSeriesId).name;
+  //  }
+  //  if (this.selectedCategoryId) {
+  //    params.category = this.filterParams.categories.find(a => a.category.id === this.selectedCategoryId).category.name;
+  //    if (this.selectedGenreId) {
+  //      params.genre = this.selectedCategoryGenres.find(a => a.id === this.selectedGenreId).name;
+  //    }
+  //  }
+  //  if (this.selectedHasFree) {
+  //    params.hasFree = this.selectedHasFree;
+  //  }
+  //  if (this.selectedSortProperty) {
+  //    params.sortProperty = this.selectedSortProperty;
+  //    if (this.selectedSortOrderValue != null) {
+  //      params.orderValue = this.selectedSortOrderValue;
+  //    }
+  //  }
+  //  this.router.navigate(['/book', id], { queryParams: params });
+  //}
 }

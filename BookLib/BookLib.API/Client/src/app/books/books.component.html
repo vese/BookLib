@@ -105,7 +105,7 @@
 
   <ol class="books">
     <li *ngFor="let b of books">
-      <a (click)="gotoBookDetail(b.id)"><span>{{b.name}} ({{b.author}})</span></a><!--[routerLink]="['/book', b.id, { name: 'ads'}]"-->
+      <a routerLink="/book/{{b.id}}"><span>{{b.name}} ({{b.author}})</span></a><!--[routerLink]="['/book', b.id, { name: 'ads'}]"-->
     </li>
   </ol>
 </div>
