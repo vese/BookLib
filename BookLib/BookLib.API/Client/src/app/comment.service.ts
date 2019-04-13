@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ConfigService } from './config.service';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { BookComment } from './BookClasses';
 import { Observable } from 'rxjs';
 
@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CommentService {
-
   contrUrl: string;
   baseUrl: string;
 
@@ -18,13 +17,32 @@ export class CommentService {
     this.contrUrl = "comments/";
   }
 
-  getComments(bookId: number, beginNumber: number, number: number, order: string): Observable<BookComment[]> {
+  getComments(bookId: number, start: number, count: number, order: string): Observable<BookComment[]> {
     let params = new HttpParams();
     if (order) {
       params = params.set("order", "" + order);
     }
     return this.http.get<BookComment[]>(this.baseUrl + this.contrUrl, {
-      params: params.set("bookId", "" + bookId).set("beginNumber", "" + beginNumber).set("number", "" + number)
+      params: params.set("bookId", "" + bookId).set("start", "" + start).set("count", "" + count)
     });
+  }
+
+  addComment(text: string, mark: number, name: string, id: number): any {
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+    console.log(headers);
+    console.log();
+    return this.http.post(this.baseUrl + this.contrUrl, {}, {
+      params: new HttpParams().set("text", "" + text).set("mark", "" + mark).set("username", "" + name).set("bookId", "" + id),
+      headers: headers
+    });
+  }
+
+  commentExists(name: string, id: number): any {
+    return this.http.get(this.baseUrl + this.contrUrl + "exists", {
+      params: new HttpParams().set("username", "" + name).set("bookId", "" + id)
+    })
   }
 }

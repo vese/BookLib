@@ -440,14 +440,21 @@ namespace BookLib.API.Controllers
                     #region Author
                     if (book.AuthorId == null)
                     {
-                        var newAuthor = _context.Author.Add(new Author
+                        if (_context.Author.Any(a => a.Name == book.Author))
                         {
-                            Name = book.Author
-                        });
+                            book.AuthorId = _context.Author.First(a => a.Name == book.Author).Id;
+                        }
+                        else
+                        {
+                            var newAuthor = _context.Author.Add(new Author
+                            {
+                                Name = book.Author
+                            });
 
-                        _context.SaveChanges();
+                            _context.SaveChanges();
 
-                        book.AuthorId = newAuthor.Entity.Id;
+                            book.AuthorId = newAuthor.Entity.Id;
+                        }
                     }
                     else if (!_context.Author.Any(a => a.Id == book.AuthorId))
                     {
@@ -459,14 +466,21 @@ namespace BookLib.API.Controllers
                     #region Publisher
                     if (book.PublisherId == null)
                     {
-                        var newPublisher = _context.Publisher.Add(new Publisher
+                        if (_context.Publisher.Any(p => p.Name == book.Publisher))
                         {
-                            Name = book.Publisher
-                        });
+                            book.PublisherId = _context.Publisher.First(p => p.Name == book.Publisher).Id;
+                        }
+                        else
+                        {
+                            var newPublisher = _context.Publisher.Add(new Publisher
+                            {
+                                Name = book.Publisher
+                            });
 
-                        _context.SaveChanges();
+                            _context.SaveChanges();
 
-                        book.PublisherId = newPublisher.Entity.Id;
+                            book.PublisherId = newPublisher.Entity.Id;
+                        }
                     }
                     else if (!_context.Publisher.Any(p => p.Id == book.PublisherId))
                     {
@@ -504,14 +518,21 @@ namespace BookLib.API.Controllers
                     #region Category
                     if (book.CategoryId == null)
                     {
-                        var newCategory = _context.Category.Add(new Category
+                        if (_context.Category.Any(c => c.Name == book.Category))
                         {
-                            Name = book.Category
-                        });
+                            book.CategoryId = _context.Category.First(c => c.Name == book.Category).Id;
+                        }
+                        else
+                        {
+                            var newCategory = _context.Category.Add(new Category
+                            {
+                                Name = book.Category
+                            });
 
-                        _context.SaveChanges();
+                            _context.SaveChanges();
 
-                        book.CategoryId = newCategory.Entity.Id;
+                            book.CategoryId = newCategory.Entity.Id;
+                        }
                     }
                     else if (!_context.Category.Any(c => c.Id == book.CategoryId))
                     {
@@ -523,15 +544,22 @@ namespace BookLib.API.Controllers
                     #region Genre
                     if (book.GenreId == null)
                     {
-                        var newGenre = _context.Genre.Add(new Genre
+                        if (_context.Genre.Any(g => g.Name == book.Genre && g.IdCategory == book.CategoryId))
                         {
-                            Name = book.Genre,
-                            IdCategory = (int)book.CategoryId
-                        });
+                            book.GenreId = _context.Genre.First(g => g.Name == book.Genre && g.IdCategory == book.CategoryId).Id;
+                        }
+                        else
+                        {
+                            var newGenre = _context.Genre.Add(new Genre
+                            {
+                                Name = book.Genre,
+                                IdCategory = (int)book.CategoryId
+                            });
 
-                        _context.SaveChanges();
+                            _context.SaveChanges();
 
-                        book.GenreId = newGenre.Entity.Id;
+                            book.GenreId = newGenre.Entity.Id;
+                        }
                     }
                     else if (!_context.Genre.Any(g => g.Id == book.GenreId && g.IdCategory == book.CategoryId))
                     {

@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Book, BookComment } from '../BookClasses';
 import { ActivatedRoute, Router, Params } from '@angular/router';
+import { Location } from '@angular/common';
 import { BookService } from '../book.service';
 import { PageEvent, MatDialog } from '@angular/material';
 import { CommentService } from '../comment.service';
@@ -17,6 +18,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   loggedIn: boolean;
   isAdmin: boolean;
+  name: string;
 
   book: Book;
   id: number;
@@ -29,23 +31,31 @@ export class BookDetailComponent implements OnInit, OnDestroy {
 
   filterParams: Params;
 
+  text: string;
+  mark: number = 0;
+  needMark: boolean = false;
+  commentExists: boolean;
+
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private bookService: BookService,
     private commentService: CommentService,
     private userService: UserService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private location: Location) {
     this.subscription = this.userService.logChanged$.subscribe(
       res => {
         this.loggedIn = res;
         if (res) {
           this.isAdmin = localStorage.getItem("role") === "admin";
+          this.name = localStorage.getItem("name");
+          this.commentService.commentExists(this.name, this.id).subscribe(ex => this.commentExists = ex.exists);
         }
       });
   }
 
   ngOnInit() {
+    this.userService.checkLogged();
     this.getBook();
     this.getComments(null);
   }
@@ -76,8 +86,25 @@ export class BookDetailComponent implements OnInit, OnDestroy {
       , this.pageEvent ? this.pageEvent.pageSize : this.pageSize, "asc").subscribe(res => this.comments = res);
   }
 
+  addComment(): void {
+    if (this.loggedIn && this.mark > 0) {
+      this.commentService.addComment(this.text, this.mark, this.name, this.id).subscribe(res => {
+        this.getComments(this.pageEvent);
+        this.commentExists = true;
+      });
+    }
+    else {
+      this.needMark = true;
+    }
+  }
+
+  setMark(mark: number): void {
+    this.mark = mark;
+    this.needMark = false;
+  }
+
   goBack(): void {
-    this.router.navigate(['/filter'], { queryParams: this.filterParams });
+    this.location.back();
   }
 
   openDeleteBookDialog() {
@@ -90,7 +117,6 @@ export class BookDetailComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(12345);
       if (!result) {
         this.goBack();
       }

@@ -1,7 +1,7 @@
 <div *ngIf="book" class="container-fluid">
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <h2>{{book.name}} </h2> 
+      <h2>{{book.name}} </h2>
       <p><b><a href="">{{book.author}}</a></b> </p>
     </div>
   </div>
@@ -10,9 +10,10 @@
       <p><b>Серия:</b> &laquo;{{book.series}}&raquo;<br />{{book.category}} / {{book.genre}}</p>
     </div>
     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-      <p><b>Издатель:</b> &laquo;{{book.publisher}}&raquo; ({{book.releaseYear}} год)<br/>
-      <b>ISBN:</b> {{book.isbn}}
-    </p>
+      <p>
+        <b>Издатель:</b> &laquo;{{book.publisher}}&raquo; ({{book.releaseYear}} год)<br />
+        <b>ISBN:</b> {{book.isbn}}
+      </p>
     </div>
   </div>
   <div class="row">
@@ -22,14 +23,34 @@
   </div>
 
   <div *ngIf="loggedIn && isAdmin">
-    <div ><button mat-raised-button routerLink="/book/edit/{{id}}">Редактировать</button></div>
-    <div ><button mat-raised-button (click)="openDeleteBookDialog()">Удалить</button></div>
+    <div><button mat-raised-button routerLink="/book/edit/{{id}}">Редактировать</button></div>
+    <div><button mat-raised-button (click)="openDeleteBookDialog()">Удалить</button></div>
   </div>
 
   <div class="row">
     <div class="col-xs-11 col-sm-11 col-md-9 col-lg-9">
       <p><button (click)="goBack()">Назад</button></p>
       <p><b>Рейтинг:</b> {{book.averageMark}}</p>
+
+      <div *ngIf="!commentExists && loggedIn && !isAdmin">
+        <mat-form-field>
+          <mat-label>Отзыв</mat-label>
+          <input matInput [(ngModel)]="text">
+          <button mat-button *ngIf="text" matSuffix mat-icon-button aria-label="Clear" (click)="text=''">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+        <div *ngIf="needMark">
+          Поставьте оценку!
+        </div>
+        <span><button [class.gold]="mark===1" (click)="setMark(1)">1</button></span>
+        <span><button [class.gold]="mark===2" (click)="setMark(2)">2</button></span>
+        <span><button [class.gold]="mark===3" (click)="setMark(3)">3</button></span>
+        <span><button [class.gold]="mark===4" (click)="setMark(4)">4</button></span>
+        <span><button [class.gold]="mark===5" (click)="setMark(5)">5</button></span>
+        <span><button (click)="addComment()">Оставить отзыв</button></span>
+      </div>
+
       <p><b>Комментарии ({{book.commentsCount}}):</b></p>
       <mat-paginator [length]="length"
                      [pageSize]="pageSize"
@@ -45,10 +66,10 @@
     </div>
   </div>
 
- <!--
-  <div><span>В наличии: </span>{{book.freeCount}}</div>
-      
--->
+  <!--
+    <div><span>В наличии: </span>{{book.freeCount}}</div>
+
+  -->
 </div>
 
 
