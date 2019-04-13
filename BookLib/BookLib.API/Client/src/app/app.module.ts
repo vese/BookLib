@@ -18,6 +18,7 @@ import { RegisterDialogComponent } from './register-dialog/register-dialog.compo
 import { UserComponent } from './user/user.component';
 import { DeleteBookDialogComponent } from './delete-book-dialog/delete-book-dialog.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { UserService } from './user.service';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     RegisterDialogComponent,
     DeleteBookDialogComponent
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

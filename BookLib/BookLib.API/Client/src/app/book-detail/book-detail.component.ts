@@ -1,18 +1,24 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Book, BookComment } from '../BookClasses';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { BookService } from '../book.service';
 import { PageEvent, MatDialog } from '@angular/material';
 import { CommentService } from '../comment.service';
 import { DeleteBookDialogComponent } from '../delete-book-dialog/delete-book-dialog.component';
+import { Subscription } from 'rxjs';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-book-detail',
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.css']
 })
-export class BookDetailComponent implements OnInit {
-  @Input() book: Book;
+export class BookDetailComponent implements OnInit, OnDestroy {
+  subscription: Subscription;
+  loggedIn: boolean;
+  isAdmin: boolean;
+
+  book: Book;
   id: number;
 
   pageEvent: PageEvent;
@@ -28,11 +34,24 @@ export class BookDetailComponent implements OnInit {
     private router: Router,
     private bookService: BookService,
     private commentService: CommentService,
-    public dialog: MatDialog) { }
+    private userService: UserService,
+    public dialog: MatDialog) {
+    this.subscription = this.userService.logChanged$.subscribe(
+      res => {
+        this.loggedIn = res;
+        if (res) {
+          this.isAdmin = localStorage.getItem("role") === "admin";
+        }
+      });
+  }
 
   ngOnInit() {
     this.getBook();
     this.getComments(null);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   getBook(): void {

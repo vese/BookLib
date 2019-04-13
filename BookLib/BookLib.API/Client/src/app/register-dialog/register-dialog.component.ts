@@ -9,7 +9,6 @@ import { FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/
   styleUrls: ['./register-dialog.component.css']
 })
 export class RegisterDialogComponent {
-
   hide = true;
   loggedIn: boolean = false;
   registerFailed: boolean;

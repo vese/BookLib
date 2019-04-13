@@ -1,14 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { UserService, UserDialogData } from '../user.service';
 import { FormControl, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login-dialog',
   templateUrl: './login-dialog.component.html',
   styleUrls: ['./login-dialog.component.css']
 })
-export class LoginDialogComponent implements OnInit{
+export class LoginDialogComponent implements OnInit, OnDestroy {
+
+  subscription: Subscription;
 
   hide = true;
   loggedIn: boolean = false;
@@ -38,13 +41,19 @@ export class LoginDialogComponent implements OnInit{
   }
 
   constructor(public dialogRef: MatDialogRef<LoginDialogComponent>,
-    private userService: UserService) {}
+    private userService: UserService) {
+    this.subscription = this.userService.logChanged$.subscribe(
+      res => {
+        this.loggedIn = res;
+      });
+  }
 
   ngOnInit() {
-    this.loggedIn = this.userService.isLoggedIn();
-    if (this.loggedIn == null) {
-      this.userService.checkLogged().subscribe(res => this.loggedIn = true, error => this.loggedIn = false);
-    }
+    this.userService.isLoggedIn();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   onNoClick(): void {
@@ -57,13 +66,7 @@ export class LoginDialogComponent implements OnInit{
         name: this.loginFormControl.value,
         pass: this.passwordFormControl.value
       }
-      this.userService.login(data).subscribe(res => {
-        this.loggedIn = true;
-        this.loginFailed = false;
-      }, error => {
-        this.loggedIn = false;
-        this.loginFailed = true;
-      });
+      this.userService.login(data).subscribe(res => { }, error => this.loginFailed = true);
     }
   }
 }

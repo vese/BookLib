@@ -36,7 +36,8 @@ namespace BookLib.API.Controllers
                 return BadRequest(ModelState);
             }
             var user = _userManager.FindByNameAsync(loginUser.Name).Result;
-            if (user != null || await _userManager.CheckPasswordAsync(user, loginUser.Pass))
+            bool t = await _userManager.CheckPasswordAsync(user, loginUser.Pass);
+            if (user != null && await _userManager.CheckPasswordAsync(user, loginUser.Pass))
             {
                 string role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
                 var claims = new List<Claim>

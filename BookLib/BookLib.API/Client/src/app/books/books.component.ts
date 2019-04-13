@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { ListBook, FilterParams, Param } from '../BookClasses';
 import { BookService } from '../book.service';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-books',
@@ -10,6 +9,7 @@ import { of } from 'rxjs';
   styleUrls: ['./books.component.css']
 })
 export class BooksComponent implements OnInit {
+
   filterParams: FilterParams;
   books: ListBook[];
 

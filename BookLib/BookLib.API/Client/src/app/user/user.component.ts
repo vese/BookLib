@@ -1,73 +1,50 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { UserService } from '../user.service';
 import { RegisterDialogComponent } from '../register-dialog/register-dialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
-export class UserComponent implements OnInit {
-
-  @Output() onLogged = new EventEmitter<{ loggedIn: boolean, role: string }>();
-  logged() {
-    this.onLogged.emit({ loggedIn: this.loggedIn, role: localStorage.getItem("role") });
-  }
-
+export class UserComponent implements OnDestroy {
+  subscription: Subscription;
   name: string;
   password: string;
   loggedIn: boolean;
 
   constructor(private userService: UserService,
     public dialog: MatDialog) {
-    this.loggedIn = this.userService.isLoggedIn();
-    if (this.loggedIn == null) {
-      this.userService.checkLogged().subscribe(res => {
-        this.loggedIn = true;
-        this.name = localStorage.getItem("name");
-        this.logged();
-      }, error => {
-        this.loggedIn = false;
-        this.logged();
+    this.subscription = this.userService.logChanged$.subscribe(
+      res => {
+        this.loggedIn = res;
+        if (res) {
+          this.name = localStorage.getItem("name");
+        }
       });
-    }
-    else {
-      this.logged();
-      if (this.loggedIn) {
-        this.name = localStorage.getItem("name");
-      }
-    }
+    this.userService.checkLogged();
   }
 
   openLoginDialog(): void {
-    const dialogRef = this.dialog.open(LoginDialogComponent, {
+    this.dialog.open(LoginDialogComponent, {
       width: '400px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.loggedIn = this.userService.isLoggedIn();
-      if (this.loggedIn) {
-        this.name = localStorage.getItem("name");
-      }
-      this.logged();
     });
   }
 
   openRegisterDialog(): void {
-    const dialogRef = this.dialog.open(RegisterDialogComponent, {
+    this.dialog.open(RegisterDialogComponent, {
       width: '400px'
     });
   }
 
   logout(): void {
-    this.loggedIn = false;
     this.userService.logout();
-    this.logged();
   }
 
-  ngOnInit() {
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
-
 }

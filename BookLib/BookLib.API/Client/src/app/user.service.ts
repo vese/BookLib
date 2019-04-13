@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ConfigService } from './config.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { LoginResult } from './AuthClasses';
@@ -19,16 +19,15 @@ export class UserService {
   baseUrl: string;
 
   private loggedIn: boolean;
-  
+  private logChangedSource = new Subject<boolean>();
+  logChanged$ = this.logChangedSource.asObservable();
+
   constructor(private http: HttpClient, private configService: ConfigService) {
     this.baseUrl = this.configService.getApiURI();
     this.contrUrl = "auth/";
   }
 
   isLoggedIn(): boolean {
-    if (this.loggedIn == null) {
-      this.checkLogged().subscribe(res => this.loggedIn = true, error => this.logout());
-    }
     return this.loggedIn;
   }
 
@@ -38,6 +37,14 @@ export class UserService {
     let authToken = localStorage.getItem('auth_token');
     headers = headers.append('Authorization', `Bearer ${authToken}`);
     let res = this.http.get(this.baseUrl + this.contrUrl, { headers });
+    res.subscribe(res => {
+      this.loggedIn = true;
+      this.logChangedSource.next(true);
+    }, error => {
+      if (this.loggedIn) {
+        this.logout();
+      }
+    });
     return res;
   }
 
@@ -46,6 +53,7 @@ export class UserService {
     localStorage.removeItem('name');
     localStorage.removeItem('role');
     this.loggedIn = false;
+    this.logChangedSource.next(false);
   }
 
   login(data: UserDialogData): Observable<LoginResult> {
@@ -57,7 +65,10 @@ export class UserService {
       localStorage.setItem('name', r.username);
       localStorage.setItem('role', r.role);
       this.loggedIn = true;
-    }, error => this.loggedIn = false)
+      this.logChangedSource.next(true);
+    }, error => {
+      this.loggedIn = false;
+    })
     return res;
   }
 

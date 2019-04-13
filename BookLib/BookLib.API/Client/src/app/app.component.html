@@ -1,6 +1,6 @@
 <nav>
   <span><a routerLink="">Главная</a></span> <span><a routerLink="/filter">Книги</a></span>
   <span><a *ngIf="loggedIn && isAdmin" routerLink="/book/add">Добавить книгу</a></span>
-  <app-user (onLogged)="onLogged($event)"></app-user>
+  <app-user></app-user>
 </nav>
 <router-outlet></router-outlet>

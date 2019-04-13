@@ -21,9 +21,9 @@
     </div>
   </div>
 
-  <div>
-    <div><button mat-raised-button routerLink="/book/edit/{{id}}">Редактировать(сделать доступным админу)</button></div><!--*ngIf="loggedIn && isAdmin"-->
-    <div><button mat-raised-button (click)="openDeleteBookDialog()">Удалить(сделать доступным админу)</button></div>
+  <div *ngIf="loggedIn && isAdmin">
+    <div ><button mat-raised-button routerLink="/book/edit/{{id}}">Редактировать</button></div>
+    <div ><button mat-raised-button (click)="openDeleteBookDialog()">Удалить</button></div>
   </div>
 
   <div class="row">
