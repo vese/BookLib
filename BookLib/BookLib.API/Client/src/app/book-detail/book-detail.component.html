@@ -43,11 +43,11 @@
         <div *ngIf="needMark">
           Поставьте оценку!
         </div>
-        <span><button [class.gold]="mark===1" (click)="setMark(1)">1</button></span>
-        <span><button [class.gold]="mark===2" (click)="setMark(2)">2</button></span>
-        <span><button [class.gold]="mark===3" (click)="setMark(3)">3</button></span>
-        <span><button [class.gold]="mark===4" (click)="setMark(4)">4</button></span>
-        <span><button [class.gold]="mark===5" (click)="setMark(5)">5</button></span>
+        <i class="material-icons md-18" [class.gold]="mark>=1" (click)="setMark(1)">star</i>
+        <i class="material-icons md-18" [class.gold]="mark>=2" (click)="setMark(2)">star</i>
+        <i class="material-icons md-18" [class.gold]="mark>=3" (click)="setMark(3)">star</i>
+        <i class="material-icons md-18" [class.gold]="mark>=4" (click)="setMark(4)">star</i>
+        <i class="material-icons md-18" [class.gold]="mark===5" (click)="setMark(5)">star</i>
         <span><button (click)="addComment()">Оставить отзыв</button></span>
       </div>
 
