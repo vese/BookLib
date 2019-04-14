@@ -108,21 +108,16 @@ namespace BookLib.API.Controllers
                 ModelState.TryAddModelError("Model", "Произошла ошибка при создании пользователя!");
                 return BadRequest(ModelState);
             }
-            return new OkObjectResult(JsonConvert.SerializeObject("Account created", new JsonSerializerSettings { Formatting = Formatting.Indented }));
+            return new OkResult();
         }
 
-        #region Test
+        #region Check
         // GET: api/Auth
         [HttpGet]
         [Authorize]
         public ActionResult<string> Get()
         {
-            var res = new
-            {
-                name = User.FindFirstValue(ClaimsIdentity.DefaultNameClaimType),
-                role = User.FindFirstValue(ClaimsIdentity.DefaultRoleClaimType)
-            };
-            return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+            return new OkResult();
         }
 
         // GET: api/Auth/Admin
@@ -131,9 +126,7 @@ namespace BookLib.API.Controllers
         [Authorize(Roles = "admin")]
         public ActionResult<string> GetAdmin()
         {
-            string res = string.Empty;
-            User.Claims.ToList().ForEach(u => res += u.Value + " ");
-            return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+            return new OkResult();
         }
 
         // GET: api/Auth/User
@@ -142,9 +135,7 @@ namespace BookLib.API.Controllers
         [Authorize(Roles = "user")]
         public ActionResult<string> GetUser()
         {
-            string res = string.Empty;
-            User.Claims.ToList().ForEach(u => res += u.Value + " ");
-            return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+            return new OkResult();
         }
         #endregion
     }

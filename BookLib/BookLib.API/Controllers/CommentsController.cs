@@ -1,11 +1,10 @@
 ﻿using BookLib.Data;
-using BookLib.Data.ViewModels;
 using BookLib.Models.DBModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace BookLib.API.Controllers
@@ -15,68 +14,85 @@ namespace BookLib.API.Controllers
     public class CommentsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CommentsController(ApplicationDbContext context)
+        public CommentsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
+        // GET: api/Comments
         [HttpGet]
-        public IActionResult GetComment(int bookId, int beginNumber, int number, string order)
+        public IActionResult GetComment(int bookId, int start, int count, string order)
         {
             bool desc = (order ?? default(string)) == "desc";
             var comments = _context.Comment.Where(c => c.IdBook == bookId).OrderBy(b => desc ? null : b.Mark)
-                .OrderByDescending(b => desc ? b.Mark : null).Skip(beginNumber).Take(number).Select(c => new
+                .OrderByDescending(b => desc ? b.Mark : null).Skip(start).Take(count).Select(c => new
                 {
                     text = c.Text,
                     mark = c.Mark,
                     name = c.IdUserNavigation.UserName
                 }).ToList();
 
-            return new OkObjectResult(JsonConvert.SerializeObject(comments,
-                new JsonSerializerSettings {Formatting = Formatting.Indented}));
+            return new OkObjectResult(JsonConvert.SerializeObject(comments, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
+        // POST: api/Comments
         [HttpPost]
         [Authorize(Roles = "user")]
-        public IActionResult PostComment(string text, int mark, string idUser, int idBook)
+        public async System.Threading.Tasks.Task<IActionResult> PostCommentAsync(string text, int mark, string username, int bookId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var userId = (await _userManager.FindByNameAsync(username))?.Id;
+            if (userId == null)
+            {
+                ModelState.TryAddModelError("Comment", "Пользователь не найден");
+                return BadRequest(ModelState);
+            }
 
-            if (_context.Comment.Any(c => c.IdBook == idBook && c.IdUser == idUser))
+            if (_context.Comment.Any(c => c.IdBook == bookId && c.IdUser == userId))
             {
                 ModelState.TryAddModelError("Comment", "Отзыв на эту книгу от этого пользователя уже существует");
                 return BadRequest(ModelState);
             }
 
-            using (var transaction = _context.Database.BeginTransaction())
+            try
             {
-                try
+                _context.Comment.Add(new Comment()
                 {
-                    var newComment = _context.Comment.Add(new Comment()
-                    {
-                        Text = text,
-                        Mark = mark,
-                        IdBook = idBook,
-                        IdUser = idUser
-                    });
+                    Text = text,
+                    Mark = mark,
+                    IdBook = bookId,
+                    IdUser = userId
+                });
 
-                    _context.SaveChanges();
-                    transaction.Commit();
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                    ModelState.TryAddModelError("Comment", "Ошибка при добавлении отзыва");
-                    return BadRequest(ModelState);
-                }
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                ModelState.TryAddModelError("Comment", "Ошибка при добавлении отзыва");
+                return BadRequest(ModelState);
             }
 
             return new OkResult();
+        }
+
+        // GET: api/Comments/Exists
+        [HttpGet]
+        [Route("exists")]
+        public IActionResult CommentExists(string username, int bookId)
+        {
+            var res = new
+            {
+                exists = _context.Comment.Any(c => c.IdUserNavigation.UserName == username && c.IdBook == bookId)
+            };
+
+            return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
     }
 }
