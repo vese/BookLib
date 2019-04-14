@@ -1,49 +1,33 @@
-.books {
-  margin: 0 0 0 1em;
-  padding: 0;
+div.list {
+  border-style: solid;
+  border-color: #efefef;
+  border-width: 1px;
+  width:100%;
+  height:350px;
+  overflow: auto
 }
 
-  .books li {
-    cursor: pointer;
-    position: relative;
-    background-color: #EFEFEF;
-    margin: 0 0em .5em 0;
-    padding: .5em .5em;
-    height: 3em;
-    width: 100%;
-    border-radius: 0px;
-  }
+.books {
+}
 
-    .books li:hover {
-      color: #607D8B;
-      background-color: #DDD;
-      left: 0em;
-    }
+.books li {
+  cursor: pointer;
+  padding: .5em .5em;
+  height: 2.5em;
+  width: 100%;
+}
+
+.books li:hover {
+  background-color: #efefef;
+}
 
 .books a {
-  color: #888;
+  color: #444;
   text-decoration: none;
   position: relative;
   display: block;
 }
 
-  .books a:hover {
-    color: #607D8B;
-  }
-
-  .books .badge {
-    display: inline-block;
-    font-size: small;
-    color: white;
-    padding: 0.8em 0.7em 0 0.7em;
-    background-color: #607D8B;
-    line-height: 1em;
-    position: relative;
-    left: -1px;
-    top: -4px;
-    height: 1.8em;
-    min-width: 16px;
-    text-align: right;
-    margin-right: .8em;
-    border-radius: 4px 0 0 4px;
-  }
+.books a:hover {
+  color: #5b1c17;
+}

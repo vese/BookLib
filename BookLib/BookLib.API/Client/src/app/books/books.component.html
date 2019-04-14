@@ -1,7 +1,7 @@
 <div *ngIf="filterParams" class="container-fluid">
   <div class="row">
 
-    <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
       <mat-form-field>
         <mat-label>Поиск в названии</mat-label>
         <input matInput [(ngModel)]="inNameString" (change)="getBooks()">
@@ -11,7 +11,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
       <mat-form-field>
         <mat-label>Автор</mat-label>
         <mat-select [(value)]="selectedAuthorId" (selectionChange)="getBooks()">
@@ -23,7 +23,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
       <mat-form-field>
         <mat-label>Год издания</mat-label>
         <mat-select [(value)]="selectedReleaseYear" (selectionChange)="getBooks()">
@@ -35,7 +35,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
       <mat-form-field>
         <mat-label>Издатель</mat-label>
         <mat-select [(value)]="selectedPublisherId" (selectionChange)="getBooks()">
@@ -47,7 +47,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
       <mat-form-field>
         <mat-label>Серия</mat-label>
         <mat-select [(value)]="selectedSeriesId" (selectionChange)="getBooks()">
@@ -59,7 +59,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
       <mat-form-field>
         <mat-label>Категория</mat-label>
         <mat-select [(value)]="selectedCategoryId" (selectionChange)="getCategoryGenres();getBooks()">
@@ -71,7 +71,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
       <mat-form-field>
         <mat-label>Жанр</mat-label>
         <mat-select [(value)]="selectedGenreId" [disabled]="!selectedCategoryId" (selectionChange)="getBooks()">
@@ -82,13 +82,13 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
       <mat-checkbox [(ngModel)]="selectedHasFree" (change)="getBooks()">Только свободные</mat-checkbox>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
       <mat-form-field>
         <mat-label>Сортировать по</mat-label>
         <mat-select [(value)]="selectedSortProperty" (selectionChange)="getBooks()">
@@ -98,14 +98,16 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div *ngIf="selectedSortProperty" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" *ngIf="selectedSortProperty">
       <mat-checkbox [(ngModel)]="selectedSortOrderValue" (change)="getSortOrder();getBooks()">По возрастанию</mat-checkbox>
     </div>
   </div>
+</div>
 
+  <div class="list">
   <ol class="books">
     <li *ngFor="let b of books">
-      <a routerLink="/book/{{b.id}}"><span>{{b.name}} ({{b.author}})</span></a><!--[routerLink]="['/book', b.id, { name: 'ads'}]"-->
+      <a routerLink="/book/{{b.id}}"><span>{{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong> ({{b.releaseYear}})</span></a>
     </li>
   </ol>
-</div>
+  </div>

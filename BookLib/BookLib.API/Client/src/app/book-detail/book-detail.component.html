@@ -1,35 +1,40 @@
 <div *ngIf="book" class="container-fluid">
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <h2>{{book.name}} </h2>
-      <p><b><a href="">{{book.author}}</a></b> </p>
+      <h2>{{book.name}}</h2>
+      <h6>{{book.author}}</h6>
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-      <p><b>Серия:</b> &laquo;{{book.series}}&raquo;<br />{{book.category}} / {{book.genre}}</p>
+    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+      <p *ngIf="book.series"><b>Серия:</b> &laquo;{{book.series}}&raquo;</p>
+      <p>{{book.category}} / {{book.genre}}</p>
     </div>
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-      <p>
-        <b>Издатель:</b> &laquo;{{book.publisher}}&raquo; ({{book.releaseYear}} год)<br />
-        <b>ISBN:</b> {{book.isbn}}
-      </p>
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+      <p><b>Издатель:</b> &laquo;{{book.publisher}}&raquo; ({{book.releaseYear}} год)<br/>
+      <b>ISBN:</b> {{book.isbn}}
+    </p>
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-11 col-sm-11 col-md-9 col-lg-9">
-      <p><b class="material-icons">book</b> <b>Описание:</b> {{book.description}}</p>
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <h6>Описание:</h6>
+      <div class="description">{{book.description}}</div>
     </div>
   </div>
 
-  <div *ngIf="loggedIn && isAdmin">
-    <div><button mat-raised-button routerLink="/book/edit/{{id}}">Редактировать</button></div>
-    <div><button mat-raised-button (click)="openDeleteBookDialog()">Удалить</button></div>
+  <div class="row justify-content-end">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <span><a class="text" [routerLink]="" (click)="goBack()">Назад</a></span>
+      <span *ngIf="loggedIn && isAdmin">
+        <span><a class="text" routerLink="/book/edit/{{id}}">Редактировать</a></span>
+        <span><a class="text" [routerLink]="" (click)="openDeleteBookDialog()">Удалить</a></span>
+      </span>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col-xs-11 col-sm-11 col-md-9 col-lg-9">
-      <p><button (click)="goBack()">Назад</button></p>
+    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
       <p><b>Рейтинг:</b> {{book.averageMark}}</p>
 
       <div *ngIf="!commentExists && loggedIn && !isAdmin">
@@ -52,11 +57,12 @@
       </div>
 
       <p><b>Комментарии ({{book.commentsCount}}):</b></p>
-      <mat-paginator [length]="length"
-                     [pageSize]="pageSize"
-                     [pageSizeOptions]="pageSizeOptions"
-                     showFirstLastButtons
-                     (page)="getComments($event)">
+      <mat-paginator *ngIf="book.commentsCount"
+      [length]="length"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      showFirstLastButtons
+      (page)="getComments($event)">
       </mat-paginator>
       <mat-list>
         <mat-list-item *ngFor="let comment of comments">

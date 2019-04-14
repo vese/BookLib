@@ -1,15 +1,39 @@
-@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-h1 {
-  color: #369;
-  font-family: Segoe UI, Helvetica, sans-serif;
-  font-size: 250%;
+div.nav {
+  padding: 1em 1em 1em 1em;
+  color: #ffe1bd;
+  background-color: #5b1c17;
 }
 
-h2, h3 {
-  color: #444;
-  font-family: Segoe UI, Helvetica, sans-serif;
-  font-weight: lighter;
+
+a.nav {
+  color: #ffe1bd;
+  padding: 8px 15px;
+  text-decoration: none;
+  margin-top: 0px;
+  display:inline;
+}
+
+a.nav:hover {
+  color: #5b1c17;
+  text-decoration: none;
+  background-color: #ffe1bd;
+}
+
+a.text {
+  color: #ffe1bd;
+  background-color: #5b1c17;
+  padding: 8px 15px;
+  text-decoration: none;
+  margin: 1em 0 1em 0;
+  display:inline-block;
+}
+
+a.text:hover {
+  color: #5b1c17;
+  text-decoration: none;
+  background-color: #ffe1bd;
 }
 
 span {
@@ -20,21 +44,17 @@ mat-form-field {
   width:100%;
 }
 
-nav {
-  padding: 1em 1em 1em 1em;
-  margin-bottom: 0.5em;
-  background: #E0E0E0;
-}
-
 body {
   font-size: 90%;
   margin: 0em;
 }
 
-body, input[type="text"], button {
-  color: #888;
+input[type="text"], button {
+  color: #444;
   font-family: Segoe UI, Helvetica, sans-serif;
 }
+
+
 
 * {
   font-family: Segoe UI, Helvetica, sans-serif;

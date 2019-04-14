@@ -1,6 +1,11 @@
-<nav>
-  <span><a routerLink="">Главная</a></span> <span><a routerLink="/filter">Книги</a></span>
-  <span><a *ngIf="loggedIn && isAdmin" routerLink="/book/add">Добавить книгу</a></span>
-  <app-user></app-user>
-</nav>
+<div class="nav container-fluid">
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<span><a class="nav" routerLink="">Главная</a></span>
+			<span><a class="nav" routerLink="/filter">Книги</a></span>
+			<span><a class="nav" *ngIf="loggedIn && isAdmin" routerLink="/book/add">Добавить книгу</a></span>
+			<app-user></app-user>
+		</div>
+	</div>
+</div>
 <router-outlet></router-outlet>
