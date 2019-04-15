@@ -1,5 +1,5 @@
 <div *ngIf="!loggedIn">
-  <h1 mat-dialog-title>Вход</h1>
+  <h1 mat-dialog-title>Авторизация</h1>
   <div *ngIf="loginFailed">Неверный логин или пароль!</div>
   <div mat-dialog-content>
     <mat-form-field>
@@ -13,10 +13,7 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">Отмена</button>
-    <button mat-button (click)="onLoginClick()" cdkFocusInitial>Логин</button>
+    <span><a class="text" [routerLink]="" (click)="onLoginClick()" cdkFocusInitial>Вход</a></span>
+    <span><a class="text" [routerLink]="" (click)="onNoClick()">Отмена</a></span>
   </div>
-</div>
-<div *ngIf="loggedIn">
-  <h1>Успешный вход!</h1>
 </div>

@@ -1,0 +1,7 @@
+div.select {
+  border-style: solid;
+  border-color: #ccc;
+  border-width: 1px;
+  padding: 0 1em 0 1em;
+  margin-bottom: 1em;
+}

@@ -21,8 +21,6 @@ namespace BookLib.API.Controllers
             _context = context;
         }
 
-        #region Filter
-        // GET: api/Books/SortParams
         [HttpGet]
         [Route("filterparams")]
         public IActionResult GetFilterParams()
@@ -139,10 +137,7 @@ namespace BookLib.API.Controllers
 
             return new OkObjectResult(JsonConvert.SerializeObject(books, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
-        #endregion
 
-        #region Book
-        // GET: api/Books
         [HttpGet]
         public IActionResult GetBook(int id)
         {
@@ -173,7 +168,6 @@ namespace BookLib.API.Controllers
             return new OkObjectResult(JsonConvert.SerializeObject(book, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
-        // PUT: api/Books
         [HttpPut]
         [Authorize(Roles = "admin")]
         public IActionResult PutBook(int id, [FromBody] ViewBook book)
@@ -608,7 +602,6 @@ namespace BookLib.API.Controllers
             return new OkResult();
         }
 
-        // DELETE: api/Books
         [HttpDelete]
         [Authorize(Roles = "admin")]
         public IActionResult DeleteBook(int id)
@@ -662,7 +655,6 @@ namespace BookLib.API.Controllers
 
             return new OkResult();
         }
-        #endregion
 
         #region Exists
         // GET: api/Books/AuthorExists

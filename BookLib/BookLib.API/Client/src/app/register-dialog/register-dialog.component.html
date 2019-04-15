@@ -22,13 +22,10 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">Отмена</button>
-    <button mat-button (click)="onRegisterClick()" cdkFocusInitial>Регистрация</button>
+    <span><a class="text" [routerLink]="" (click)="onRegisterClick()" cdkFocusInitial>Регистрация</a></span>
+    <span><a class="text" [routerLink]="" (click)="onNoClick()">Отмена</a></span>
   </div>
 </div>
 <div *ngIf="registerFailed != null && !registerFailed">
   <h1>Успешная регистрация!</h1>
-</div>
-<div *ngIf="loggedIn">
-  <h1>Успешный вход!</h1>
 </div>

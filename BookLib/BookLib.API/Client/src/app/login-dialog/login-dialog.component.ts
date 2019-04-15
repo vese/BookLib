@@ -67,6 +67,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
         pass: this.passwordFormControl.value
       }
       this.userService.login(data).subscribe(res => { }, error => this.loginFailed = true);
+      this.dialogRef.close();
     }
   }
 }

@@ -10,7 +10,7 @@ namespace BookLib.API
         public const string ISSUER = "BookLib"; // издатель токена
         public const string AUDIENCE = "BookLibClient"; // потребитель токена
         const string KEY = "key123key321key456key654";   // ключ для шифрации
-        public const int LIFETIME = 10; // время жизни токена - 10 минут
+        public const int LIFETIME = 60; // время жизни токена - 60 минут
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
             return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));

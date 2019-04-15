@@ -17,19 +17,21 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+    <div class="col item">
       <h6>Описание:</h6>
       <div class="description">{{book.description}}</div>
     </div>
   </div>
 
-  <div class="row justify-content-end">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <span><a class="text" [routerLink]="" (click)="goBack()">Назад</a></span>
+  <div class="row">
+    <div class="col item">
       <span *ngIf="loggedIn && isAdmin">
         <span><a class="text" routerLink="/book/edit/{{id}}">Редактировать</a></span>
         <span><a class="text" [routerLink]="" (click)="openDeleteBookDialog()">Удалить</a></span>
       </span>
+    </div>
+    <div class="col item text-right">
+      <a class="text" [routerLink]="" (click)="goBack()">Назад</a>
     </div>
   </div>
 
@@ -71,11 +73,6 @@
       </mat-list>
     </div>
   </div>
-
-  <!--
-    <div><span>В наличии: </span>{{book.freeCount}}</div>
-
-  -->
 </div>
 
 

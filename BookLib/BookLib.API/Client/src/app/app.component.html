@@ -1,9 +1,11 @@
-<div class="nav container-fluid">
-	<div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<div class="container-fluid">
+	<div class="row nav">
+		<div class="col-8">
 			<span><a class="nav" routerLink="">Главная</a></span>
 			<span><a class="nav" routerLink="/filter">Книги</a></span>
 			<span><a class="nav" *ngIf="loggedIn && isAdmin" routerLink="/book/add">Добавить книгу</a></span>
+		</div>
+		<div class="col-4 text-right">
 			<app-user></app-user>
 		</div>
 	</div>

@@ -22,7 +22,6 @@ namespace BookLib.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -34,7 +33,6 @@ namespace BookLib.API
                             ValidateIssuer = true,
                             // строка, представляющая издателя
                             ValidIssuer = AuthOptions.ISSUER,
-
                             // будет ли валидироваться потребитель токена
                             ValidateAudience = true,
                             // установка потребителя токена
@@ -43,7 +41,6 @@ namespace BookLib.API
                             ValidateLifetime = true,
                             // время добавляется к времени существования токена
                             ClockSkew = TimeSpan.FromSeconds(0),
-
                             // установка ключа безопасности
                             IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                             // валидация ключа безопасности
@@ -55,11 +52,11 @@ namespace BookLib.API
                 options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("BookLib.Data")));
             services.AddIdentityCore<ApplicationUser>(opt =>
             {
-                opt.Password.RequiredLength = 6;   // минимальная длина
-                opt.Password.RequireNonAlphanumeric = false;   // требуются ли не алфавитно-цифровые символы
-                opt.Password.RequireLowercase = false; // требуются ли символы в нижнем регистре
-                opt.Password.RequireUppercase = false; // требуются ли символы в верхнем регистре
-                opt.Password.RequireDigit = false; // требуются ли цифры
+                opt.Password.RequiredLength = 6;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireDigit = false;
             }).AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -67,7 +64,6 @@ namespace BookLib.API
             services.AddCors();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

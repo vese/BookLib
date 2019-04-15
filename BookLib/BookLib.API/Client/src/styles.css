@@ -1,7 +1,11 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+h2 {
+  margin: .5em 0 .5em 0;
+}
+
 div.nav {
-  padding: 1em 1em 1em 1em;
+  padding: 1em 0em 1em 0em;
   color: #ffe1bd;
   background-color: #5b1c17;
 }
