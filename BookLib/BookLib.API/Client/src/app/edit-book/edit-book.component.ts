@@ -33,11 +33,6 @@ export class EditBookComponent implements OnInit {
   releaseYearFormControl = new FormControl("", [
     Validators.required
   ]);
-  isbnFormControl = new FormControl("", [
-    Validators.required,
-    Validators.minLength(17),
-    Validators.maxLength(17)
-  ]);
   authorFormControl = new FormControl("", [
     Validators.required
   ]);
@@ -62,11 +57,6 @@ export class EditBookComponent implements OnInit {
   }
   getReleaseYearErrorMessage() {
     return this.releaseYearFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getISBNErrorMessage() {
-    return this.isbnFormControl.hasError('required') ? 'Введите значение' :
-      this.isbnFormControl.hasError('minlength') || this.isbnFormControl.hasError('maxlength') ? 'Длина поля должна быть 17 символов' :
-        '';
   }
   getAuthorErrorMessage() {
     return this.authorFormControl.hasError('required') ? 'Введите значение' : '';
@@ -97,7 +87,6 @@ export class EditBookComponent implements OnInit {
     this.id = +this.route.snapshot.paramMap.get('id');
     this.bookService.getBook(this.id).subscribe(book => {
       this.nameFormControl.setValue(book.name);
-      this.isbnFormControl.setValue(book.isbn);
       this.descriptionFormControl.setValue(book.description);
       this.releaseYearFormControl.setValue(book.releaseYear);
       this.selectedAuthorId = this.filterParams.authors.find(a => a.name === book.author).id;
@@ -117,11 +106,10 @@ export class EditBookComponent implements OnInit {
   editBook(): void {
     this.failtureMessages = [];
     if (this.nameFormControl.valid && this.descriptionFormControl.valid && this.releaseYearFormControl.valid &&
-      this.isbnFormControl.valid && this.authorFormControl.valid && this.publisherFormControl.valid &&
+      this.authorFormControl.valid && this.publisherFormControl.valid &&
       this.seriesFormControl.valid && this.categoryFormControl.valid && this.genreFormControl.valid) { } if (true) {
         let data: ViewBook = {
           name: this.nameFormControl.value,
-          isbn: this.isbnFormControl.value,
           description: this.descriptionFormControl.value,
           releaseYear: this.releaseYearFormControl.value,
           authorId: this.selectedAuthorId,

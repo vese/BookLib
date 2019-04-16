@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BookService } from '../book.service';
 import { FilterParams, Param, ViewBook } from '../BookClasses';
+import { BookService } from '../book.service';
 import { FormControl, Validators } from '@angular/forms';
 
 @Component({
@@ -8,6 +8,7 @@ import { FormControl, Validators } from '@angular/forms';
   templateUrl: './add-book.component.html',
   styleUrls: ['./add-book.component.css']
 })
+
 export class AddBookComponent implements OnInit {
   filterParams: FilterParams;
 
@@ -29,11 +30,6 @@ export class AddBookComponent implements OnInit {
   ]);
   releaseYearFormControl = new FormControl("", [
     Validators.required
-  ]);
-  isbnFormControl = new FormControl("", [
-    Validators.required,
-    Validators.minLength(17),
-    Validators.maxLength(17)
   ]);
   authorFormControl = new FormControl("", [
     Validators.required
@@ -63,11 +59,6 @@ export class AddBookComponent implements OnInit {
   }
   getReleaseYearErrorMessage() {
     return this.releaseYearFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getISBNErrorMessage() {
-    return this.isbnFormControl.hasError('required') ? 'Введите значение' :
-      this.isbnFormControl.hasError('minlength') || this.isbnFormControl.hasError('maxlength') ? 'Длина поля должна быть 17 символов' :
-        '';
   }
   getAuthorErrorMessage() {
     return this.authorFormControl.hasError('required') ? 'Введите значение' : '';
@@ -100,11 +91,10 @@ export class AddBookComponent implements OnInit {
   addBook(): void {
     this.failtureMessages = [];
     if (this.nameFormControl.valid && this.descriptionFormControl.valid && this.releaseYearFormControl.valid &&
-      this.isbnFormControl.valid && this.authorFormControl.valid && this.publisherFormControl.valid &&
+      this.authorFormControl.valid && this.publisherFormControl.valid &&
       this.seriesFormControl.valid && this.categoryFormControl.valid && this.genreFormControl.valid && this.countFormControl.valid) { }if(true){
       let data: ViewBook = {
         name: this.nameFormControl.value,
-        isbn: this.isbnFormControl.value,
         description: this.descriptionFormControl.value,
         releaseYear: this.releaseYearFormControl.value,
         authorId: this.selectedAuthorId,
