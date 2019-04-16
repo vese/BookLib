@@ -19,7 +19,11 @@ export class LibService {
   }
 
   getUsers(): Observable<LibUser[]> {
-    throw new Error("Method not implemented.");
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+    return this.http.get<LibUser[]>(this.baseUrl + this.contrUrl + "users", { headers: headers });
   }
 
   getUserQueues(): Observable<QueueOnBook[]> {

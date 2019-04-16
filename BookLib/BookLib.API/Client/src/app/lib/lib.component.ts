@@ -33,7 +33,12 @@ export class LibComponent implements OnInit {
   refresh(): void {
     this.libService.getUsers().subscribe(res => {
       this.users = res;
-      this.selectedUser = this.users.find(u => u.name === this.selectedUser.name);
+      if (this.selectedUser) {
+        this.selectedUser = this.users.find(u => u.name === this.selectedUser.name);
+      }
+      else {
+        this.selectedUser = this.users[0];
+      }
       this.getUserQueues();
       this.libService.getBooks().subscribe(res => {
         this.books = res;

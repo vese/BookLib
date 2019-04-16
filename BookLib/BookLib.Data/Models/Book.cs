@@ -9,6 +9,7 @@ namespace BookLib.Models.DBModels
             Comments = new HashSet<Comment>();
             ReadBooks = new HashSet<ReadBook>();
             SheduledBooks = new HashSet<SheduledBook>();
+            QueuesOnBook = new HashSet<QueueOnBook>();
         }
 
         public int Id { get; set; }
@@ -30,5 +31,6 @@ namespace BookLib.Models.DBModels
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<ReadBook> ReadBooks { get; set; }
         public virtual ICollection<SheduledBook> SheduledBooks { get; set; }
+        public virtual ICollection<QueueOnBook> QueuesOnBook { get; set; }
     }
 }

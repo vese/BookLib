@@ -19,22 +19,33 @@ namespace BookLib.API.Controllers
             _context = context;
         }
 
+        // GET: api/Lib/Users
         [HttpGet]
+        [Route("users")]
         [Authorize(Roles = "admin")]
-        public IActionResult GetUserNames()
+        public IActionResult GetUsers()
         {
-            var users = _context.Users.Select(u => new { u.Id }).ToList();
+            var users = _context.Users.Select(u => new
+            {
+                name = u.UserName,
+                onHands = u.OnHands,
+                returned = u.Returned,
+                expired = u.Expired
+            }).ToList();
 
             return new OkObjectResult(JsonConvert.SerializeObject(users, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
+        // GET: api/Lib/UserQueues
         [HttpGet]
+        [Route("users")]
         [Authorize(Roles = "admin")]
-        public IActionResult GetPositionsInQueues(string userName)
+        public IActionResult GetUserQueues(string username)
         {
-            var positionsInQueues = _context.QueueOnBook.Where(q => q.UserId == userName).Select(q => new
+            var positionsInQueues = _context.QueueOnBook.Where(q => q.UserId == username).Select(q => new
             {
-                bookId = q.BookId,
+                id = q.BookId,
+                name = q.BookNavigation.Name,
                 position = q.Position
             }).ToList();
 

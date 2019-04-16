@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookLib.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-
+        
         public virtual DbSet<Author> Author { get; set; }
         public virtual DbSet<Availability> Availability { get; set; }
         public virtual DbSet<Book> Book { get; set; }

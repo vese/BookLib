@@ -7,7 +7,6 @@ namespace BookLib.Models.DBModels
         public Availability()
         {
             BooksOnHands = new HashSet<BookOnHands>();
-            QueuesOnBook = new HashSet<QueueOnBook>();
         }
 
         public int Id { get; set; }
@@ -19,6 +18,5 @@ namespace BookLib.Models.DBModels
 
         public virtual Book BookNavigation { get; set; }
         public virtual ICollection<BookOnHands> BooksOnHands { get; set; }
-        public virtual ICollection<QueueOnBook> QueuesOnBook { get; set; }
     }
 }

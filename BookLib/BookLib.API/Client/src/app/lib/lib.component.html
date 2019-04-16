@@ -1,5 +1,5 @@
 <p>Работа с книгами</p>
-<div class="row">
+<div class="row" *ngIf="users">
   <div>
     <mat-form-field>
       <mat-label>Пользователь</mat-label>
@@ -29,7 +29,7 @@
   </ol>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="books">
   <div>
     <mat-form-field>
       <mat-label>Книга</mat-label>
@@ -47,6 +47,6 @@
   </div>
 </div>
 
-<button (click)="giveBook(selectedBookId)" [disabled]="giveDisabled">Выдать</button>
+<!--<button (click)="giveBook(selectedBookId)" [disabled]="giveDisabled">Выдать</button>
 <button (click)="returnBook()" [disabled]="returnDisabled">Вернуть</button>
-<button (click)="putInQueueBook()" [disabled]="putInDisabled">Поставить в очередь</button>
+<button (click)="putInQueueBook()" [disabled]="putInDisabled">Поставить в очередь</button>-->

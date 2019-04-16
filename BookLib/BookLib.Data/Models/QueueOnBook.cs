@@ -7,7 +7,7 @@
         public string UserId { get; set; }
         public int Position { get; set; }
 
-        public virtual Availability BookNavigation { get; set; }
+        public virtual Book BookNavigation { get; set; }
         public virtual ApplicationUser UserNavigation { get; set; }
     }
 }
