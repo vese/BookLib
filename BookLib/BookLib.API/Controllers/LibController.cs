@@ -1,6 +1,7 @@
 ﻿using BookLib.Data;
 using BookLib.Models.DBModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -13,10 +14,12 @@ namespace BookLib.API.Controllers
     public class LibController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public LibController(ApplicationDbContext context)
+        public LibController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/Lib/Users
@@ -25,12 +28,14 @@ namespace BookLib.API.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult GetUsers()
         {
-            var users = _context.Users.Select(u => new
+            var userRoleId = _context.Roles.First(r => r.Name == "user").Id;
+            var users = _context.Users.Where(u => _context.UserRoles.Any(r => r.RoleId == userRoleId && r.UserId == u.Id)).Select(u => new
             {
                 name = u.UserName,
                 onHands = u.OnHands,
                 returned = u.Returned,
-                expired = u.Expired
+                expired = u.Expired,
+                notReturned = u.NotReturned
             }).ToList();
 
             return new OkObjectResult(JsonConvert.SerializeObject(users, new JsonSerializerSettings { Formatting = Formatting.Indented }));
@@ -38,7 +43,7 @@ namespace BookLib.API.Controllers
 
         // GET: api/Lib/UserQueues
         [HttpGet]
-        [Route("users")]
+        [Route("userqueues")]
         [Authorize(Roles = "admin")]
         public IActionResult GetUserQueues(string username)
         {
@@ -52,57 +57,99 @@ namespace BookLib.API.Controllers
             return new OkObjectResult(JsonConvert.SerializeObject(positionsInQueues, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
+        // GET: api/Lib/Books
         [HttpGet]
+        [Route("books")]
         [Authorize(Roles = "admin")]
-        public IActionResult GetBooksCount(string userName)
+        public IActionResult GetBooks()
         {
             var booksCount = _context.Availability.Select(a => new
             {
-                bookId = a.BookId,
-                totalCount = a.TotalCount,
-                freeCount = a.FreeCount,
-                onHandsCount = a.OnHandsCount,
-                expiredCount = a.NotReturnedCount
+                id = a.BookId,
+                name = a.BookNavigation.Name,
+                free = a.FreeCount,
+                onHands = a.OnHandsCount,
+                queueLength = a.BookNavigation.QueuesOnBook.Count
             }).ToList();
             return new OkObjectResult(JsonConvert.SerializeObject(booksCount, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
-        [HttpPost]
+        // GET: api/Lib/BookGiven
+        [HttpGet]
+        [Route("bookgiven")]
         [Authorize(Roles = "admin")]
-        public IActionResult TakeBook(int bookId, string userName)
+        public IActionResult BookGiven(string username, int bookId)
+        {
+            var given = _context.BookOnHands.Any(b => b.BookId == bookId && b.UserNavigation.UserName == username && b.ReturnDate == null);
+            return new OkObjectResult(JsonConvert.SerializeObject(given, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
+        // POST: api/Lib/GiveBook
+        [HttpPost]
+        [Route("givebook")]
+        [Authorize(Roles = "admin")]
+        public IActionResult GiveBook(string username, int bookId)
         {
             if (!_context.Book.Any(b => b.Id == bookId))
             {
-                ModelState.TryAddModelError("Model", $"Book with id = {bookId} does not exist.");
+                ModelState.TryAddModelError("Model", $"Book with id = {bookId} does not exist");
                 return BadRequest(ModelState);
             }
 
-            var aviability = _context.Availability.Where(a => a.BookId == bookId).Single();
-            if (aviability.FreeCount == 0)
+            if (_context.BookOnHands.Any(b => b.BookId == bookId && b.UserNavigation.UserName == username && b.ReturnDate == null))
             {
-                ModelState.TryAddModelError("Availability", "Свободных книг нет");
+                ModelState.TryAddModelError("Model", $"У пользователя уже есть такая книга");
                 return BadRequest(ModelState);
             }
 
-            var queueOnBook = _context.QueueOnBook.Where(q => q.BookId == bookId && q.UserId == userName).Single();
-            if (queueOnBook.Position != 1)
+            var user = _context.Users.FirstOrDefault(u => u.UserName == username);
+            if (user.NotReturned > 0)
             {
-                ModelState.TryAddModelError("QueueOnBook", "Пользователь не первый в очереди");
+                ModelState.TryAddModelError("Model", "У пользователя есть невозвращенные книги");
                 return BadRequest(ModelState);
             }
+
+            var availability = _context.Availability.FirstOrDefault(a => a.BookId == bookId);
+            if (availability.FreeCount == 0)
+            {
+                ModelState.TryAddModelError("Model", "Свободных книг нет");
+                return BadRequest(ModelState);
+            }
+
+            var queue = _context.QueueOnBook.Where(q => q.BookId == bookId).ToList();
+
 
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
-                    aviability.FreeCount--;
-                    aviability.OnHandsCount++;
-                    _context.BookOnHands.Add(new BookOnHands() { BookId = bookId, UserId = userName });
-                    _context.QueueOnBook.Remove(queueOnBook);
-                    foreach (var queue in _context.QueueOnBook.Where(q => q.BookId == bookId))
+                    //из очереди
+                    if (queue.Count >= availability.FreeCount)
                     {
-                        queue.Position--;
+                        var userInQueue = queue.FirstOrDefault(q => q.UserNavigation.UserName == username);
+                        if (userInQueue == null)
+                        {
+                            ModelState.TryAddModelError("Model", "Пользователь не в очереди");
+                            return BadRequest(ModelState);
+                        }
+                        if (userInQueue.Position > availability.FreeCount)
+                        {
+                            ModelState.TryAddModelError("Model", "Пользователь далеко в очереди");
+                            return BadRequest(ModelState);
+                        }
+                        var pos = userInQueue.Position;
+                        _context.QueueOnBook.Remove(userInQueue);
+                        queue.Where(q => q.Position > pos).ToList().ForEach(q => q.Position--);
                     }
+                    user.OnHands++;
+                    availability.FreeCount--;
+                    availability.OnHandsCount++;
+                    _context.BookOnHands.Add(new BookOnHands()
+                    {
+                        BookId = bookId,
+                        UserId = user.Id,
+                        TakingDate = DateTime.UtcNow
+                    });
                     _context.SaveChanges();
                     transaction.Commit();
                 }
@@ -117,28 +164,32 @@ namespace BookLib.API.Controllers
             return new OkResult();
         }
 
+        // POST: api/Lib/GiveBook
         [HttpPost]
+        [Route("returnbook")]
         [Authorize(Roles = "admin")]
-        public IActionResult ReturnBook(int bookId, string userName)
+        public IActionResult ReturnBook(string username, int bookId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (!_context.BookOnHands.Any(b => b.BookId == bookId && b.UserId == userName))
+            if (!_context.BookOnHands.Any(b => b.BookId == bookId && b.UserNavigation.UserName == username && b.ReturnDate == null))
             {
                 ModelState.TryAddModelError("BookOnHands", "Такой книги нет у данного человека");
                 return BadRequest(ModelState);
             }
+            
 
-            var bookOnHands = _context.BookOnHands.Where(b => b.BookId == bookId && b.UserId == userName).Single();
-            var aviability = _context.Availability.Where(a => a.BookId == bookId).Single();
+            var bookOnHands = _context.BookOnHands.First(b => b.BookId == bookId && b.UserNavigation.UserName == username && b.ReturnDate == null);
+            var aviability = _context.Availability.First(a => a.BookId == bookId);
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
-                    _context.BookOnHands.Remove(bookOnHands);
+                    bookOnHands.ReturnDate = DateTime.UtcNow;
+                    if (bookOnHands.TakingDate.AddMonths(2) < bookOnHands.ReturnDate)
+                    {
+                        bookOnHands.UserNavigation.Expired++;
+                    }
+                    bookOnHands.UserNavigation.Returned++;
+                    bookOnHands.UserNavigation.OnHands--;
                     aviability.FreeCount++;
                     aviability.OnHandsCount--;
                     _context.SaveChanges();

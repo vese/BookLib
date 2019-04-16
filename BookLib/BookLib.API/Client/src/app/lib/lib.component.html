@@ -3,7 +3,7 @@
   <div>
     <mat-form-field>
       <mat-label>Пользователь</mat-label>
-      <mat-select [(value)]="selectedUser" (selectionChanged)="getUserQueues();checkDisabled()">
+      <mat-select [(value)]="selectedUser" (selectionChange)="getUserQueues();checkDisabled()">
         <mat-option *ngFor="let user of users" [value]="user">
           {{user.name}}
         </mat-option>
@@ -14,6 +14,7 @@
     <p>Книг на руках: {{selectedUser.onHands}}</p>
     <p>Книг возвращено: {{selectedUser.returned}}</p>
     <p>Книг просрочено: {{selectedUser.expired}}</p>
+    <p>Книг не возвращено: {{selectedUser.notReturned}}</p>
   </div>
 </div>
 
@@ -33,8 +34,8 @@
   <div>
     <mat-form-field>
       <mat-label>Книга</mat-label>
-      <mat-select [(value)]="selectedBookId" (selectionChanged)="checkDisabled()">
-        <mat-option *ngFor="let book of books" [value]="book.id">
+      <mat-select [(value)]="selectedBook" (selectionChange)="checkDisabled()">
+        <mat-option *ngFor="let book of books" [value]="book">
           {{book.name}}
         </mat-option>
       </mat-select>
@@ -47,6 +48,8 @@
   </div>
 </div>
 
-<!--<button (click)="giveBook(selectedBookId)" [disabled]="giveDisabled">Выдать</button>
-<button (click)="returnBook()" [disabled]="returnDisabled">Вернуть</button>
-<button (click)="putInQueueBook()" [disabled]="putInDisabled">Поставить в очередь</button>-->
+<div *ngIf="users && books">
+  <button mat-raised-button (click)="giveBook(selectedBook.id)" *ngIf="!giveDisabled">Выдать</button>
+  <button mat-raised-button (click)="returnBook()" *ngIf="!returnDisabled">Вернуть</button>
+  <button mat-raised-button (click)="putInQueueBook()" *ngIf="!putInDisabled">Поставить в очередь</button>
+</div>

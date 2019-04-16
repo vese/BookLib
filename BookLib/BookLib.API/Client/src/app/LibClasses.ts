@@ -3,6 +3,7 @@ export class LibUser {
   onHands: number
   returned: number
   expired: number
+  notReturned: number
 }
 
 export class QueueOnBook {

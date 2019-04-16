@@ -27,26 +27,55 @@ export class LibService {
   }
 
   getUserQueues(): Observable<QueueOnBook[]> {
-    throw new Error("Method not implemented.");
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+    return this.http.get<QueueOnBook[]>(this.baseUrl + this.contrUrl + "userqueues", { headers: headers });
   }
 
   getBooks(): Observable<LibBook[]> {
-    throw new Error("Method not implemented.");
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+    return this.http.get<LibBook[]>(this.baseUrl + this.contrUrl + "books", { headers: headers });
   }
 
   giveBook(username: string, bookId: number): any {
-    throw new Error("Method not implemented.");
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+    return this.http.post(this.baseUrl + this.contrUrl + "givebook", {}, {
+      params: new HttpParams().set("username", username).set("bookId", "" + bookId),
+      headers: headers
+    });
   }
 
   returnBook(username: string, bookId: number): any {
-    throw new Error("Method not implemented.");
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+    return this.http.post(this.baseUrl + this.contrUrl + "returnbook", {}, {
+      params: new HttpParams().set("username", username).set("bookId", "" + bookId),
+      headers: headers
+    });
   }
 
   putInQueueBook(username: string, bookId: number): any {
     throw new Error("Method not implemented.");
   }
-
+  
   userHasBook(username: string, bookId: number): Observable<boolean> {
-    throw new Error("Method not implemented.");
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+    return this.http.get<boolean>(this.baseUrl + this.contrUrl + "bookgiven", {
+      params: new HttpParams().set("username", username).set("bookId", "" + bookId),
+      headers: headers
+    });
   }
 }

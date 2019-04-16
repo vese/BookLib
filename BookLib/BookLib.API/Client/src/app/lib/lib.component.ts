@@ -14,7 +14,7 @@ export class LibComponent implements OnInit {
   userQueues: QueueOnBook[];
 
   books: LibBook[];
-  selectedBookId: number;
+  selectedBook: LibBook;
 
   giveDisabled: boolean;
   returnDisabled: boolean;
@@ -27,7 +27,12 @@ export class LibComponent implements OnInit {
   }
 
   getUserQueues(): void {
-    this.libService.getUserQueues().subscribe(res => this.userQueues = res);
+    this.libService.getUserQueues().subscribe(res => {
+      this.userQueues = res;
+      if (this.books) {
+        this.checkDisabled();
+      }
+    });
   }
 
   refresh(): void {
@@ -39,14 +44,21 @@ export class LibComponent implements OnInit {
       else {
         this.selectedUser = this.users[0];
       }
-      this.getUserQueues();
-      this.libService.getBooks().subscribe(res => {
-        this.books = res;
-        this.selectedBookId = this.books[0].id;
-        this.checkDisabled();
+
+      this.libService.getUserQueues().subscribe(res => {
+        this.userQueues = res;
+        this.libService.getBooks().subscribe(res => {
+          this.books = res;
+          if (this.selectedBook) {
+            this.selectedBook = this.books.find(b => b.id === this.selectedBook.id);
+          }
+          else {
+            this.selectedBook = this.books[0];
+          }
+          this.checkDisabled();
+        });
       });
     });
-
   }
 
   giveBook(id: number): void {
@@ -54,19 +66,19 @@ export class LibComponent implements OnInit {
   }
 
   returnBook(): void {
-    this.libService.returnBook(this.selectedUser.name, this.selectedBookId).subscribe(r => this.refresh());
+    this.libService.returnBook(this.selectedUser.name, this.selectedBook.id).subscribe(r => this.refresh());
   }
 
   putInQueueBook(): void {
-    this.libService.putInQueueBook(this.selectedUser.name, this.selectedBookId).subscribe(r => this.refresh());
+    this.libService.putInQueueBook(this.selectedUser.name, this.selectedBook.id).subscribe(r => this.refresh());
   }
 
   checkDisabled(): void {
-    this.libService.userHasBook(this.selectedUser.name, this.selectedBookId).subscribe(res => {
-      let queue = this.userQueues.find(q => q.id === this.selectedBookId);
-      this.giveDisabled = res || this.selectedUser.expired > 0 || (queue && queue.position > 1) || this.books.find(b => b.id == this.selectedBookId).free === 0;
+    this.libService.userHasBook(this.selectedUser.name, this.selectedBook.id).subscribe(res => {
+      let queue = this.userQueues.find(q => q.id === this.selectedBook.id);
+      this.giveDisabled = res || this.selectedUser.notReturned > 0 || (queue && queue.position > 1) || this.books.find(b => b.id == this.selectedBook.id).free === 0;
       this.returnDisabled = !res;
-      this.putInDisabled = res || this.selectedUser.expired > 0;
+      this.putInDisabled = res || this.selectedUser.notReturned > 0;
     });
   }
 }
