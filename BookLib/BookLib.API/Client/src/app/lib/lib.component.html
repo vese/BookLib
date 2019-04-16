@@ -1,0 +1,52 @@
+<p>Работа с книгами</p>
+<div class="row">
+  <div>
+    <mat-form-field>
+      <mat-label>Пользователь</mat-label>
+      <mat-select [(value)]="selectedUser" (selectionChanged)="getUserQueues();checkDisabled()">
+        <mat-option *ngFor="let user of users" [value]="user">
+          {{user.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <p>Книг на руках: {{selectedUser.onHands}}</p>
+    <p>Книг возвращено: {{selectedUser.returned}}</p>
+    <p>Книг просрочено: {{selectedUser.expired}}</p>
+  </div>
+</div>
+
+<div class="list" *ngIf="userQueues">
+  <p></p>
+  <ol>
+    <li *ngFor="let queue of userQueues">
+      <p>
+        {{queue.name}}: Место в очереди {{queue.position}}
+      </p>
+      <a (click)="giveBook(queue.id)">Выдать</a>
+    </li>
+  </ol>
+</div>
+
+<div class="row">
+  <div>
+    <mat-form-field>
+      <mat-label>Книга</mat-label>
+      <mat-select [(value)]="selectedBookId" (selectionChanged)="checkDisabled()">
+        <mat-option *ngFor="let book of books" [value]="book.id">
+          {{book.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <p>Книг свободно: {{selectedBook.free}}</p>
+    <p>Книг на руках: {{selectedBook.onHands}}</p>
+    <p *ngIf="selectedBook.free === 0">Длина очереди: {{selectedBook.queueLength}}</p>
+  </div>
+</div>
+
+<button (click)="giveBook(selectedBookId)" [disabled]="giveDisabled">Выдать</button>
+<button (click)="returnBook()" [disabled]="returnDisabled">Вернуть</button>
+<button (click)="putInQueueBook()" [disabled]="putInDisabled">Поставить в очередь</button>

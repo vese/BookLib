@@ -76,7 +76,7 @@ export class RegisterDialogComponent {
         pass: this.passwordFormControl.value
       }
       this.userService.register(data).subscribe(res => {
-        this.registerFailed = false;
+        this.dialogRef.close();
       }, error => {
         if (error.error.Name) {
           error.error.Name.forEach(el => this.failtureMessages.push(el));

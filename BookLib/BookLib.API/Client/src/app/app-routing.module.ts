@@ -6,6 +6,7 @@ import { BookDetailComponent } from './book-detail/book-detail.component';
 import { AddBookComponent } from './add-book/add-book.component';
 import { EditBookComponent } from './edit-book/edit-book.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { LibComponent } from './lib/lib.component';
 
 const routes: Routes =
   [{
@@ -22,6 +23,9 @@ const routes: Routes =
   },
   {
     path: "book/:id", component: BookDetailComponent
+  },
+  {
+    path: "lib", component: LibComponent
   },
   {
     path: '', redirectTo: '/home', pathMatch: 'full'

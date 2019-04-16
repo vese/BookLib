@@ -19,6 +19,7 @@ import { UserComponent } from './user/user.component';
 import { DeleteBookDialogComponent } from './delete-book-dialog/delete-book-dialog.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { UserService } from './user.service';
+import { LibComponent } from './lib/lib.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { UserService } from './user.service';
     LoginDialogComponent,
     RegisterDialogComponent,
     DeleteBookDialogComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    LibComponent
   ],
   imports: [
     BrowserModule,

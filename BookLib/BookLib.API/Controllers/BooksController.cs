@@ -21,6 +21,8 @@ namespace BookLib.API.Controllers
             _context = context;
         }
 
+        #region Filter
+        // GET: api/Books/FilterParams
         [HttpGet]
         [Route("filterparams")]
         public IActionResult GetFilterParams()
@@ -137,7 +139,10 @@ namespace BookLib.API.Controllers
 
             return new OkObjectResult(JsonConvert.SerializeObject(books, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
+        #endregion
 
+        #region Book
+        // GET: api/Books
         [HttpGet]
         public IActionResult GetBook(int id)
         {
@@ -167,6 +172,7 @@ namespace BookLib.API.Controllers
             return new OkObjectResult(JsonConvert.SerializeObject(book, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
+        // PUT: api/Books
         [HttpPut]
         [Authorize(Roles = "admin")]
         public IActionResult PutBook(int id, [FromBody] ViewBook book)
@@ -590,6 +596,7 @@ namespace BookLib.API.Controllers
             return new OkResult();
         }
 
+        // DELETE: api/Books
         [HttpDelete]
         [Authorize(Roles = "admin")]
         public IActionResult DeleteBook(int id)
@@ -643,131 +650,8 @@ namespace BookLib.API.Controllers
 
             return new OkResult();
         }
+        #endregion
 
-        [HttpGet]
-        [Authorize(Roles = "admin")]
-        public IActionResult GetUserNames()
-        {
-            var users = _context.Users.Select(u => new { u.Id }).ToList();
-
-            return new OkObjectResult(JsonConvert.SerializeObject(users, new JsonSerializerSettings { Formatting = Formatting.Indented }));
-        }
-
-        [HttpGet]
-        [Authorize(Roles = "admin")]
-        public IActionResult GetPositionsInQueues(string userName)
-        {
-            var positionsInQueues = _context.QueueOnBook.Where(q => q.IdUser == userName).Select(q => new
-            {
-                bookId = q.IdBook,
-                position = q.Position
-            }).ToList();
-
-            return new OkObjectResult(JsonConvert.SerializeObject(positionsInQueues, new JsonSerializerSettings { Formatting = Formatting.Indented }));
-        }
-
-        [HttpGet]
-        [Authorize(Roles = "admin")]
-        public IActionResult GetBooksCount(string userName)
-        {
-            var booksCount = _context.Availability.Select(a => new
-            {
-                bookId = a.IdBook,
-                totalCount = a.TotalCount,
-                freeCount = a.FreeCount,
-                onHandsCount = a.OnHandsCount,
-                expiredCount = a.ExpiredCount
-            }).ToList();
-            return new OkObjectResult(JsonConvert.SerializeObject(booksCount, new JsonSerializerSettings { Formatting = Formatting.Indented }));
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "admin")]
-        public IActionResult TakeBook(int bookId, string userName)
-        {
-            if (!BookExists(bookId))
-            {
-                ModelState.TryAddModelError("Model", $"Book with id = {bookId} does not exist.");
-                return BadRequest(ModelState);
-            }
-
-            var aviability = _context.Availability.Where(a => a.IdBook == bookId).Single();
-            if (aviability.FreeCount == 0)
-            {
-                ModelState.TryAddModelError("Availability", "Свободных книг нет");
-                return BadRequest(ModelState);
-            }
-
-            var queueOnBook = _context.QueueOnBook.Where(q => q.IdBook == bookId && q.IdUser == userName).Single();
-            if (queueOnBook.Position != 1)
-            {
-                ModelState.TryAddModelError("QueueOnBook", "Пользователь не первый в очереди");
-                return BadRequest(ModelState);
-            }
-
-            using (var transaction = _context.Database.BeginTransaction())
-            {
-                try
-                {
-                    aviability.FreeCount--;
-                    aviability.OnHandsCount++;
-                    _context.BookOnHands.Add(new BookOnHands() { IdBook = bookId, IdUser = userName });
-                    _context.QueueOnBook.Remove(queueOnBook);
-                    foreach (var queue in _context.QueueOnBook.Where(q => q.IdBook == bookId))
-                    {
-                        queue.Position--;
-                    }
-                    _context.SaveChanges();
-                    transaction.Commit();
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                    ModelState.TryAddModelError("Book", "Ошибка при выдаче книги");
-                    return BadRequest(ModelState);
-                }
-            }
-
-            return new OkResult();
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "admin")]
-        public IActionResult ReturnBook(int bookId, string userName)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (!_context.BookOnHands.Any(b => b.IdBook == bookId && b.IdUser == userName))
-            {
-                ModelState.TryAddModelError("BookOnHands", "Такой книги нет у данного человека");
-                return BadRequest(ModelState);
-            }
-
-            var bookOnHands = _context.BookOnHands.Where(b => b.IdBook == bookId && b.IdUser == userName).Single();
-            var aviability = _context.Availability.Where(a => a.IdBook == bookId).Single();
-            using (var transaction = _context.Database.BeginTransaction())
-            {
-                try
-                {
-                    _context.BookOnHands.Remove(bookOnHands);
-                    aviability.FreeCount++;
-                    aviability.OnHandsCount--;
-                    _context.SaveChanges();
-                    transaction.Commit();
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                    ModelState.TryAddModelError("BookOnHand", "Ошибка при возврате книги");
-                    return BadRequest(ModelState);
-                }
-            }
-
-            return new OkResult();
-        }
         #region Exists
         // GET: api/Books/AuthorExists
         [HttpGet]

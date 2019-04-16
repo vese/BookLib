@@ -8,6 +8,7 @@
   <ItemGroup>
     <None Remove="Client\src\app\AuthClasses.ts" />
     <None Remove="Client\src\app\BookClasses.ts" />
+    <None Remove="Client\src\app\LibClasses.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="Client\src\app\AuthClasses.ts" />
     <TypeScriptCompile Include="Client\src\app\BookClasses.ts" />
+    <TypeScriptCompile Include="Client\src\app\LibClasses.ts" />
   </ItemGroup>
 
 </Project>
