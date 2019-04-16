@@ -1,10 +1,10 @@
-<div *ngIf="filterParams" class="container-fluid">
+<div class="container-fluid">
   <div class="row">
 
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
       <mat-form-field>
         <mat-label>Поиск в названии</mat-label>
-        <input matInput [(ngModel)]="inNameString" (change)="getBooks()">
+        <input matInput [(ngModel)]="inNameString" (input)="getBooks()">
         <button mat-button *ngIf="inNameString" matSuffix mat-icon-button aria-label="Clear" (click)="inNameString=''">
           <mat-icon>close</mat-icon>
         </button>

@@ -153,7 +153,6 @@ namespace BookLib.API.Controllers
             var book = new
             {
                 name = libBook.Name,
-                isbn = libBook.Isbn,
                 description = libBook.Description,
                 releaseYear = libBook.ReleaseYear,
                 author = libBook.IdAuthorNavigation.Name,
@@ -193,16 +192,6 @@ namespace BookLib.API.Controllers
                     if (libBook.Name != book.Name)
                     {
                         libBook.Name = book.Name;
-                    }
-
-                    if (libBook.Isbn != book.Isbn)
-                    {
-                        if (_context.Book.Any(b => b.Isbn == book.Isbn))
-                        {
-                            ModelState.TryAddModelError("Book", $"Book with ISBN = {book.Isbn} already exists.");
-                            return BadRequest(ModelState);
-                        }
-                        libBook.Isbn = book.Isbn;
                     }
 
                     if (libBook.Description != book.Description)
@@ -422,7 +411,7 @@ namespace BookLib.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (_context.Book.Any(b => b.Isbn == book.Isbn || book.AuthorId != null && b.Name == book.Name && b.IdAuthor == book.AuthorId))
+            if (_context.Book.Any(b => book.AuthorId != null && b.Name == book.Name && b.IdAuthor == book.AuthorId))
             {
                 ModelState.TryAddModelError("Book", "Такая книга уже существувет");
                 return BadRequest(ModelState);
@@ -565,7 +554,6 @@ namespace BookLib.API.Controllers
 
                     var newBook = _context.Book.Add(new Book
                     {
-                        Isbn = book.Isbn,
                         Name = book.Name,
                         Description = book.Description,
                         ReleaseYear = book.ReleaseYear,
@@ -782,24 +770,6 @@ namespace BookLib.API.Controllers
             return new OkResult();
         }
         #region Exists
-        // GET: api/Books/AuthorExists
-        [HttpGet]
-        [Route("bookexists")]
-        [Authorize(Roles = "admin")]
-        public IActionResult BookExists(string isbn)
-        {
-            if (string.IsNullOrWhiteSpace(isbn))
-            {
-                ModelState.TryAddModelError(nameof(isbn), $"The {nameof(isbn)} field is required.");
-                return BadRequest(ModelState);
-            }
-
-            return new OkObjectResult(JsonConvert.SerializeObject(new
-            {
-                isbnExists = _context.Book.Any(b => b.Isbn == isbn)
-            }, new JsonSerializerSettings { Formatting = Formatting.Indented }));
-        }
-
         // GET: api/Books/AuthorExists
         [HttpGet]
         [Route("authorexists")]

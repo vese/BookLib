@@ -41,19 +41,11 @@ namespace BookLib.Data
             modelBuilder.Entity<Book>(entity =>
             {
                 entity.Property(e => e.Description).IsRequired();
-
-                entity.Property(e => e.Isbn).IsRequired().HasColumnName("ISBN").HasMaxLength(20);
-
                 entity.Property(e => e.Name).IsRequired();
-
                 entity.HasOne(d => d.IdAuthorNavigation).WithMany(p => p.Books).HasForeignKey(d => d.IdAuthor);
-
                 entity.HasOne(d => d.IdCategoryNavigation).WithMany(p => p.Books).HasForeignKey(d => d.IdCategory);
-
                 entity.HasOne(d => d.IdGenreNavigation).WithMany(p => p.Books).HasForeignKey(d => d.IdGenre);
-
                 entity.HasOne(d => d.IdPublisherNavigation).WithMany(p => p.Books).HasForeignKey(d => d.IdPublisher);
-
                 entity.HasOne(d => d.IdSeriesNavigation).WithMany(p => p.Books).HasForeignKey(d => d.IdSeries);
             });
 
