@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace BookLib.Models.DBModels
 {
@@ -12,9 +11,9 @@ namespace BookLib.Models.DBModels
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public int IdCategory { get; set; }
+        public int CategoryId { get; set; }
 
-        public virtual Category IdCategoryNavigation { get; set; }
+        public virtual Category CategoryNavigation { get; set; }
         public virtual ICollection<Book> Books { get; set; }
     }
 }

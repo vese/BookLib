@@ -98,22 +98,22 @@ namespace BookLib.API.Controllers
             (string.IsNullOrWhiteSpace(inName) || b.Name.Contains(inName, StringComparison.CurrentCultureIgnoreCase)) &&
             (releaseYear == null || b.ReleaseYear == releaseYear) &&
             (hasFree == null || !(bool)hasFree || b.Availability.FreeCount > 0) &&
-            (authorId == null || b.IdAuthor == authorId) &&
-            (publisherId == null || b.IdPublisher == publisherId) &&
-            (seriesId == null || b.IdSeries != null && b.IdSeries == seriesId) &&
-            (categoryId == null || b.IdCategory == categoryId) &&
-            (genreId == null || b.IdGenre == genreId)
+            (authorId == null || b.AuthorId == authorId) &&
+            (publisherId == null || b.PublisherId == publisherId) &&
+            (seriesId == null || b.SeriesId != null && b.SeriesId == seriesId) &&
+            (categoryId == null || b.CategoryId == categoryId) &&
+            (genreId == null || b.GenreId == genreId)
             ).Select(b => new
             {
                 id = b.Id,
                 name = b.Name,
                 croppedDescription = b.Description.Substring(0, 100),
                 releaseYear = b.ReleaseYear,
-                author = b.IdAuthorNavigation.Name,
-                publisher = b.IdPublisherNavigation.Name,
-                category = b.IdCategoryNavigation.Name,
-                genre = b.IdGenreNavigation.Name,
-                series = b.IdSeriesNavigation == null ? null : b.IdSeriesNavigation.Name,
+                author = b.AuthorNavigation.Name,
+                publisher = b.PublisherNavigation.Name,
+                category = b.CategoryNavigation.Name,
+                genre = b.GenreNavigation.Name,
+                series = b.SeriesNavigation == null ? null : b.SeriesNavigation.Name,
                 commentsCount = b.Comments.Count(),
                 averageMark = b.Comments.Any() ? (int)b.Comments.Sum(c => c.Mark) / b.Comments.Count() : 0,
                 freeCount = b.Availability.FreeCount
@@ -159,11 +159,11 @@ namespace BookLib.API.Controllers
                 name = libBook.Name,
                 description = libBook.Description,
                 releaseYear = libBook.ReleaseYear,
-                author = libBook.IdAuthorNavigation.Name,
-                publisher = libBook.IdPublisherNavigation.Name,
-                category = libBook.IdCategoryNavigation.Name,
-                genre = libBook.IdGenreNavigation.Name,
-                series = libBook.IdSeriesNavigation == null ? null : libBook.IdSeriesNavigation.Name,
+                author = libBook.AuthorNavigation.Name,
+                publisher = libBook.PublisherNavigation.Name,
+                category = libBook.CategoryNavigation.Name,
+                genre = libBook.GenreNavigation.Name,
+                series = libBook.SeriesNavigation == null ? null : libBook.SeriesNavigation.Name,
                 commentsCount = libBook.Comments.Count(),
                 averageMark = libBook.Comments.Any() ? (int)libBook.Comments.Sum(c => c.Mark) / libBook.Comments.Count() : 0,
                 freeCount = libBook.Availability.FreeCount
@@ -210,7 +210,7 @@ namespace BookLib.API.Controllers
                     }
 
                     #region Author
-                    var oldAuthor = libBook.IdAuthorNavigation;
+                    var oldAuthor = libBook.AuthorNavigation;
 
                     if (book.AuthorId == null)
                     {
@@ -221,13 +221,13 @@ namespace BookLib.API.Controllers
 
                         _context.SaveChanges();
 
-                        libBook.IdAuthor = newAuthor.Entity.Id;
+                        libBook.AuthorId = newAuthor.Entity.Id;
                     }
                     else if (_context.Author.Any(a => a.Id == book.AuthorId))
                     {
-                        if (libBook.IdAuthor != book.AuthorId)
+                        if (libBook.AuthorId != book.AuthorId)
                         {
-                            libBook.IdAuthor = (int)book.AuthorId;
+                            libBook.AuthorId = (int)book.AuthorId;
                         }
                     }
                     else
@@ -243,7 +243,7 @@ namespace BookLib.API.Controllers
                     #endregion
 
                     #region Publisher
-                    var oldPublisher = libBook.IdPublisherNavigation;
+                    var oldPublisher = libBook.PublisherNavigation;
 
                     if (book.PublisherId == null)
                     {
@@ -254,13 +254,13 @@ namespace BookLib.API.Controllers
 
                         _context.SaveChanges();
 
-                        libBook.IdPublisher = newPublisher.Entity.Id;
+                        libBook.PublisherId = newPublisher.Entity.Id;
                     }
                     else if (_context.Publisher.Any(p => p.Id == book.PublisherId))
                     {
-                        if (libBook.IdPublisher != book.PublisherId)
+                        if (libBook.PublisherId != book.PublisherId)
                         {
-                            libBook.IdPublisher = (int)book.PublisherId;
+                            libBook.PublisherId = (int)book.PublisherId;
                         }
                     }
                     else
@@ -276,7 +276,7 @@ namespace BookLib.API.Controllers
                     #endregion
 
                     #region Series
-                    var oldSeries = libBook.IdSeriesNavigation;
+                    var oldSeries = libBook.SeriesNavigation;
 
                     if (book.HasSeries)
                     {
@@ -289,13 +289,13 @@ namespace BookLib.API.Controllers
 
                             _context.SaveChanges();
 
-                            libBook.IdSeries = newSeries.Entity.Id;
+                            libBook.SeriesId = newSeries.Entity.Id;
                         }
                         else if (_context.Series.Any(s => s.Id == book.SeriesId))
                         {
-                            if (libBook.IdSeries != book.SeriesId)
+                            if (libBook.SeriesId != book.SeriesId)
                             {
-                                libBook.IdSeries = (int)book.SeriesId;
+                                libBook.SeriesId = (int)book.SeriesId;
                             }
                         }
                         else
@@ -304,9 +304,9 @@ namespace BookLib.API.Controllers
                             return BadRequest(ModelState);
                         }
                     }
-                    else if (libBook.IdSeries != null)
+                    else if (libBook.SeriesId != null)
                     {
-                        libBook.IdSeries = null;
+                        libBook.SeriesId = null;
                     }
 
                     if (oldSeries != null && !oldSeries.Books.Any())
@@ -316,9 +316,9 @@ namespace BookLib.API.Controllers
                     #endregion
 
                     #region Category & Genre
-                    var oldCategory = libBook.IdCategoryNavigation;
+                    var oldCategory = libBook.CategoryNavigation;
 
-                    var oldGenre = libBook.IdGenreNavigation;
+                    var oldGenre = libBook.GenreNavigation;
 
                     if (book.CategoryId == null)
                     {
@@ -330,24 +330,24 @@ namespace BookLib.API.Controllers
 
                         _context.SaveChanges();
 
-                        libBook.IdCategory = newCategory.Entity.Id;
+                        libBook.CategoryId = newCategory.Entity.Id;
 
                         var newGenre = _context.Genre.Add(new Genre
                         {
                             Name = book.Genre,
-                            IdCategory = newCategory.Entity.Id
+                            CategoryId = newCategory.Entity.Id
                         });
 
                         _context.SaveChanges();
 
-                        libBook.IdGenre = newGenre.Entity.Id;
+                        libBook.GenreId = newGenre.Entity.Id;
                     }
                     else if (_context.Category.Any(c => c.Id == book.CategoryId))
                     {
-                        if (libBook.IdCategory != book.CategoryId)
+                        if (libBook.CategoryId != book.CategoryId)
                         {
                             //переместить
-                            libBook.IdCategory = (int)book.CategoryId;
+                            libBook.CategoryId = (int)book.CategoryId;
                         }
 
                         if (book.GenreId == null)
@@ -356,17 +356,17 @@ namespace BookLib.API.Controllers
                             var newGenre = _context.Genre.Add(new Genre
                             {
                                 Name = book.Genre,
-                                IdCategory = (int)book.CategoryId
+                                CategoryId = (int)book.CategoryId
                             });
 
                             _context.SaveChanges();
 
-                            libBook.IdGenre = newGenre.Entity.Id;
+                            libBook.GenreId = newGenre.Entity.Id;
                         }
-                        else if (_context.Genre.Any(g => g.IdCategory == book.CategoryId && g.Id == book.GenreId))
+                        else if (_context.Genre.Any(g => g.CategoryId == book.CategoryId && g.Id == book.GenreId))
                         {
                             //переместить жанр
-                            libBook.IdGenre = (int)book.GenreId;
+                            libBook.GenreId = (int)book.GenreId;
                         }
                         else
                         {
@@ -416,7 +416,7 @@ namespace BookLib.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (_context.Book.Any(b => book.AuthorId != null && b.Name == book.Name && b.IdAuthor == book.AuthorId))
+            if (_context.Book.Any(b => book.AuthorId != null && b.Name == book.Name && b.AuthorId == book.AuthorId))
             {
                 ModelState.TryAddModelError("Book", "Такая книга уже существувет");
                 return BadRequest(ModelState);
@@ -533,16 +533,16 @@ namespace BookLib.API.Controllers
                     #region Genre
                     if (book.GenreId == null)
                     {
-                        if (_context.Genre.Any(g => g.Name == book.Genre && g.IdCategory == book.CategoryId))
+                        if (_context.Genre.Any(g => g.Name == book.Genre && g.CategoryId == book.CategoryId))
                         {
-                            book.GenreId = _context.Genre.First(g => g.Name == book.Genre && g.IdCategory == book.CategoryId).Id;
+                            book.GenreId = _context.Genre.First(g => g.Name == book.Genre && g.CategoryId == book.CategoryId).Id;
                         }
                         else
                         {
                             var newGenre = _context.Genre.Add(new Genre
                             {
                                 Name = book.Genre,
-                                IdCategory = (int)book.CategoryId
+                                CategoryId = (int)book.CategoryId
                             });
 
                             _context.SaveChanges();
@@ -550,7 +550,7 @@ namespace BookLib.API.Controllers
                             book.GenreId = newGenre.Entity.Id;
                         }
                     }
-                    else if (!_context.Genre.Any(g => g.Id == book.GenreId && g.IdCategory == book.CategoryId))
+                    else if (!_context.Genre.Any(g => g.Id == book.GenreId && g.CategoryId == book.CategoryId))
                     {
                         ModelState.TryAddModelError("Book", $"Genre with id = {book.GenreId} does not exist.");
                         return BadRequest(ModelState);
@@ -563,11 +563,11 @@ namespace BookLib.API.Controllers
                         Description = book.Description,
                         ReleaseYear = book.ReleaseYear,
 
-                        IdAuthor = (int)book.AuthorId,
-                        IdPublisher = (int)book.PublisherId,
-                        IdSeries = book.SeriesId,
-                        IdCategory = (int)book.CategoryId,
-                        IdGenre = (int)book.GenreId
+                        AuthorId = (int)book.AuthorId,
+                        PublisherId = (int)book.PublisherId,
+                        SeriesId = book.SeriesId,
+                        CategoryId = (int)book.CategoryId,
+                        GenreId = (int)book.GenreId
                     });
 
                     _context.SaveChanges();
@@ -577,8 +577,8 @@ namespace BookLib.API.Controllers
                         TotalCount = count,
                         FreeCount = count,
                         OnHandsCount = 0,
-                        ExpiredCount = 0,
-                        IdBook = newBook.Entity.Id
+                        NotReturnedCount = 0,
+                        BookId = newBook.Entity.Id
                     });
 
                     _context.SaveChanges();
@@ -608,11 +608,11 @@ namespace BookLib.API.Controllers
 
             var libBook = _context.Book.Find(id);
 
-            var oldAuthor = libBook.IdAuthorNavigation;
-            var oldPublisher = libBook.IdPublisherNavigation;
-            var oldSeries = libBook.IdSeriesNavigation;
-            var oldCategory = libBook.IdCategoryNavigation;
-            var oldGenre = libBook.IdGenreNavigation;
+            var oldAuthor = libBook.AuthorNavigation;
+            var oldPublisher = libBook.PublisherNavigation;
+            var oldSeries = libBook.SeriesNavigation;
+            var oldCategory = libBook.CategoryNavigation;
+            var oldGenre = libBook.GenreNavigation;
 
             _context.Book.Remove(libBook);
 
@@ -745,7 +745,7 @@ namespace BookLib.API.Controllers
 
             return new OkObjectResult(JsonConvert.SerializeObject(new
             {
-                GenreExists = _context.Genre.Any(a => a.IdCategory == categoryId && a.Name == name)
+                GenreExists = _context.Genre.Any(a => a.CategoryId == categoryId && a.Name == name)
             }, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 

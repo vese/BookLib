@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace BookLib.Models.DBModels
 {
@@ -16,17 +15,17 @@ namespace BookLib.Models.DBModels
         public string Name { get; set; }
         public string Description { get; set; }
         public int ReleaseYear { get; set; }
-        public int IdAuthor { get; set; }
-        public int IdPublisher { get; set; }
-        public int? IdSeries { get; set; }
-        public int IdCategory { get; set; }
-        public int? IdGenre { get; set; }
+        public int AuthorId { get; set; }
+        public int PublisherId { get; set; }
+        public int? SeriesId { get; set; }
+        public int CategoryId { get; set; }
+        public int GenreId { get; set; }
 
-        public virtual Author IdAuthorNavigation { get; set; }
-        public virtual Category IdCategoryNavigation { get; set; }
-        public virtual Genre IdGenreNavigation { get; set; }
-        public virtual Publisher IdPublisherNavigation { get; set; }
-        public virtual Series IdSeriesNavigation { get; set; }
+        public virtual Author AuthorNavigation { get; set; }
+        public virtual Category CategoryNavigation { get; set; }
+        public virtual Genre GenreNavigation { get; set; }
+        public virtual Publisher PublisherNavigation { get; set; }
+        public virtual Series SeriesNavigation { get; set; }
         public virtual Availability Availability { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<ReadBook> ReadBooks { get; set; }

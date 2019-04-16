@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BookLib.Models.DBModels
 {
@@ -16,6 +13,11 @@ namespace BookLib.Models.DBModels
             QueuesOnBook = new HashSet<QueueOnBook>();
             BooksOnHands = new HashSet<BookOnHands>();
         }
+
+        public int OnHands { get; set; }
+        public int Returned { get; set; }
+        public int Expired { get; set; }
+        public int NotReturned { get; set; }
 
         public virtual ICollection<ReadBook> ReadBooks { get; set; }
         public virtual ICollection<SheduledBook> SheduledBooks { get; set; }

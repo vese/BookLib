@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace BookLib.Models.DBModels
 {
@@ -12,13 +11,13 @@ namespace BookLib.Models.DBModels
         }
 
         public int Id { get; set; }
-        public int IdBook { get; set; }
+        public int BookId { get; set; }
         public int TotalCount { get; set; }
         public int FreeCount { get; set; }
         public int OnHandsCount { get; set; }
-        public int ExpiredCount { get; set; }
+        public int NotReturnedCount { get; set; }
 
-        public virtual Book IdBookNavigation { get; set; }
+        public virtual Book BookNavigation { get; set; }
         public virtual ICollection<BookOnHands> BooksOnHands { get; set; }
         public virtual ICollection<QueueOnBook> QueuesOnBook { get; set; }
     }

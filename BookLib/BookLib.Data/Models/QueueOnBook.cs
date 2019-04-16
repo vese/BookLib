@@ -1,17 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-
-namespace BookLib.Models.DBModels
+﻿namespace BookLib.Models.DBModels
 {
     public partial class QueueOnBook
     {
         public int Id { get; set; }
-        public int IdBook { get; set; }
-        public string IdUser { get; set; }
+        public int BookId { get; set; }
+        public string UserId { get; set; }
         public int Position { get; set; }
 
-        public virtual Availability IdBookNavigation { get; set; }
-        public virtual ApplicationUser IdUserNavigation { get; set; }
+        public virtual Availability BookNavigation { get; set; }
+        public virtual ApplicationUser UserNavigation { get; set; }
     }
 }

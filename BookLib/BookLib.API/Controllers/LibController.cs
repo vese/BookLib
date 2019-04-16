@@ -32,9 +32,9 @@ namespace BookLib.API.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult GetPositionsInQueues(string userName)
         {
-            var positionsInQueues = _context.QueueOnBook.Where(q => q.IdUser == userName).Select(q => new
+            var positionsInQueues = _context.QueueOnBook.Where(q => q.UserId == userName).Select(q => new
             {
-                bookId = q.IdBook,
+                bookId = q.BookId,
                 position = q.Position
             }).ToList();
 
@@ -47,11 +47,11 @@ namespace BookLib.API.Controllers
         {
             var booksCount = _context.Availability.Select(a => new
             {
-                bookId = a.IdBook,
+                bookId = a.BookId,
                 totalCount = a.TotalCount,
                 freeCount = a.FreeCount,
                 onHandsCount = a.OnHandsCount,
-                expiredCount = a.ExpiredCount
+                expiredCount = a.NotReturnedCount
             }).ToList();
             return new OkObjectResult(JsonConvert.SerializeObject(booksCount, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
@@ -66,14 +66,14 @@ namespace BookLib.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var aviability = _context.Availability.Where(a => a.IdBook == bookId).Single();
+            var aviability = _context.Availability.Where(a => a.BookId == bookId).Single();
             if (aviability.FreeCount == 0)
             {
                 ModelState.TryAddModelError("Availability", "Свободных книг нет");
                 return BadRequest(ModelState);
             }
 
-            var queueOnBook = _context.QueueOnBook.Where(q => q.IdBook == bookId && q.IdUser == userName).Single();
+            var queueOnBook = _context.QueueOnBook.Where(q => q.BookId == bookId && q.UserId == userName).Single();
             if (queueOnBook.Position != 1)
             {
                 ModelState.TryAddModelError("QueueOnBook", "Пользователь не первый в очереди");
@@ -86,9 +86,9 @@ namespace BookLib.API.Controllers
                 {
                     aviability.FreeCount--;
                     aviability.OnHandsCount++;
-                    _context.BookOnHands.Add(new BookOnHands() { IdBook = bookId, IdUser = userName });
+                    _context.BookOnHands.Add(new BookOnHands() { BookId = bookId, UserId = userName });
                     _context.QueueOnBook.Remove(queueOnBook);
-                    foreach (var queue in _context.QueueOnBook.Where(q => q.IdBook == bookId))
+                    foreach (var queue in _context.QueueOnBook.Where(q => q.BookId == bookId))
                     {
                         queue.Position--;
                     }
@@ -115,14 +115,14 @@ namespace BookLib.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!_context.BookOnHands.Any(b => b.IdBook == bookId && b.IdUser == userName))
+            if (!_context.BookOnHands.Any(b => b.BookId == bookId && b.UserId == userName))
             {
                 ModelState.TryAddModelError("BookOnHands", "Такой книги нет у данного человека");
                 return BadRequest(ModelState);
             }
 
-            var bookOnHands = _context.BookOnHands.Where(b => b.IdBook == bookId && b.IdUser == userName).Single();
-            var aviability = _context.Availability.Where(a => a.IdBook == bookId).Single();
+            var bookOnHands = _context.BookOnHands.Where(b => b.BookId == bookId && b.UserId == userName).Single();
+            var aviability = _context.Availability.Where(a => a.BookId == bookId).Single();
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try

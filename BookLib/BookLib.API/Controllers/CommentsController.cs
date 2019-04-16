@@ -27,12 +27,12 @@ namespace BookLib.API.Controllers
         public IActionResult GetComment(int bookId, int start, int count, string order)
         {
             bool desc = (order ?? default(string)) == "desc";
-            var comments = _context.Comment.Where(c => c.IdBook == bookId).OrderBy(b => desc ? null : b.Mark)
+            var comments = _context.Comment.Where(c => c.BookId == bookId).OrderBy(b => desc ? null : b.Mark)
                 .OrderByDescending(b => desc ? b.Mark : null).Skip(start).Take(count).Select(c => new
                 {
                     text = c.Text,
                     mark = c.Mark,
-                    name = c.IdUserNavigation.UserName
+                    name = c.UserNavigation.UserName
                 }).ToList();
 
             return new OkObjectResult(JsonConvert.SerializeObject(comments, new JsonSerializerSettings { Formatting = Formatting.Indented }));
@@ -55,7 +55,7 @@ namespace BookLib.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (_context.Comment.Any(c => c.IdBook == bookId && c.IdUser == userId))
+            if (_context.Comment.Any(c => c.BookId == bookId && c.UserId == userId))
             {
                 ModelState.TryAddModelError("Comment", "Отзыв на эту книгу от этого пользователя уже существует");
                 return BadRequest(ModelState);
@@ -67,8 +67,8 @@ namespace BookLib.API.Controllers
                 {
                     Text = text,
                     Mark = mark,
-                    IdBook = bookId,
-                    IdUser = userId
+                    BookId = bookId,
+                    UserId = userId
                 });
 
                 _context.SaveChanges();
@@ -89,7 +89,7 @@ namespace BookLib.API.Controllers
         {
             var res = new
             {
-                exists = _context.Comment.Any(c => c.IdUserNavigation.UserName == username && c.IdBook == bookId)
+                exists = _context.Comment.Any(c => c.UserNavigation.UserName == username && c.BookId == bookId)
             };
 
             return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
