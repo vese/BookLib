@@ -21,7 +21,6 @@ export class BookComment {
 
 export class Book {
   name: string
-  isbn: string
   description: string
   releaseYear: number
   author: string
@@ -50,7 +49,6 @@ export class FilterParams {
 
 export class ViewBook {
   name: string
-  isbn: string
   description: string
   releaseYear: number
   authorId: number

@@ -4,6 +4,14 @@ h2 {
   margin: .5em 0 .5em 0;
 }
 
+div.select {
+  border-style: solid;
+  border-color: #ccc;
+  border-width: 1px;
+  padding: 0 1em 0 1em;
+  margin-bottom: 1em;
+}
+
 div.nav {
   padding: 1em 0em 1em 0em;
   color: #ffe1bd;

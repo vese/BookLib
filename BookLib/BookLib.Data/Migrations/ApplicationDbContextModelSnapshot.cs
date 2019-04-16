@@ -76,11 +76,6 @@ namespace BookLib.Data.Migrations
 
                     b.Property<int?>("IdSeries");
 
-                    b.Property<string>("Isbn")
-                        .IsRequired()
-                        .HasColumnName("ISBN")
-                        .HasMaxLength(20);
-
                     b.Property<string>("Name")
                         .IsRequired();
 
