@@ -139,6 +139,7 @@ namespace BookLib.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public IActionResult GetBook(int id)
         {
             if (!BookExists(id))
