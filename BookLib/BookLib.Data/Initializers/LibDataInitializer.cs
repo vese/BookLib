@@ -95,6 +95,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Миссис Дэллоуэй",
+                        Isbn = "",
                         ReleaseYear = 1925,
                         IdAuthor = authorId[0],
                         IdGenre = genreId[0],
@@ -105,6 +106,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "На маяк",
+                        Isbn = "",
                         ReleaseYear = 1927,
                         IdAuthor = authorId[0],
                         IdGenre = genreId[3],
@@ -115,6 +117,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Преступление и наказание",
+                        Isbn = "",
                         ReleaseYear = 1866,
                         IdAuthor = authorId[1],
                         IdGenre = genreId[2],
@@ -126,6 +129,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Идиот",
+                        Isbn = "",
                         ReleaseYear = 1869,
                         IdAuthor = authorId[1],
                         IdGenre = genreId[0],
@@ -137,6 +141,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Бесы",
+                        Isbn = "",
                         ReleaseYear = 1872,
                         IdAuthor = authorId[1],
                         IdGenre = genreId[7],
@@ -148,6 +153,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Братья Карамазовы",
+                        Isbn = "",
                         ReleaseYear = 1880,
                         IdAuthor = authorId[1],
                         IdGenre = genreId[6],
@@ -159,6 +165,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Сто лет одиночества",
+                        Isbn = "",
                         ReleaseYear = 1967,
                         IdAuthor = authorId[2],
                         IdGenre = genreId[6],
@@ -169,6 +176,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Любовь во время чумы",
+                        Isbn = "",
                         ReleaseYear = 1985,
                         IdAuthor = authorId[2],
                         IdGenre = genreId[5],
@@ -179,6 +187,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Рассказы",
+                        Isbn = "",
                         ReleaseYear = 1924,
                         IdAuthor = authorId[3],
                         IdGenre = genreId[4],
@@ -189,6 +198,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Процесс",
+                        Isbn = "",
                         ReleaseYear = 1925,
                         IdAuthor = authorId[3],
                         IdGenre = genreId[3],
@@ -199,6 +209,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Замок",
+                        Isbn = "",
                         ReleaseYear = 1926,
                         IdAuthor = authorId[3],
                         IdGenre = genreId[4],
@@ -209,6 +220,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Война и мир",
+                        Isbn = "",
                         ReleaseYear = 1865,
                         IdAuthor = authorId[4],
                         IdGenre = genreId[7],
@@ -220,6 +232,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Анна Каренина",
+                        Isbn = "",
                         ReleaseYear = 1877,
                         IdAuthor = authorId[4],
                         IdGenre = genreId[0],
@@ -231,6 +244,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Смерть Ивана Ильича",
+                        Isbn = "",
                         ReleaseYear = 1886,
                         IdAuthor = authorId[4],
                         IdGenre = genreId[1],
@@ -242,6 +256,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Авессалом, Авессалом!",
+                        Isbn = "",
                         ReleaseYear = 1936,
                         IdAuthor = authorId[5],
                         IdGenre = genreId[0],
@@ -252,6 +267,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Шум и ярость",
+                        Isbn = "",
                         ReleaseYear = 1929,
                         IdAuthor = authorId[5],
                         IdGenre = genreId[6],
@@ -262,6 +278,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Гамлет",
+                        Isbn = "",
                         ReleaseYear = 1603,
                         IdAuthor = authorId[6],
                         IdGenre = genreId[6],
@@ -273,6 +290,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Король Лир",
+                        Isbn = "",
                         ReleaseYear = 1608,
                         IdAuthor = authorId[6],
                         IdGenre = genreId[3],
@@ -284,6 +302,7 @@ namespace BookLib.Initializers
                     new Book
                     {
                         Name = "Отелло",
+                        Isbn = "",
                         ReleaseYear = 1609,
                         IdAuthor = authorId[6],
                         IdGenre = genreId[1],

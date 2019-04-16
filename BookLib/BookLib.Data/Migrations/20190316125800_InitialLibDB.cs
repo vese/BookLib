@@ -96,6 +96,7 @@ namespace BookLib.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ISBN = table.Column<string>(maxLength: 20, nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: false),
                     ReleaseYear = table.Column<int>(nullable: false),

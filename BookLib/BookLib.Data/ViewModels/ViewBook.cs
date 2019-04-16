@@ -15,6 +15,7 @@ namespace BookLib.Data.ViewModels
     public class ViewBook
     {
         public string Name { get; set; }
+        public string Isbn { get; set; }
         public string Description { get; set; }
         public int ReleaseYear { get; set; }
         public int? AuthorId { get; set; }
@@ -37,6 +38,15 @@ namespace BookLib.Data.ViewModels
             {
                 errors.Add(new ValidationResult("Введите имя!", new List<string>() { nameof(Name) }));
             }
+            //if (string.IsNullOrWhiteSpace(Isbn))
+            //{
+            //    errors.Add(new ValidationResult("Введите ISBN!", new List<string>() { nameof(Isbn) }));
+            //}
+
+            //if (Isbn.Length != 17 || !new Regex(@"\d+-\d+-\d+-\d+-\d+").IsMatch(Isbn))
+            //{
+            //    errors.Add(new ValidationResult("Неверный ISBN!", new List<string>() { nameof(Isbn) }));
+            //}
             if (string.IsNullOrWhiteSpace(Description))
             {
                 errors.Add(new ValidationResult("Введите описание!", new List<string>() { nameof(Description) }));
