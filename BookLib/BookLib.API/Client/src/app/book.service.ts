@@ -19,46 +19,49 @@ export class BookService {
     this.contrUrl = "books/";
   }
 
-  getBooks(inNameString: string,
-    selectedReleaseYear: number,
-    selectedAuthorId: number,
-    selectedPublisherId: number,
-    selectedSeriesId: number,
-    selectedCategoryId: number,
-    selectedGenreId: number,
-    selectedHasFree: boolean,
-    selectedSortProperty: string,
-    selectedSortOrder: string): Observable<ListBook[]> {
+  getBooks(
+    inNameString: string,
+    releaseYear: number,
+    authorId: number,
+    publisherId: number,
+    seriesId: number,
+    categoryId: number,
+    genreId: number,
+    hasFree: boolean,
+    sortProperty: string,
+    sortOrder: string): Observable<ListBook[]> {
+    
     let params: HttpParams = new HttpParams();
+
     if (inNameString) {
       params = params.set("inName", inNameString);
     }
-    if (selectedReleaseYear) {
-      params = params.set("releaseYear", "" + selectedReleaseYear);
+    if (releaseYear) {
+      params = params.set("releaseYear", "" + releaseYear);
     }
-    if (selectedAuthorId) {
-      params = params.set("authorId", "" + selectedAuthorId);
+    if (authorId) {
+      params = params.set("authorId", "" + authorId);
     }
-    if (selectedPublisherId) {
-      params = params.set("publisherId", "" + selectedPublisherId);
+    if (publisherId) {
+      params = params.set("publisherId", "" + publisherId);
     }
-    if (selectedSeriesId) {
-      params = params.set("seriesId", "" + selectedSeriesId);
+    if (seriesId) {
+      params = params.set("seriesId", "" + seriesId);
     }
-    if (selectedCategoryId) {
-      params = params.set("categoryId", "" + selectedCategoryId);
+    if (categoryId) {
+      params = params.set("categoryId", "" + categoryId);
     }
-    if (selectedGenreId) {
-      params = params.set("genreId", "" + selectedGenreId);
+    if (genreId) {
+      params = params.set("genreId", "" + genreId);
     }
-    if (selectedHasFree) {
-      params = params.set("hasFree", "" + selectedHasFree);
+    if (hasFree) {
+      params = params.set("hasFree", "" + hasFree);
     }
-    if (selectedSortProperty) {
-      params = params.set("sort", "" + selectedSortProperty);
+    if (sortProperty) {
+      params = params.set("sort", "" + sortProperty);
     }
-    if (selectedSortOrder) {
-      params = params.set("order", "" + selectedSortOrder);
+    if (sortOrder) {
+      params = params.set("order", "" + sortOrder);
     }
 
     return this.http.get<ListBook[]>(this.baseUrl + this.contrUrl + "filter",

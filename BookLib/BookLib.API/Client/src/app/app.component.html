@@ -1,16 +1,19 @@
 <div class="container-fluid">
-	<div class="row nav">
+<div class="row nav">
     <div class="col-9">
       <span><a class="nav" routerLink="">Главная</a></span>
       <span><a class="nav" routerLink="/filter">Поиск</a></span>
-      <span><a class="nav" *ngIf="loggedIn && isAdmin" routerLink="/book/add">+&nbsp;Добавить</a></span>
-      <span><a class="nav" *ngIf="loggedIn && isAdmin" routerLink="/lib">&#167;&nbsp;Библиотека</a></span>
-      <span><a class="nav" *ngIf="loggedIn && !isAdmin" routerLink="/list">Списки</a></span>
+      <span *ngIf="loggedIn">
+      	<span *ngIf="isAdmin">
+	      <span><a class="nav" routerLink="/book/add">+&nbsp;Добавить</a></span>
+	      <span><a class="nav" routerLink="/lib">&#167;&nbsp;Библиотека</a></span>
+	     </span>
+	     <span><a class="nav" *ngIf="!isAdmin" routerLink="/list"><u>=</u>&nbsp;Списки</a></span>
+      </span>
     </div>
-
-		<div class="col-3 text-right">
-			<app-user></app-user>
-		</div>
+	<div class="col-3 text-right">
+		<app-user></app-user>
 	</div>
+</div>
 </div>
 <router-outlet></router-outlet>

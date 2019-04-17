@@ -19,7 +19,7 @@ export class AddBookComponent implements OnInit {
   categoryId: number;
   categoryGenres: Param[];
   genreId: number;
-  failtureMessages: string[];
+  failureMessages: string[];
   disableGenre: boolean = true;
   
   defaultErrorMsg: string = 'Поле обязательно для заполнения!';
@@ -70,7 +70,7 @@ export class AddBookComponent implements OnInit {
   }
 
   addBook(): void {
-    this.failtureMessages = [];
+    this.failureMessages = [];
     if (this.formsIsValid) {
       
       let data: ViewBook = {
@@ -91,11 +91,11 @@ export class AddBookComponent implements OnInit {
       }
 
       this.bookService.addBook(this.countFC.value, data).subscribe(res => {
-        this.failtureMessages.push("Книга успешно добавлена!")
+        this.failureMessages.push("Книга успешно добавлена!")
       }, error => {
         if (error.error) {
           if (error.error.Book) {
-            error.error.Book.forEach(el => this.failtureMessages.push(el));
+            error.error.Book.forEach(el => this.failureMessages.push(el));
           }
         }
       });

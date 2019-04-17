@@ -8,23 +8,24 @@ import { BookService } from '../book.service';
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.css']
 })
+
 export class BooksComponent implements OnInit {
 
   filterParams: FilterParams;
   books: ListBook[];
 
   inNameString: string;
-  selectedReleaseYear: number;
-  selectedAuthorId: number;
-  selectedPublisherId: number;
-  selectedSeriesId: number;
-  selectedCategoryId: number;
-  selectedCategoryGenres: Param[];
-  selectedGenreId: number;
-  selectedHasFree: boolean;
-  selectedSortProperty: string;
-  selectedSortOrderValue: boolean = true;
-  selectedSortOrder: string;
+  releaseYear: number;
+  authorId: number;
+  publisherId: number;
+  seriesId: number;
+  categoryId: number;
+  categoryGenres: Param[];
+  genreId: number;
+  hasFree: boolean;
+  sortProperty: string;
+  sortOrderValue: boolean = true;
+  sortOrder: string;
 
   constructor(private bookService: BookService,
     private route: ActivatedRoute,
@@ -39,32 +40,33 @@ export class BooksComponent implements OnInit {
       if (res.get("name")) {
         this.inNameString = res.get("name");
       }
-      if (res.get("year")) {
-        this.selectedReleaseYear = +res.get("year");
+      if (res.get("releaseYear")) {
+        this.releaseYear = +res.get("releaseYear");
       }
-      if (res.get("author")) {
-        this.selectedAuthorId = this.filterParams.authors.find(a => a.name === res.get("author")).id;
+      if (res.get("authorId")) {
+        let aid: number = +res.get("authorId");
+        this.authorId = this.filterParams.authors.find(a => a.id === +res.get("authorId")).id;
       }
-      if (res.get("publisher")) {
-        this.selectedPublisherId = this.filterParams.publishers.find(a => a.name === res.get("publisher")).id;
+      if (res.get("publisherId")) {
+        this.publisherId = this.filterParams.publishers.find(a => a.id === +res.get("publisherId")).id;
       }
-      if (res.get("series")) {
-        this.selectedSeriesId = this.filterParams.series.find(a => a.name === res.get("series")).id;
+      if (res.get("seriesId")) {
+        this.seriesId = this.filterParams.series.find(a => a.id === +res.get("seriesId")).id;
       }
-      if (res.get("category")) {
-        this.selectedCategoryId = this.filterParams.categories.find(a => a.category.name === res.get("category")).category.id;
+      if (res.get("categoryId")) {
+        this.categoryId = this.filterParams.categories.find(a => a.category.id === +res.get("categoryId")).category.id;
         this.getCategoryGenres();
-        if (res.get("genre")) {
-          this.selectedGenreId = this.selectedCategoryGenres.find(a => a.name === res.get("genre")).id;
+        if (res.get("genreId")) {
+          this.genreId = this.categoryGenres.find(a => a.id === +res.get("genreId")).id;
         }
       }
       if (res.get("hasFree")) {
-        this.selectedHasFree = res.get("hasFree") === "true";
+        this.hasFree = res.get("hasFree") === "true";
       }
       if (res.get("sortProperty")) {
-        this.selectedSortProperty = res.get("sortProperty");
+        this.sortProperty = res.get("sortProperty");
         if (res.get("orderValue") != null) {
-          this.selectedSortOrderValue = res.get("orderValue") === "true";
+          this.sortOrderValue = res.get("orderValue") === "true";
           this.getSortOrder();
         }
       }
@@ -75,104 +77,72 @@ export class BooksComponent implements OnInit {
   getBooks(): void {
     this.bookService.getBooks(
       this.inNameString,
-      this.selectedReleaseYear,
-      this.selectedAuthorId,
-      this.selectedPublisherId,
-      this.selectedSeriesId,
-      this.selectedCategoryId,
-      this.selectedGenreId,
-      this.selectedHasFree,
-      this.selectedSortProperty,
-      this.selectedSortOrder).subscribe(books => this.books = books);
+      this.releaseYear,
+      this.authorId,
+      this.publisherId,
+      this.seriesId,
+      this.categoryId,
+      this.genreId,
+      this.hasFree,
+      this.sortProperty,
+      this.sortOrder).subscribe(b => this.books = b);
 
 
     let params: Params = {};
+
     if (this.inNameString) {
       params.name = this.inNameString;
     }
-    if (this.selectedReleaseYear) {
-      params.year = this.selectedReleaseYear;
+    if (this.releaseYear) {
+      params.releaseYear = this.releaseYear;
     }
-    if (this.selectedAuthorId) {
-      params.author = this.filterParams.authors.find(a => a.id === this.selectedAuthorId).name;
+    if (this.authorId) {
+      params.authorId = this.filterParams.authors.find(a => a.id === this.authorId).id;
     }
-    if (this.selectedPublisherId) {
-      params.publisher = this.filterParams.publishers.find(a => a.id === this.selectedPublisherId).name;
+    if (this.publisherId) {
+      params.publisherId = this.filterParams.publishers.find(a => a.id === this.publisherId).id;
     }
-    if (this.selectedSeriesId) {
-      params.series = this.filterParams.series.find(a => a.id === this.selectedSeriesId).name;
+    if (this.seriesId) {
+      params.seriesId = this.filterParams.series.find(a => a.id === this.seriesId).id;
     }
-    if (this.selectedCategoryId) {
-      params.category = this.filterParams.categories.find(a => a.category.id === this.selectedCategoryId).category.name;
-      if (this.selectedGenreId) {
-        params.genre = this.selectedCategoryGenres.find(a => a.id === this.selectedGenreId).name;
+    if (this.categoryId) {
+      params.categoryId = this.filterParams.categories.find(a => a.category.id === this.categoryId).category.id;
+      if (this.genreId) {
+        params.genreId = this.categoryGenres.find(a => a.id === this.genreId).id;
       }
     }
-    if (this.selectedHasFree) {
-      params.hasFree = this.selectedHasFree;
+    if (this.hasFree) {
+      params.hasFree = this.hasFree;
     }
-    if (this.selectedSortProperty) {
-      params.sortProperty = this.selectedSortProperty;
-      if (this.selectedSortOrderValue != null) {
-        params.orderValue = this.selectedSortOrderValue;
+    if (this.sortProperty) {
+      params.sortProperty = this.sortProperty;
+      if (this.sortOrderValue != null) {
+        params.orderValue = this.sortOrderValue;
       }
     }
     this.router.navigate([], { queryParams: params });
   }
 
-  getFilterParams(): void {
-    this.bookService.getFilterParams().subscribe(params => {
-      this.filterParams = params;
-      this.getOptionalParams();
-    });
-  }
-
   getCategoryGenres(): void {
-    if (this.selectedCategoryId) {
-      this.selectedCategoryGenres = this.filterParams.categories.find(category => category.category.id === this.selectedCategoryId).genres;
+    if (this.categoryId) {
+      this.categoryGenres = this.filterParams.categories.find(c => c.category.id === this.categoryId).genres;
     }
     else {
-      this.selectedGenreId = null;
-      this.selectedCategoryGenres = [];
+      this.genreId = null;
+      this.categoryGenres = [];
     }
   }
 
   getSortOrder(): void {
-    this.selectedSortOrder = this.selectedSortOrderValue ? "asc" : "desc";
+    this.sortOrder = this.sortOrderValue ? "asc" : "desc";
   }
 
-  //gotoBookDetail(id: number): void {
-  //  let params: Params = {};
-  //  if (this.inNameString) {
-  //    params.name = this.inNameString;
-  //  }
-  //  if (this.selectedReleaseYear) {
-  //    params.year = this.selectedReleaseYear;
-  //  }
-  //  if (this.selectedAuthorId) {
-  //    params.author = this.filterParams.authors.find(a => a.id === this.selectedAuthorId).name;
-  //  }
-  //  if (this.selectedPublisherId) {
-  //    params.publisher = this.filterParams.publishers.find(a => a.id === this.selectedPublisherId).name;
-  //  }
-  //  if (this.selectedSeriesId) {
-  //    params.series = this.filterParams.series.find(a => a.id === this.selectedSeriesId).name;
-  //  }
-  //  if (this.selectedCategoryId) {
-  //    params.category = this.filterParams.categories.find(a => a.category.id === this.selectedCategoryId).category.name;
-  //    if (this.selectedGenreId) {
-  //      params.genre = this.selectedCategoryGenres.find(a => a.id === this.selectedGenreId).name;
-  //    }
-  //  }
-  //  if (this.selectedHasFree) {
-  //    params.hasFree = this.selectedHasFree;
-  //  }
-  //  if (this.selectedSortProperty) {
-  //    params.sortProperty = this.selectedSortProperty;
-  //    if (this.selectedSortOrderValue != null) {
-  //      params.orderValue = this.selectedSortOrderValue;
-  //    }
-  //  }
-  //  this.router.navigate(['/book', id], { queryParams: params });
-  //}
+  getFilterParams(): void {
+    this.bookService.getFilterParams().subscribe(
+    p => {
+      this.filterParams = p;
+      this.getOptionalParams();
+    });
+  }
+
 }
