@@ -11,7 +11,7 @@ import { EditBookComponent } from './edit-book/edit-book.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSelectModule, MatInputModule, MatIconModule, MatButtonModule, MatCheckboxModule, MatDialogModule, MatListModule, MatPaginatorModule } from '@angular/material';
+import { MatSelectModule, MatInputModule, MatIconModule, MatButtonModule, MatCheckboxModule, MatDialogModule, MatListModule, MatPaginatorModule, MatExpansionModule } from '@angular/material';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
 import { UserComponent } from './user/user.component';
@@ -19,6 +19,7 @@ import { DeleteBookDialogComponent } from './delete-book-dialog/delete-book-dial
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { UserService } from './user.service';
 import { LibComponent } from './lib/lib.component';
+import { ListComponent } from './list/list.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { LibComponent } from './lib/lib.component';
     RegisterDialogComponent,
     DeleteBookDialogComponent,
     PageNotFoundComponent,
-    LibComponent
+    LibComponent,
+    ListComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,8 @@ import { LibComponent } from './lib/lib.component';
     MatCheckboxModule,
     MatDialogModule,
     MatListModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatExpansionModule
   ],
   exports: [
     LoginDialogComponent,

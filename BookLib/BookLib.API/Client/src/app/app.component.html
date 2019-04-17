@@ -5,7 +5,9 @@
       <span><a class="nav" routerLink="/filter">Поиск</a></span>
       <span><a class="nav" *ngIf="loggedIn && isAdmin" routerLink="/book/add">+&nbsp;Добавить</a></span>
       <span><a class="nav" *ngIf="loggedIn && isAdmin" routerLink="/lib">&#167;&nbsp;Библиотека</a></span>
+      <span><a class="nav" *ngIf="loggedIn && !isAdmin" routerLink="/list">Списки</a></span>
     </div>
+
 		<div class="col-3 text-right">
 			<app-user></app-user>
 		</div>

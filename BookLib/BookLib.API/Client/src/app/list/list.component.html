@@ -1,0 +1,46 @@
+<mat-accordion>
+  <mat-expansion-panel *ngIf="sheduledList">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Список запланированных ({{sheduledList.length}})
+      </mat-panel-title>
+      <mat-panel-description *ngIf="sheduledList.length === 0">
+        Список пуст
+      </mat-panel-description>
+      <mat-panel-description *ngIf="sheduledList.length > 0">
+        Раскройте, чтобы посмотреть книги в списке запланированных
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class="list">
+      <ol>
+        <li *ngFor="let b of sheduledList">
+          <a routerLink="/book/{{b.id}}">
+            <span><strong>&laquo;{{b.name}}&raquo;</strong></span>
+          </a>
+        </li>
+      </ol>
+    </div>
+  </mat-expansion-panel>
+  <mat-expansion-panel *ngIf="readList">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Список прочитанных ({{readList.length}})
+      </mat-panel-title>
+      <mat-panel-description *ngIf="readList.length === 0">
+        Список пуст
+      </mat-panel-description>
+      <mat-panel-description *ngIf="readList.length > 0">
+        Раскройте, чтобы посмотреть книги в списке прочитанных
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class="list">
+      <ol>
+        <li *ngFor="let b of readList">
+          <a routerLink="/book/{{b.id}}">
+            <span><strong>&laquo;{{b.name}}&raquo;</strong></span>
+          </a>
+        </li>
+      </ol>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

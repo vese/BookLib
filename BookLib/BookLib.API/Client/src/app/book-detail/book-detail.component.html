@@ -23,10 +23,16 @@
   </div>
 
   <div class="row">
-    <div class="col item">
-      <span *ngIf="loggedIn && isAdmin">
+    <div class="col item" *ngIf="loggedIn">
+      <span *ngIf="isAdmin">
         <span><a class="text" routerLink="/book/edit/{{id}}">Редактировать</a></span>
         <span><a class="text" [routerLink]="" (click)="openDeleteBookDialog()">Удалить</a></span>
+      </span>
+      <span *ngIf="!isAdmin">
+        <span *ngIf="!inSheduled"><a class="text" [routerLink]="" (click)="addToSheduled()">Добавить в запланированные</a></span>
+        <span *ngIf="inSheduled"><a class="text" [routerLink]="" (click)="removeFromSheduled()">Убрать из запланированных</a></span>
+        <span *ngIf="!inRead"><a class="text" [routerLink]="" (click)="addToRead()">Добавить в прочитанные</a></span>
+        <span *ngIf="inRead"><a class="text" [routerLink]="" (click)="removeFromRead()">Убрать из прочитанных</a></span>
       </span>
     </div>
     <div class="col item text-right">
