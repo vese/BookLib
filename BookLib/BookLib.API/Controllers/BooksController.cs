@@ -119,14 +119,8 @@ namespace BookLib.API.Controllers
             {
                 id = b.Id,
                 name = b.Name,
-                croppedDescription = b.Description.Substring(0, 100),
                 releaseYear = b.ReleaseYear,
                 author = b.AuthorNavigation.Name,
-                publisher = b.PublisherNavigation.Name,
-                category = b.CategoryNavigation.Name,
-                genre = b.GenreNavigation.Name,
-                series = b.SeriesNavigation == null ? null : b.SeriesNavigation.Name,
-                commentsCount = b.Comments.Count(),
                 averageMark = b.Comments.Any() ? (int)b.Comments.Sum(c => c.Mark) / b.Comments.Count() : 0,
                 freeCount = b.Availability.FreeCount
             });
