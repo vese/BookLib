@@ -74,7 +74,7 @@
       <span><strong>Комментарии ({{book.commentsCount}}):</strong></span>
       <ul class="comments">
         <li *ngFor="let comment of comments">
-          &#151; {{comment.text}}<br/>/ <span class="user">Пользователь: <strong>{{comment.name}}</strong>, оценка: <strong>{{comment.mark}}</strong></span>/
+          &#151; {{comment.text}}<br/><span class="user">Пользователь: <strong>{{comment.name}}</strong> (оценка: <strong>{{comment.mark}}</strong>)</span>
         </li>
       </ul>
       <mat-paginator *ngIf="book.commentsCount > 5"

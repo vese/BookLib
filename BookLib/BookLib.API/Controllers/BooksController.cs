@@ -92,7 +92,19 @@ namespace BookLib.API.Controllers
         // GET: api/Books/Filter
         [HttpGet]
         [Route("filter")]
-        public IActionResult Filter(string inName, int? releaseYear, int? authorId, int? publisherId, int? seriesId, int? categoryId, int? genreId, bool? hasFree, SortProperty sort, string order, int start, int count)
+        public IActionResult Filter(
+            string inName,
+            int? authorId,
+            int? publisherId,
+            int? releaseYear,
+            int? seriesId,
+            int? categoryId,
+            int? genreId,
+            bool? hasFree,
+            SortProperty sort,
+            string order,
+            int start,
+            int count)
         {
             var books = _context.Book.Where(b =>
             (string.IsNullOrWhiteSpace(inName) || b.Name.Contains(inName, StringComparison.CurrentCultureIgnoreCase)) &&
