@@ -102,12 +102,17 @@
       <mat-checkbox [(ngModel)]="selectedSortOrderValue" (change)="getSortOrder();getBooks()">По возрастанию</mat-checkbox>
     </div>
   </div>
-</div>
 
-  <div class="list">
-  <ol class="books">
-    <li *ngFor="let b of books">
-      <a routerLink="/book/{{b.id}}"><span>{{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong> ({{b.releaseYear}})</span></a>
-    </li>
-  </ol>
+  <div class="row">
+  	<div class="col-12">
+  		<div class="list">
+  			<ol class="books">
+  				<li *ngFor="let b of books">
+				    <a routerLink="/book/{{b.id}}"><span>{{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong> ({{b.releaseYear}})</span></a>
+  				</li>
+  			</ol>
+  		</div>
+  	</div>
   </div>
+  
+</div>

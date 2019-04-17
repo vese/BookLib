@@ -6,7 +6,7 @@ h2 {
 
 div.select {
   border-style: solid;
-  border-color: #ccc;
+  border-color: #bbb;
   border-width: 1px;
   padding: 0 1em 0 1em;
   margin-bottom: 1em;
@@ -49,7 +49,7 @@ a.text:hover {
 }
 
 span {
-  margin-right:1em;
+  margin-right:.5em;
 }
 
 mat-form-field {
@@ -58,7 +58,6 @@ mat-form-field {
 
 body {
   font-size: 90%;
-  margin: 0em;
 }
 
 input[type="text"], button {

@@ -1,15 +1,15 @@
 export class ListBook {
   id: number
   name: string
-  croppedDescription: string
-  releaseYear: number
   author: string
   publisher: string
+  croppedDescription: string
   category: string
   genre: string
   series: string
   commentsCount: number
   averageMark: number
+  releaseYear: number
   freeCount: number
 }
 
@@ -21,15 +21,15 @@ export class BookComment {
 
 export class Book {
   name: string
-  description: string
-  releaseYear: number
   author: string
   publisher: string
+  description: string
   category: string
   genre: string
   series: string
   commentsCount: number
   averageMark: number
+  releaseYear: number
   freeCount: number
 }
 
@@ -49,12 +49,12 @@ export class FilterParams {
 
 export class ViewBook {
   name: string
-  description: string
-  releaseYear: number
   authorId: number
   author: string
   publisherId: number
   publisher: string
+  description: string
+  releaseYear: number
   hasSeries: boolean
   seriesId: number
   series: string

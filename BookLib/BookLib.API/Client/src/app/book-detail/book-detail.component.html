@@ -35,41 +35,49 @@
   </div>
 
   <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-      <p><b>Рейтинг:</b> {{book.averageMark}}</p>
-
-      <div *ngIf="!commentExists && loggedIn && !isAdmin">
+    <div class="col-12">
+      <p><strong>Средняя оценка:</strong> {{book.averageMark}}</p>
+    </div>
+  </div>
+  <div class="row" *ngIf="!commentExists && loggedIn && !isAdmin">
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+      <div>
         <mat-form-field>
-          <mat-label>Отзыв</mat-label>
-          <input matInput [(ngModel)]="text">
-          <button mat-button *ngIf="text" matSuffix mat-icon-button aria-label="Clear" (click)="text=''">
-            <mat-icon>close</mat-icon>
-          </button>
+          <mat-label>Комментарий</mat-label>
+          <textarea rows="3" matInput [(formControl)]="commentFC"></textarea>
+          <mat-error>{{getErrorMessage(commentFC)}}</mat-error>
         </mat-form-field>
-        <div *ngIf="needMark">
-          Поставьте оценку!
-        </div>
-        <i class="material-icons md-18" [class.gold]="mark>=1" (click)="setMark(1)">star</i>
-        <i class="material-icons md-18" [class.gold]="mark>=2" (click)="setMark(2)">star</i>
-        <i class="material-icons md-18" [class.gold]="mark>=3" (click)="setMark(3)">star</i>
-        <i class="material-icons md-18" [class.gold]="mark>=4" (click)="setMark(4)">star</i>
-        <i class="material-icons md-18" [class.gold]="mark===5" (click)="setMark(5)">star</i>
-        <span><button (click)="addComment()">Оставить отзыв</button></span>
       </div>
-
-      <p><b>Комментарии ({{book.commentsCount}}):</b></p>
-      <mat-paginator *ngIf="book.commentsCount"
+    </div>
+  </div>
+  <div class="row" *ngIf="!commentExists && loggedIn && !isAdmin">
+    <div class="col-6">Оценка:<br/>
+        <a class="stars" [routerLink]="" (click)="setMark(1)"><i class="material-icons md-18" [class.gold]="mark>=1">star</i></a>
+        <a class="stars" [routerLink]="" (click)="setMark(2)"><i class="material-icons md-18" [class.gold]="mark>=2">star</i></a>
+        <a class="stars" [routerLink]="" (click)="setMark(3)"><i class="material-icons md-18" [class.gold]="mark>=3">star</i></a>
+        <a class="stars" [routerLink]="" (click)="setMark(4)"><i class="material-icons md-18" [class.gold]="mark>=4">star</i></a>
+        <a class="stars" [routerLink]="" (click)="setMark(5)"><i class="material-icons md-18" [class.gold]="mark===5">star</i></a>
+        <div>
+          <span class="link"><a class="text" [routerLink]="" (click)="addComment()">Отправить</a></span>
+          <span *ngIf="needMark">Необходимо оставить комментарий и оценку!</span>
+        </div>
+     </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <span><strong>Комментарии ({{book.commentsCount}}):</strong></span>
+      <ul class="comments">
+        <li *ngFor="let comment of comments">
+          &#151; {{comment.text}}<br/>/ <span class="user">Пользователь: <strong>{{comment.name}}</strong>, оценка: <strong>{{comment.mark}}</strong></span>/
+        </li>
+      </ul>
+      <mat-paginator *ngIf="book.commentsCount > 5"
       [length]="length"
       [pageSize]="pageSize"
       [pageSizeOptions]="pageSizeOptions"
       showFirstLastButtons
       (page)="getComments($event)">
       </mat-paginator>
-      <mat-list>
-        <mat-list-item *ngFor="let comment of comments">
-          {{comment.text}} {{comment.mark}} - {{comment.name}}
-        </mat-list-item>
-      </mat-list>
     </div>
   </div>
 </div>

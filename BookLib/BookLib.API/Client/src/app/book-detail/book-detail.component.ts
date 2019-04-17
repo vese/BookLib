@@ -8,12 +8,14 @@ import { CommentService } from '../comment.service';
 import { DeleteBookDialogComponent } from '../delete-book-dialog/delete-book-dialog.component';
 import { Subscription } from 'rxjs';
 import { UserService } from '../user.service';
+import { FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-book-detail',
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.css']
 })
+
 export class BookDetailComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   loggedIn: boolean;
@@ -35,6 +37,9 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   mark: number = 0;
   needMark: boolean = false;
   commentExists: boolean;
+
+  defaultErrorMsg: string = 'Поле обязательно для заполнения!';
+  commentFC = new FormControl("", [Validators.required]);
 
   constructor(
     private route: ActivatedRoute,
@@ -64,6 +69,10 @@ export class BookDetailComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  getErrorMessage(formControl: FormControl) {
+    return formControl.hasError('required') ? this.defaultErrorMsg : '';
+  }
+
   getBook(): void {
     this.route.queryParams.subscribe(res => {
       if (res) {
@@ -87,13 +96,12 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   }
 
   addComment(): void {
-    if (this.loggedIn && this.mark > 0) {
-      this.commentService.addComment(this.text, this.mark, this.name, this.id).subscribe(res => {
-        this.getComments(this.pageEvent);
-        this.commentExists = true;
-      });
-    }
-    else {
+    if (this.loggedIn && this.commentFC.valid && this.mark > 0) {
+      this.commentService.addComment(this.text, this.mark, this.name, this.id).subscribe(res =>
+      {
+          this.getComments(this.pageEvent); this.commentExists = true;
+       });
+    } else {
       this.needMark = true;
     }
   }

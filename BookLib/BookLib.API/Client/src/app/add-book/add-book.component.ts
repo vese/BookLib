@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FilterParams, Param, ViewBook } from '../BookClasses';
 import { BookService } from '../book.service';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-add-book',
@@ -12,75 +12,50 @@ import { FormControl, Validators } from '@angular/forms';
 export class AddBookComponent implements OnInit {
   filterParams: FilterParams;
 
-  selectedAuthorId: number;
-  selectedPublisherId: number;
+  authorId: number;
+  publisherId: number;
   hasSeries: boolean = false;
-  selectedSeriesId: number;
-  selectedCategoryId: number;
-  selectedCategoryGenres: Param[];
-  selectedGenreId: number;
+  seriesId: number;
+  categoryId: number;
+  categoryGenres: Param[];
+  genreId: number;
   failtureMessages: string[];
   disableGenre: boolean = true;
+  
+  defaultErrorMsg: string = 'Поле обязательно для заполнения!';
 
-  nameFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  descriptionFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  releaseYearFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  authorFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  publisherFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  seriesFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  categoryFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  genreFormControl = new FormControl({ value: "", disabled: this.disableGenre }, [
-    Validators.required
-  ]);
-  countFormControl = new FormControl("", [
-    Validators.required,
-    Validators.min(1)
-  ]);
+  nameFC = new FormControl("", [Validators.required]);
+  authorFC = new FormControl("", [Validators.required]);
+  publisherFC = new FormControl("", [Validators.required]);
+  descrFC = new FormControl("", [Validators.required]);
+  seriesFC = new FormControl("", [Validators.required]);
+  categoryFC = new FormControl("", [Validators.required]);
+  genreFC = new FormControl({ value: "", disabled: this.disableGenre }, [Validators.required]);
+  yearFC = new FormControl("", [Validators.required]);
+  countFC = new FormControl("", [Validators.required, Validators.min(1)]);
 
-  getNameErrorMessage() {
-    return this.nameFormControl.hasError('required') ? 'Введите значение' : '';
+  forms: FormControl[] = [
+    this.nameFC,
+    this.authorFC,
+    this.publisherFC,
+    this.descrFC,
+    this.seriesFC,
+    this.categoryFC,
+    this.genreFC,
+    this.yearFC,
+    this.countFC
+  ];
+
+
+  getErrorMessage(formControl: FormControl) {
+    return formControl.hasError('required') ? this.defaultErrorMsg : '';
   }
-  getDescriptionErrorMessage() {
-    return this.descriptionFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getReleaseYearErrorMessage() {
-    return this.releaseYearFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getAuthorErrorMessage() {
-    return this.authorFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getPublisherErrorMessage() {
-    return this.publisherFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getSeriesErrorMessage() {
-    return this.seriesFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getCategoryErrorMessage() {
-    return this.categoryFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getGenreErrorMessage() {
-    return this.genreFormControl.hasError('required') ? 'Введите значение' : '';
-  }
+
   getCountErrorMessage() {
-    return this.countFormControl.hasError('required') ? 'Введите значение' :
-      this.countFormControl.hasError('min') ? 'Значение должно быть больше 0' :
+    return this.countFC.hasError('required') ? this.defaultErrorMsg :
+      this.countFC.hasError('min') ? 'Значение должно быть больше 0' :
       '';
   }
-
 
   constructor(private bookService: BookService) { }
 
@@ -88,28 +63,34 @@ export class AddBookComponent implements OnInit {
     this.getFilterParams();
   }
 
+  formsIsValid(): boolean {
+    for (let i = 0; i < this.forms.length; i++) {
+      if (!this.forms[i].valid) return false;
+    }
+  }
+
   addBook(): void {
     this.failtureMessages = [];
-    if (this.nameFormControl.valid && this.descriptionFormControl.valid && this.releaseYearFormControl.valid &&
-      this.authorFormControl.valid && this.publisherFormControl.valid &&
-      this.seriesFormControl.valid && this.categoryFormControl.valid && this.genreFormControl.valid && this.countFormControl.valid) { }if(true){
+    if (this.formsIsValid) {
+      
       let data: ViewBook = {
-        name: this.nameFormControl.value,
-        description: this.descriptionFormControl.value,
-        releaseYear: this.releaseYearFormControl.value,
-        authorId: this.selectedAuthorId,
-        author: this.authorFormControl.value,
-        publisherId: this.selectedPublisherId,
-        publisher: this.publisherFormControl.value,
+        name: this.nameFC.value,
+        authorId: this.authorId,
+        author: this.authorFC.value,
+        publisherId: this.publisherId,
+        publisher: this.publisherFC.value,
+        description: this.descrFC.value,
+        releaseYear: this.yearFC.value,
         hasSeries: this.hasSeries,
-        seriesId: this.selectedSeriesId,
-        series: this.seriesFormControl.value,
-        categoryId: this.selectedCategoryId,
-        category: this.categoryFormControl.value,
-        genreId: this.selectedGenreId,
-        genre: this.genreFormControl.value
+        seriesId: this.seriesId,
+        series: this.seriesFC.value,
+        categoryId: this.categoryId,
+        category: this.categoryFC.value,
+        genreId: this.genreId,
+        genre: this.genreFC.value
       }
-      this.bookService.addBook(this.countFormControl.value, data).subscribe(res => {
+
+      this.bookService.addBook(this.countFC.value, data).subscribe(res => {
         this.failtureMessages.push("Книга успешно добавлена!")
       }, error => {
         if (error.error) {
@@ -126,22 +107,22 @@ export class AddBookComponent implements OnInit {
   }
 
   getCategoryGenres(): void {
-    if (this.selectedCategoryId) {
-      this.selectedCategoryGenres = this.filterParams.categories.find(category => category.category.id === this.selectedCategoryId).genres;
+    if (this.categoryId) {
+      this.categoryGenres = this.filterParams.categories.find(category => category.category.id === this.categoryId).genres;
     }
     else {
-      this.selectedGenreId = null;
-      this.selectedCategoryGenres = [];
+      this.genreId = null;
+      this.categoryGenres = [];
     }
   }
 
   setDisableGenre(): void {
-    this.disableGenre = !this.selectedCategoryId && (!this.categoryFormControl.value || this.categoryFormControl.invalid);
+    this.disableGenre = !this.categoryId && (!this.categoryFC.value || this.categoryFC.invalid);
     if (this.disableGenre) {
-      this.genreFormControl.disable();
+      this.genreFC.disable();
     }
     else {
-      this.genreFormControl.enable();
+      this.genreFC.enable();
     }
   }
 }

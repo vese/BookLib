@@ -1,10 +1,10 @@
+<div style="text-align: center">
 <div *ngIf="!deleted">
-  <h1 mat-dialog-title>Подтвердите удаление книги {{data.name}}!</h1>
-  <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">Отмена</button>
-    <button mat-button (click)="onDeleteClick()" cdkFocusInitial>Удалить</button>
-  </div>
+  <h2>Удалить книгу &laquo;{{data.name}}&raquo;?</h2>
+    <span><a class="text" [routerLink]="" (click)="onDeleteClick()" cdkFocusInitial>Удалить</a></span>
+    <span><a class="text" [routerLink]="" (click)="onNoClick()">Отмена</a></span>
 </div>
 <div *ngIf="deleted">
-  <h1>Книга {{data.name}} удалена!</h1>
+  <h2>Книга &laquo;{{data.name}}&raquo; удалена!</h2>
+</div>
 </div>
