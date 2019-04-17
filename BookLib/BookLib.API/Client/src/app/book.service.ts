@@ -20,15 +20,15 @@ export class BookService {
   }
 
   getBooks(inNameString: string,
-    selectedReleaseYear: number,
-    selectedAuthorId: number,
-    selectedPublisherId: number,
-    selectedSeriesId: number,
-    selectedCategoryId: number,
-    selectedGenreId: number,
-    selectedHasFree: boolean,
-    selectedSortProperty: string,
-    selectedSortOrder: string,
+    releaseYear: number,
+    authorId: number,
+    publisherId: number,
+    seriesId: number,
+    categoryId: number,
+    genreId: number,
+    hasFree: boolean,
+    sortProperty: string,
+    sortOrder: string,
     start: number,
     count: number): Observable<BooksList> {
     let params: HttpParams = new HttpParams();

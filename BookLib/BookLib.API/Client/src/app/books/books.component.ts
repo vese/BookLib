@@ -95,11 +95,10 @@ export class BooksComponent implements OnInit {
       this.sortOrder,
       this.pageEvent ? this.pageEvent.pageIndex * this.pageEvent.pageSize : 0,
       this.pageEvent ? this.pageEvent.pageSize : this.pageSize).subscribe(books => {
-          this.books = books.books;
-          this.length = books.count;
-      }
-
-
+        this.books = books.books;
+        this.length = books.count;
+      });
+    
     let params: Params = {};
 
     if (this.inNameString) {
@@ -151,10 +150,10 @@ export class BooksComponent implements OnInit {
 
   getFilterParams(): void {
     this.bookService.getFilterParams().subscribe(
-    p => {
-      this.filterParams = p;
-      this.getOptionalParams();
-    });
+      p => {
+        this.filterParams = p;
+        this.getOptionalParams();
+      });
   }
 
 }
