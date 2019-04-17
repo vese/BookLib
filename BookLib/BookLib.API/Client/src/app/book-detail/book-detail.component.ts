@@ -8,6 +8,7 @@ import { CommentService } from '../comment.service';
 import { DeleteBookDialogComponent } from '../delete-book-dialog/delete-book-dialog.component';
 import { Subscription } from 'rxjs';
 import { UserService } from '../user.service';
+import { ListService } from '../list.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -36,11 +37,15 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   needMark: boolean = false;
   commentExists: boolean;
 
+  inSheduled: boolean;
+  inRead: boolean;
+
   constructor(
     private route: ActivatedRoute,
     private bookService: BookService,
     private commentService: CommentService,
     private userService: UserService,
+    private listService: ListService,
     public dialog: MatDialog,
     private location: Location) {
     this.subscription = this.userService.logChanged$.subscribe(
@@ -50,6 +55,10 @@ export class BookDetailComponent implements OnInit, OnDestroy {
           this.isAdmin = localStorage.getItem("role") === "admin";
           this.name = localStorage.getItem("name");
           this.commentService.commentExists(this.name, this.id).subscribe(ex => this.commentExists = ex.exists);
+          if (!this.isAdmin) {
+            this.listService.inSheduled(this.name, this.id).subscribe(res => this.inSheduled = res);
+            this.listService.inRead(this.name, this.id).subscribe(res => this.inRead = res);
+          }
         }
       });
   }
@@ -121,5 +130,21 @@ export class BookDetailComponent implements OnInit, OnDestroy {
         this.goBack();
       }
     });
+  }
+
+  addToSheduled(): void {
+    this.listService.addToSheduled(this.name, this.id).subscribe(res => this.inSheduled = true);
+  }
+
+  addToRead(): void {
+    this.listService.addToRead(this.name, this.id).subscribe(res => this.inRead = true);
+  }
+
+  removeFromSheduled(): void {
+    this.listService.removeFromSheduled(this.name, this.id).subscribe(res => this.inSheduled = false);
+  }
+
+  removeFromRead(): void {
+    this.listService.removeFromRead(this.name, this.id).subscribe(res => this.inRead = false);
   }
 }
