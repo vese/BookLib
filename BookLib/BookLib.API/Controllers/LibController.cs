@@ -205,5 +205,98 @@ namespace BookLib.API.Controllers
 
             return new OkResult();
         }
+
+        [HttpPost]
+        [Authorize(Roles = "user")]
+        public IActionResult AddBookInSheduled(string userName, int bookId)
+        {
+            if (_context.SheduledBook.Any(s => s.BookId == bookId && s.UserId == userName))
+            {
+                ModelState.TryAddModelError("SheduledBook", "Книга уже находится в запланированных");
+                return BadRequest(ModelState);
+            }
+
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var newBook = _context.SheduledBook.Add(new SheduledBook
+                        {
+                            BookId = bookId,
+                            UserId = userName
+                        });
+                        _context.SaveChanges();
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        ModelState.TryAddModelError("SheduledBook", "Ошибка при попытке сохранить книгу в рекомендации");
+                        return BadRequest(ModelState);
+                    }
+                }
+
+            return new OkResult();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "user")]
+        public IActionResult AddBookInRead(string userName, int bookId)
+        {
+            if (_context.ReadBook.Any(r => r.BookId == bookId && r.UserId == userName))
+            {
+                ModelState.TryAddModelError("ReadBook", "Книга уже находится в списке прочитанных");
+                return BadRequest(ModelState);
+            }
+
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var newBook = _context.ReadBook.Add(new ReadBook
+                        {
+                            BookId = bookId,
+                            UserId = userName
+                        });
+                        _context.SaveChanges();
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        ModelState.TryAddModelError("ReadBook", "Ошибка при попытке сохранить книгу в прочитанные");
+                        return BadRequest(ModelState);
+                    }
+                }
+
+            return new OkResult();
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "user")]
+        public IActionResult GetReadBooks(string userName)
+        {
+            var readBooks = _context.ReadBook.Where(r => r.UserId == userName).Select(r => new
+            {
+                bookId = r.BookId,
+                bookName = r.BookNavigation.Name,
+            }).ToList();
+
+            return new OkObjectResult(JsonConvert.SerializeObject(readBooks, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "user")]
+        public IActionResult GetShedukedBooks(string userName)
+        {
+            var sheduledBooks = _context.SheduledBook.Where(s => s.UserId == userName).Select(s => new
+            {
+                bookId = s.BookId,
+                bookName = s.BookNavigation.Name,
+            }).ToList();
+
+            return new OkObjectResult(JsonConvert.SerializeObject(sheduledBooks, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
     }
 }
