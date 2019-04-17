@@ -39,7 +39,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   needMark: boolean = false;
   commentExists: boolean;
 
-  defaultErrorMsg: string = 'Поле обязательно для заполнения!';
+  defaultErrorMsg: string = "РџРѕР»Рµ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РґР»СЏ Р·Р°РїРѕР»РЅРµРЅРёСЏ!";
   commentFC = new FormControl("", [Validators.required]);
   inSheduled: boolean;
   inRead: boolean;

@@ -13,6 +13,11 @@ export class ListBook {
   freeCount: number
 }
 
+export class BooksList {
+  books: ListBook[]
+  count: number
+}
+
 export class BookComment {
   text: string
   mark: number

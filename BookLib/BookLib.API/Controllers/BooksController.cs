@@ -92,7 +92,7 @@ namespace BookLib.API.Controllers
         // GET: api/Books/Filter
         [HttpGet]
         [Route("filter")]
-        public IActionResult Filter(string inName, int? releaseYear, int? authorId, int? publisherId, int? seriesId, int? categoryId, int? genreId, bool? hasFree, SortProperty sort, string order)
+        public IActionResult Filter(string inName, int? releaseYear, int? authorId, int? publisherId, int? seriesId, int? categoryId, int? genreId, bool? hasFree, SortProperty sort, string order, int start, int count)
         {
             var books = _context.Book.Where(b =>
             (string.IsNullOrWhiteSpace(inName) || b.Name.Contains(inName, StringComparison.CurrentCultureIgnoreCase)) &&
@@ -117,27 +117,33 @@ namespace BookLib.API.Controllers
                 commentsCount = b.Comments.Count(),
                 averageMark = b.Comments.Any() ? (int)b.Comments.Sum(c => c.Mark) / b.Comments.Count() : 0,
                 freeCount = b.Availability.FreeCount
-            }).ToList();
+            });
 
             bool desc = (order ?? default(string)) == "desc";
 
             switch (sort)
             {
                 case SortProperty.Name:
-                    books = books.OrderBy(b => desc ? default(string) : b.name).OrderByDescending(b => desc ? b.name : default(string)).ToList();
+                    books = books.OrderBy(b => desc ? default(string) : b.name).OrderByDescending(b => desc ? b.name : default(string));
                     break;
                 case SortProperty.Author:
-                    books = books.OrderBy(b => desc ? default(string) : b.author).OrderByDescending(b => desc ? b.author : default(string)).ToList();
+                    books = books.OrderBy(b => desc ? default(string) : b.author).OrderByDescending(b => desc ? b.author : default(string));
                     break;
                 case SortProperty.ReleaseYear:
-                    books = books.OrderBy(b => desc ? default(int) : b.releaseYear).OrderByDescending(b => desc ? b.releaseYear : default(int)).ToList();
+                    books = books.OrderBy(b => desc ? default(int) : b.releaseYear).OrderByDescending(b => desc ? b.releaseYear : default(int));
                     break;
                 case SortProperty.Mark:
-                    books = books.OrderBy(b => desc ? default(int) : b.averageMark).OrderByDescending(b => desc ? b.averageMark : default(int)).ToList();
+                    books = books.OrderBy(b => desc ? default(int) : b.averageMark).OrderByDescending(b => desc ? b.averageMark : default(int));
                     break;
             }
 
-            return new OkObjectResult(JsonConvert.SerializeObject(books, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+            var res = new
+            {
+                books = books.Skip(start).Take(count).ToList(),
+                count = books.Count()
+            };
+
+            return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
         #endregion
 

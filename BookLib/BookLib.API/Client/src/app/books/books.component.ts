@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { ListBook, FilterParams, Param } from '../BookClasses';
 import { BookService } from '../book.service';
+import { PageEvent } from '@angular/material';
 
 @Component({
   selector: 'app-books',
@@ -12,6 +13,11 @@ export class BooksComponent implements OnInit {
 
   filterParams: FilterParams;
   books: ListBook[];
+
+  pageEvent: PageEvent;
+  length: number;
+  pageSize: number = 5;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
 
   inNameString: string;
   selectedReleaseYear: number;
@@ -72,7 +78,8 @@ export class BooksComponent implements OnInit {
     });
   }
 
-  getBooks(): void {
+  getBooks($event = null): void {
+    this.pageEvent = $event;
     this.bookService.getBooks(
       this.inNameString,
       this.selectedReleaseYear,
@@ -83,7 +90,12 @@ export class BooksComponent implements OnInit {
       this.selectedGenreId,
       this.selectedHasFree,
       this.selectedSortProperty,
-      this.selectedSortOrder).subscribe(books => this.books = books);
+      this.selectedSortOrder,
+      this.pageEvent ? this.pageEvent.pageIndex * this.pageEvent.pageSize : 0,
+      this.pageEvent ? this.pageEvent.pageSize : this.pageSize).subscribe(books => {
+        this.books = books.books;
+        this.length = books.count;
+      });
 
 
     let params: Params = {};

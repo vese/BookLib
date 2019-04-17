@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ListBook, Book, FilterParams, ViewBook } from './BookClasses';
+import { Book, FilterParams, ViewBook, BooksList } from './BookClasses';
 import { Observable } from 'rxjs';
 import { ConfigService } from './config.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -28,7 +28,9 @@ export class BookService {
     selectedGenreId: number,
     selectedHasFree: boolean,
     selectedSortProperty: string,
-    selectedSortOrder: string): Observable<ListBook[]> {
+    selectedSortOrder: string,
+    start: number,
+    count: number): Observable<BooksList> {
     let params: HttpParams = new HttpParams();
     if (inNameString) {
       params = params.set("inName", inNameString);
@@ -61,9 +63,9 @@ export class BookService {
       params = params.set("order", "" + selectedSortOrder);
     }
 
-    return this.http.get<ListBook[]>(this.baseUrl + this.contrUrl + "filter",
+    return this.http.get<BooksList>(this.baseUrl + this.contrUrl + "filter",
       {
-        params: params
+        params: params.set("start", "" + start).set("count", "" + count)
       });
   }
 

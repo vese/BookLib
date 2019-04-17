@@ -104,15 +104,22 @@
   </div>
 
   <div class="row">
-  	<div class="col-12">
-  		<div class="list">
-  			<ol class="books">
-  				<li *ngFor="let b of books">
-				    <a routerLink="/book/{{b.id}}"><span>{{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong> ({{b.releaseYear}})</span></a>
-  				</li>
-  			</ol>
-  		</div>
-  	</div>
+    <div class="col-12">
+      <div class="list">
+        <ol class="books">
+          <li *ngFor="let b of books">
+            <a routerLink="/book/{{b.id}}"><span>{{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong> ({{b.releaseYear}})</span></a>
+          </li>
+        </ol>
+      </div>
+      <mat-paginator *ngIf="length > 5"
+                     [length]="length"
+                     [pageSize]="pageSize"
+                     [pageSizeOptions]="pageSizeOptions"
+                     showFirstLastButtons
+                     (page)="getBooks($event)">
+      </mat-paginator>
+    </div>
   </div>
   
 </div>
