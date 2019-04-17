@@ -14,7 +14,7 @@ const routes: Routes =
     path: "home", component: HomeComponent
   },
   {
-    path: "filter", component: BooksComponent
+    path: "books", component: BooksComponent
   },
   {
     path: "book/add", component: AddBookComponent
