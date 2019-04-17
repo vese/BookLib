@@ -13,25 +13,36 @@ div.select {
 }
 
 div.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
   padding: 1em 0em 1em 0em;
   color: #ffe1bd;
   background-color: #5b1c17;
 }
 
+div.content {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+}
 
 a.nav {
   color: #ffe1bd;
   padding: 8px 15px;
   text-decoration: none;
   margin-top: 0px;
-  display:inline;
+  display: inline;
 }
 
-a.nav:hover {
-  color: #5b1c17;
-  text-decoration: none;
-  background-color: #ffe1bd;
-}
+  a.nav:hover {
+    color: #5b1c17;
+    text-decoration: none;
+    background-color: #ffe1bd;
+  }
 
 a.text {
   color: #ffe1bd;
@@ -39,21 +50,21 @@ a.text {
   padding: 8px 15px;
   text-decoration: none;
   margin: 1em 0 1em 0;
-  display:inline-block;
+  display: inline-block;
 }
 
-a.text:hover {
-  color: #5b1c17;
-  text-decoration: none;
-  background-color: #ffe1bd;
-}
+  a.text:hover {
+    color: #5b1c17;
+    text-decoration: none;
+    background-color: #ffe1bd;
+  }
 
 span {
-  margin-right:.5em;
+  margin-right: .5em;
 }
 
 mat-form-field {
-  width:100%;
+  width: 100%;
 }
 
 body {
