@@ -11,7 +11,7 @@ import { EditBookComponent } from './edit-book/edit-book.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSelectModule, MatInputModule, MatIconModule, MatButtonModule, MatCheckboxModule, MatDialogModule, MatListModule, MatPaginatorModule, MatExpansionModule } from '@angular/material';
+import { MatSelectModule, MatInputModule, MatIconModule, MatButtonModule, MatCheckboxModule, MatDialogModule, MatListModule, MatPaginatorModule, MatExpansionModule, MatMenuModule } from '@angular/material';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
 import { UserComponent } from './user/user.component';
@@ -55,7 +55,8 @@ import { ListComponent } from './list/list.component';
     MatDialogModule,
     MatListModule,
     MatPaginatorModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatMenuModule
   ],
   exports: [
     LoginDialogComponent,

@@ -12,6 +12,7 @@
       </span>
     </div>
 	<div class="col-3 text-right">
+    <app-notification *ngIf="loggedIn && !isAdmin"></app-notification>
 		<app-user></app-user>
 	</div>
 </div>

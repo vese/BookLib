@@ -11,7 +11,7 @@ namespace BookLib.Models.DBModels
         public DateTime? ReturnDate { get; set; }
         public bool Expired { get; set; }
 
-        public virtual Availability BookNavigation { get; set; }
+        public virtual Book BookNavigation { get; set; }
         public virtual ApplicationUser UserNavigation { get; set; }
     }
 }

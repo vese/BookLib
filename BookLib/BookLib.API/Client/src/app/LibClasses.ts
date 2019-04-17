@@ -1,3 +1,5 @@
+import { Param } from './BookClasses';
+
 export class LibUser {
   name: string
   onHands: number
@@ -18,4 +20,12 @@ export class LibBook {
   free: number
   onHands: number
   queueLength: number
+}
+
+export class Notifications {
+  queue: Param[]
+  onHands: {
+    name: string
+    days: number
+  }[]
 }

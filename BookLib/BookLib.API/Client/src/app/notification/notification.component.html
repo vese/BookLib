@@ -1,3 +1,15 @@
-<p>
-  notification works!
-</p>
+<span *ngIf="notifications">
+  <button [disabled]="allCount === 0" mat-icon-button [matMenuTriggerFor]="menu">
+    <span *ngIf="count > 0">
+      <mat-icon>notifications</mat-icon>
+      {{notificationsCount}}
+    </span>
+    <span *ngIf="count === 0">
+      <mat-icon>notifications_none</mat-icon>
+    </span>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item *ngFor="let n of notifications.queue">{{n.name}}</button>
+    <button mat-menu-item *ngFor="let n of notifications.onHands">{{n.name}} - до возврата осталось {{n.days}}</button>
+  </mat-menu>
+</span>

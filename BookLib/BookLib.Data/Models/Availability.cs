@@ -4,11 +4,6 @@ namespace BookLib.Models.DBModels
 {
     public partial class Availability
     {
-        public Availability()
-        {
-            BooksOnHands = new HashSet<BookOnHands>();
-        }
-
         public int Id { get; set; }
         public int BookId { get; set; }
         public int TotalCount { get; set; }
@@ -17,6 +12,5 @@ namespace BookLib.Models.DBModels
         public int NotReturnedCount { get; set; }
 
         public virtual Book BookNavigation { get; set; }
-        public virtual ICollection<BookOnHands> BooksOnHands { get; set; }
     }
 }

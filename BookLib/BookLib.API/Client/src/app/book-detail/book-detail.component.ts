@@ -18,6 +18,7 @@ import { ListService } from '../list.service';
 })
 
 export class BookDetailComponent implements OnInit, OnDestroy {
+
   subscription: Subscription;
   loggedIn: boolean;
   isAdmin: boolean;

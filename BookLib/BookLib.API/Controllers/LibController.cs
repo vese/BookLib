@@ -22,6 +22,30 @@ namespace BookLib.API.Controllers
             _userManager = userManager;
         }
 
+        // GET: api/Lib/Notifications
+        [HttpGet]
+        [Route("notifications")]
+        [Authorize(Roles = "user")]
+        public IActionResult GetNotifications(string username)
+        {
+            var user = _context.Users.First(u => u.UserName == username);
+            var res = new
+            {
+                queue = user.QueuesOnBook.Where(q => q.Position <= q.BookNavigation.Availability.FreeCount).Select(q => new
+                {
+                    id = q.BookNavigation.Id,
+                    name = q.BookNavigation.Name
+                }),
+                onHands = user.BooksOnHands.Where(b => b.ReturnDate == null).Select(b => new
+                {
+                    name = b.BookNavigation.Name,
+                    days = (b.TakingDate.AddMonths(2) - DateTime.UtcNow).Days
+                }).OrderBy(b => b.days)
+            };
+
+            return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
         // GET: api/Lib/Users
         [HttpGet]
         [Route("users")]

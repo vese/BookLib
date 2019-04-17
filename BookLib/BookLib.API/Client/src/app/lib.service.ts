@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LibUser, QueueOnBook, LibBook } from './LibClasses';
+import { LibUser, QueueOnBook, LibBook, Notifications } from './LibClasses';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ConfigService } from './config.service';
 
@@ -75,6 +75,17 @@ export class LibService {
     headers = headers.append('Authorization', `Bearer ${authToken}`);
     return this.http.get<boolean>(this.baseUrl + this.contrUrl + "bookgiven", {
       params: new HttpParams().set("username", username).set("bookId", "" + bookId),
+      headers: headers
+    });
+  }
+
+  getNotifications(username: string): Observable<Notifications> {
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+    return this.http.get<Notifications>(this.baseUrl + this.contrUrl + "notifications", {
+      params: new HttpParams().set("username", username),
       headers: headers
     });
   }
