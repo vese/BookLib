@@ -103,6 +103,10 @@
     </div>
   </div>
 
+  <span *ngIf="inNameString || releaseYear || authorId || publisherId || seriesId || categoryId || genreId || hasFree!=null || sortProperty || sortOrder">
+    <a class="text" [routerLink]="" (click)="clearFilters()">Сбросить фильтры</a>
+  </span>
+
   <div class="row">
     <div class="col-12">
       <div class="list">

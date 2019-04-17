@@ -143,7 +143,7 @@ export class BooksComponent implements OnInit {
       this.categoryGenres = [];
     }
   }
-
+  
   getSortOrder(): void {
     this.sortOrder = this.sortOrderValue ? "asc" : "desc";
   }
@@ -156,4 +156,17 @@ export class BooksComponent implements OnInit {
       });
   }
 
+  clearFilters(): void {
+    this.inNameString = null;
+    this.releaseYear = null;
+    this.authorId = null;
+    this.publisherId = null;
+    this.seriesId = null;
+    this.categoryId = null;
+    this.genreId = null;
+    this.hasFree = null;
+    this.sortProperty = null;
+    this.sortOrder = null;
+    this.getBooks();
+  }
 }
