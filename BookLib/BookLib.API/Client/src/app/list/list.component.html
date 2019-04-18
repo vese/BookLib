@@ -6,32 +6,20 @@
   </div>
 
   <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" *ngIf="favouriteList">
 
-      <h6>Избранное ({{favouriteList.length}})</h6>
-
-      <div class="bordertop">
-        <div class="scrolled">
-          <ul class="books">
-            <li *ngFor="let b of favouriteList">
-              <a routerLink="/book/{{b.id}}"><span>{{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong></span></a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" *ngIf="readList">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" *ngIf="booksOnHands">
       <h6>
-
-        <span *ngIf="readList.length === 0">Прочитанных книг нет</span>
-        <span *ngIf="readList.length > 0">Прочитано ({{readList.length}})</span>
+        <span *ngIf="booksOnHands.length === 0">На руках книг нет</span>
+        <span *ngIf="booksOnHands.length > 0">На руках ({{booksOnHands.length}})</span>
       </h6>
       <div class="bordertop">
-        <div class="scrolled">
+        <div>
           <ul class="books">
-            <li *ngFor="let b of readList">
-              <a routerLink="/book/{{b.id}}"><span>{{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong></span></a>
+            <li *ngFor="let b of booksOnHands">
+              <a routerLink="/book/{{b.id}}">
+                  <strong>&laquo;{{b.name}}&raquo;</strong><br /> 
+                  с {{b.getDate | date: "dd.MM.yy"}} по <strong style="color:#b3272c">{{b.returnDate | date: "dd.MM.yy"}}</strong>
+              </a>
             </li>
           </ul>
         </div>
@@ -40,13 +28,15 @@
 
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" *ngIf="queuesList">
       <h6>
+        <span *ngIf="queuesList.length === 0">Очередь пуста</span>
+        <span *ngIf="queuesList.length > 0">Очередь ({{queuesList.length}})</span>
       </h6>
       <div class="bordertop">
-        <div class="scrolled">
+        <div>
           <ul class="books">
             <li *ngFor="let b of queuesList">
               <a routerLink="/book/{{b.id}}">
-                  {{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong><br/>
+                  <strong>&laquo;{{b.name}}&raquo;</strong><br/>
                   <span>(Вы <strong>{{b.position}}-й</strong> в очереди<b *ngIf="b.available">, книга доступна</b>)</span>
               </a>
             </li>
@@ -55,23 +45,48 @@
       </div>
     </div>
 
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" *ngIf="booksOnHands">
+  </div>
+
+  <div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" *ngIf="readList">
+
       <h6>
+        <span *ngIf="readList.length === 0">Прочитанных книг нет</span>
+        <span *ngIf="readList.length > 0">Прочитано ({{readList.length}})</span>
       </h6>
+
       <div class="bordertop">
-        <div class="scrolled">
+        <div>
           <ul class="books">
-            <li *ngFor="let b of booksOnHands">
+            <li *ngFor="let b of readList">
               <a routerLink="/book/{{b.id}}">
-                <span>
-                  {{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong>
-                  (Дата взятия: {{b.getDate | date: "dd.MM.yy"}}, крайний срок возврата: {{b.returnDate | date: "dd.MM.yy"}})
-                </span>
+                <strong>&laquo;{{b.name}}&raquo;</strong>
               </a>
             </li>
           </ul>
         </div>
       </div>
     </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" *ngIf="favouriteList">
+
+      <h6>Избранное ({{favouriteList.length}})</h6>
+
+      <div class="bordertop">
+        <div>
+          <ul class="books">
+            <li *ngFor="let b of favouriteList">
+              <a routerLink="/book/{{b.id}}">
+                <strong>&laquo;{{b.name}}&raquo;</strong>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+
   </div>
 </div>
