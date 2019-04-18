@@ -229,5 +229,52 @@ namespace BookLib.API.Controllers
 
             return new OkResult();
         }
+
+        [HttpPost]
+        public IActionResult GetInQueue(string username, int bookId)
+        {
+            if (_context.QueueOnBook.Any(q => q.BookId == bookId && q.UserId == username))
+            {
+                ModelState.TryAddModelError("Model", $"Пользователь уже в очереди на эту книгу");
+                return BadRequest(ModelState);
+            }
+
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    int maxPosition = _context.QueueOnBook.Where(q => q.BookId == bookId).Max(q => q.Position);
+                    _context.QueueOnBook.Add(new QueueOnBook()
+                    {
+                        BookId = bookId,
+                        UserId = username,
+                        Position = maxPosition + 1
+                    });
+                    _context.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    ModelState.TryAddModelError("Queue", "Ошибка при попытке встать в очередь на книгу");
+                    return BadRequest(ModelState);
+                }
+            }
+
+            return new OkResult();
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "user")]
+        public IActionResult GetBooksWhereUserFirstInQueue(string username)
+        {
+            var books = _context.QueueOnBook.Select(q => new
+            {
+                id = q.BookId,
+                name = _context.Book.Find(q.BookId).Name
+            }).ToList();
+            return new OkObjectResult(JsonConvert.SerializeObject(books, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
     }
 }
