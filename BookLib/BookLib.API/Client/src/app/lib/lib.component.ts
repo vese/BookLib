@@ -81,11 +81,11 @@ export class LibComponent implements OnInit {
   checkDisabled(): void {
     this.libService.userHasBook(this.selectedUser.name, this.selectedBook.id).subscribe(res => {
       let queue = this.userQueues.find(q => q.id === this.selectedBook.id);
-      this.giveDisabled = res || this.selectedUser.notReturned > 0 || (queue && queue.position > 1) || this.books.find(b => b.id == this.selectedBook.id).free === 0;
+      this.giveDisabled = res || this.selectedUser.notReturned > 0 || (queue && queue.position > this.selectedBook.free) || this.books.find(b => b.id == this.selectedBook.id).free === 0;
       this.returnDisabled = !res;
       this.libService.userInQueue(this.selectedUser.name, this.selectedBook.id).subscribe(q => {
-        this.putInDisabled = res || q || this.selectedUser.notReturned > 0;
-        this.removeFromDisabled = !q;
+        this.putInDisabled = res || q.inQueue || this.selectedUser.notReturned > 0;
+        this.removeFromDisabled = !q.inQueue;
       });
     });
   }

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LibUser, QueueOnBook, LibBook, Notifications } from './LibClasses';
+import { LibUser, QueueOnBook, LibBook, Notifications, InQueue } from './LibClasses';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ConfigService } from './config.service';
-import { get } from 'https';
 
 @Injectable({
   providedIn: 'root'
@@ -68,12 +67,12 @@ export class LibService {
     });
   }
 
-  putInQueue(username: string, bookId: number): any {
+  putInQueue(username: string, bookId: number): Observable<number> {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
     let authToken = localStorage.getItem('auth_token');
     headers = headers.append('Authorization', `Bearer ${authToken}`);
-    return this.http.post(this.baseUrl + this.contrUrl + "queue", {}, {
+    return this.http.post<number>(this.baseUrl + this.contrUrl + "queue", {}, {
       params: new HttpParams().set("username", username).set("bookId", "" + bookId),
       headers: headers
     });
@@ -90,12 +89,12 @@ export class LibService {
     });
   }
 
-  userInQueue(username: string, bookId: number): Observable<boolean> {
+  userInQueue(username: string, bookId: number): Observable<InQueue> {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
     let authToken = localStorage.getItem('auth_token');
     headers = headers.append('Authorization', `Bearer ${authToken}`);
-    return this.http.get<boolean>(this.baseUrl + this.contrUrl + "queue", {
+    return this.http.get<InQueue>(this.baseUrl + this.contrUrl + "queue", {
       params: new HttpParams().set("username", username).set("bookId", "" + bookId),
       headers: headers
     });

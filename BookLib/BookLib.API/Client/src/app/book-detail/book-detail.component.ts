@@ -8,8 +8,9 @@ import { CommentService } from '../comment.service';
 import { DeleteBookDialogComponent } from '../delete-book-dialog/delete-book-dialog.component';
 import { Subscription } from 'rxjs';
 import { UserService } from '../user.service';
-import { FormControl, Validators} from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { ListService } from '../list.service';
+import { LibService } from '../lib.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -44,12 +45,17 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   commentFC = new FormControl("", [Validators.required]);
   inSheduled: boolean;
   inRead: boolean;
+  inQueue: boolean;
+  position: number;
+  hasBook: boolean;
+
   constructor(
     private route: ActivatedRoute,
     private bookService: BookService,
     private commentService: CommentService,
     private userService: UserService,
     private listService: ListService,
+    private libService: LibService,
     public dialog: MatDialog,
     private location: Location) {
     this.subscription = this.userService.logChanged$.subscribe(
@@ -62,6 +68,15 @@ export class BookDetailComponent implements OnInit, OnDestroy {
           if (!this.isAdmin) {
             this.listService.inSheduled(this.name, this.id).subscribe(res => this.inSheduled = res);
             this.listService.inRead(this.name, this.id).subscribe(res => this.inRead = res);
+            this.libService.userHasBook(this.name, this.id).subscribe(res => {
+              this.hasBook = res;
+              if (!res) {
+                this.libService.userInQueue(this.name, this.id).subscribe(res => {
+                  this.inQueue = res.inQueue;
+                  this.position = res.position;
+                });
+              }
+            });
           }
         }
       });
@@ -106,10 +121,9 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   addComment(): void {
 
     if (this.loggedIn && this.commentFC.valid && this.mark > 0) {
-      this.commentService.addComment(this.text, this.mark, this.name, this.id).subscribe(res =>
-      {
-          this.getComments(this.pageEvent); this.commentExists = true;
-       });
+      this.commentService.addComment(this.text, this.mark, this.name, this.id).subscribe(res => {
+        this.getComments(this.pageEvent); this.commentExists = true;
+      });
     } else {
       this.needMark = true;
     }
@@ -148,11 +162,22 @@ export class BookDetailComponent implements OnInit, OnDestroy {
     this.listService.addToRead(this.name, this.id).subscribe(res => this.inRead = true);
   }
 
+  putInQueue(): void {
+    this.libService.putInQueue(this.name, this.id).subscribe(res => {
+      this.inQueue = true;
+      this.position = res;
+    });
+  }
+
   removeFromSheduled(): void {
     this.listService.removeFromSheduled(this.name, this.id).subscribe(res => this.inSheduled = false);
   }
 
   removeFromRead(): void {
     this.listService.removeFromRead(this.name, this.id).subscribe(res => this.inRead = false);
+  }
+
+  removeFromQueue(): void {
+    this.libService.removeFromQueue(this.name, this.id).subscribe(res => this.inQueue = false);
   }
 }

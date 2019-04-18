@@ -101,7 +101,7 @@ namespace BookLib.API.Controllers
         // GET: api/Lib/BookGiven
         [HttpGet]
         [Route("bookgiven")]
-        [Authorize(Roles = "admin")]
+        [Authorize]
         public IActionResult BookGiven(string username, int bookId)
         {
             var given = _context.BookOnHands.Any(b => b.BookId == bookId && b.UserNavigation.UserName == username && b.ReturnDate == null);
@@ -240,8 +240,11 @@ namespace BookLib.API.Controllers
         [Authorize]
         public IActionResult UserInQueue(string username, int bookId)
         {
-            var res = _context.QueueOnBook.Any(q => q.BookId == bookId && q.UserNavigation.UserName == username);
-
+            var res = new
+            {
+                inQueue = _context.QueueOnBook.Any(q => q.BookId == bookId && q.UserNavigation.UserName == username),
+                position = _context.QueueOnBook.FirstOrDefault(q => q.BookId == bookId && q.UserNavigation.UserName == username)?.Position
+            };
             return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
@@ -257,14 +260,15 @@ namespace BookLib.API.Controllers
                 ModelState.TryAddModelError("Model", "Пользователь уже в очереди на эту книгу");
                 return BadRequest(ModelState);
             }
+
+            int maxPosition = _context.QueueOnBook.Any(q => q.BookId == bookId) ? _context.QueueOnBook.Where(q => q.BookId == bookId).Max(q => q.Position) : 0;
             try
             {
-                int maxPosition = _context.QueueOnBook.Any(q => q.BookId == bookId) ? _context.QueueOnBook.Where(q => q.BookId == bookId).Max(q => q.Position) : 0;
                 _context.QueueOnBook.Add(new QueueOnBook()
                 {
                     BookId = bookId,
                     UserId = _context.Users.First(u => u.UserName == username).Id,
-                    Position = maxPosition + 1
+                    Position = ++maxPosition
                 });
                 _context.SaveChanges();
             }
@@ -274,7 +278,7 @@ namespace BookLib.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            return new OkResult();
+            return new OkObjectResult(JsonConvert.SerializeObject(maxPosition, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
         // DELETE: api/Lib/Queue

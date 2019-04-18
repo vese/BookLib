@@ -29,3 +29,8 @@ export class Notifications {
     days: number
   }[]
 }
+
+export class InQueue {
+  inQueue: boolean
+  position: number
+}

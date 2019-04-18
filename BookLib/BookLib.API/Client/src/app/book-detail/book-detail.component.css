@@ -14,7 +14,7 @@ a.stars:hover {
 
 div.description {
   width:100%;
-  height: 150px;
+  height: 100%;
   text-align:justify;
   padding-right: 1em;
   overflow: auto
