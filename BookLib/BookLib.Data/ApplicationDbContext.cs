@@ -32,7 +32,7 @@ namespace BookLib.Data
 
             modelBuilder.Entity<Availability>(entity =>
             {
-                entity.HasOne(d => d.BookNavigation).WithOne(p => p.Availability).HasForeignKey<Availability>(d => d.BookId);
+                entity.HasOne(d => d.BookNavigation).WithOne(p => p.AvailabilityNavigation).HasForeignKey<Availability>(d => d.BookId);
             });
 
             modelBuilder.Entity<Book>(entity =>

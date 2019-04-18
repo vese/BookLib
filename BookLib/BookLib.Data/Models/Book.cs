@@ -29,7 +29,7 @@ namespace BookLib.Models.DBModels
         public virtual Genre GenreNavigation { get; set; }
         public virtual Publisher PublisherNavigation { get; set; }
         public virtual Series SeriesNavigation { get; set; }
-        public virtual Availability Availability { get; set; }
+        public virtual Availability AvailabilityNavigation { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<ReadBook> ReadBooks { get; set; }
         public virtual ICollection<ScheduledBook> ScheduledBooks { get; set; }

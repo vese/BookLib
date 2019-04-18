@@ -109,7 +109,7 @@ namespace BookLib.API.Controllers
             var books = _context.Book.Where(b =>
             (string.IsNullOrWhiteSpace(inName) || b.Name.Contains(inName, StringComparison.CurrentCultureIgnoreCase)) &&
             (releaseYear == null || b.ReleaseYear == releaseYear) &&
-            (hasFree == null || !(bool)hasFree || b.Availability.FreeCount > 0) &&
+            (hasFree == null || !(bool)hasFree || b.AvailabilityNavigation.FreeCount > 0) &&
             (authorId == null || b.AuthorId == authorId) &&
             (publisherId == null || b.PublisherId == publisherId) &&
             (seriesId == null || b.SeriesId != null && b.SeriesId == seriesId) &&
@@ -122,7 +122,7 @@ namespace BookLib.API.Controllers
                 releaseYear = b.ReleaseYear,
                 author = b.AuthorNavigation.Name,
                 averageMark = b.Comments.Any() ? (int)b.Comments.Sum(c => c.Mark) / b.Comments.Count() : 0,
-                freeCount = b.Availability.FreeCount
+                freeCount = b.AvailabilityNavigation.FreeCount
             });
 
             bool desc = (order ?? default(string)) == "desc";
@@ -179,7 +179,7 @@ namespace BookLib.API.Controllers
                 series = libBook.SeriesNavigation == null ? null : libBook.SeriesNavigation.Name,
                 commentsCount = libBook.Comments.Count(),
                 averageMark = libBook.Comments.Any() ? (int)libBook.Comments.Sum(c => c.Mark) / libBook.Comments.Count() : 0,
-                freeCount = libBook.Availability.FreeCount
+                freeCount = libBook.AvailabilityNavigation.FreeCount
             };
 
             return new OkObjectResult(JsonConvert.SerializeObject(book, new JsonSerializerSettings { Formatting = Formatting.Indented }));

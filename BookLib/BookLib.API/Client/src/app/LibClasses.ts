@@ -11,7 +11,9 @@ export class LibUser {
 export class QueueOnBook {
   id: number
   name: string
+  author: string
   position: number
+  available: boolean
 }
 
 export class LibBook {
@@ -33,4 +35,12 @@ export class Notifications {
 export class InQueue {
   inQueue: boolean
   position: number
+}
+
+export class BookOnHands {
+  id: number
+  name: string
+  author: string
+  getDate: Date
+  returnDate: Date
 }

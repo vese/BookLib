@@ -7,7 +7,8 @@
 
   <div class="row" *ngIf="scheduledList">
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-      <h6>Спикок книг в очереди
+      <h6>
+        Спиcок книг в запланированных
         <span *ngIf="scheduledList.length === 0"> пуст</span>
         <span *ngIf="scheduledList.length > 0"> ({{scheduledList.length}})</span>
       </h6>
@@ -24,7 +25,8 @@
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-      <h6>Список прочитанных книг
+      <h6>
+        Список прочитанных книг
         <span *ngIf="readList.length === 0"> пуст</span>
         <span *ngIf="readList.length > 0"> ({{readList.length}})</span>
       </h6>
@@ -33,6 +35,50 @@
           <ul class="books">
             <li *ngFor="let b of readList">
               <a routerLink="/book/{{b.id}}"><span>{{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong></span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+      <h6>
+        Список книг в очереди
+        <span *ngIf="readList.length === 0"> пуст</span>
+        <span *ngIf="readList.length > 0"> ({{queuesList.length}})</span>
+      </h6>
+      <div class="bordertop">
+        <div class="scrolled">
+          <ul class="books">
+            <li *ngFor="let b of queuesList">
+              <a routerLink="/book/{{b.id}}">
+                <span>
+                  {{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong>
+                  (Место в очереди {{b.position}}: <span *ngIf="b.available">Доступна</span>)
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+      <h6>
+        Список взятых книг
+        <span *ngIf="readList.length === 0"> пуст</span>
+        <span *ngIf="readList.length > 0"> ({{booksOnHands.length}})</span>
+      </h6>
+      <div class="bordertop">
+        <div class="scrolled">
+          <ul class="books">
+            <li *ngFor="let b of booksOnHands">
+              <a routerLink="/book/{{b.id}}">
+                <span>
+                  {{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong>
+                  (Дата взятия: {{b.getDate | date: "dd.MM.yy"}}, крайний срок возврата: {{b.returnDate | date: "dd.MM.yy"}})
+                </span>
+              </a>
             </li>
           </ul>
         </div>

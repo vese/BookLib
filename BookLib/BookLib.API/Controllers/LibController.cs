@@ -31,7 +31,7 @@ namespace BookLib.API.Controllers
             var user = _context.Users.First(u => u.UserName == username);
             var res = new
             {
-                queue = user.QueuesOnBook.Where(q => q.Position <= q.BookNavigation.Availability.FreeCount).Select(q => new
+                queue = user.QueuesOnBook.Where(q => q.Position <= q.BookNavigation.AvailabilityNavigation.FreeCount).Select(q => new
                 {
                     id = q.BookNavigation.Id,
                     name = q.BookNavigation.Name
@@ -68,14 +68,16 @@ namespace BookLib.API.Controllers
         // GET: api/Lib/UserQueues
         [HttpGet]
         [Route("userqueues")]
-        [Authorize(Roles = "admin")]
+        [Authorize]
         public IActionResult GetUserQueues(string username)
         {
             var positionsInQueues = _context.QueueOnBook.Where(q => q.UserNavigation.UserName == username).Select(q => new
             {
                 id = q.BookId,
                 name = q.BookNavigation.Name,
-                position = q.Position
+                author = q.BookNavigation.AuthorNavigation.Name,
+                position = q.Position,
+                available = q.BookNavigation.AvailabilityNavigation.FreeCount >= q.Position
             }).ToList();
 
             return new OkObjectResult(JsonConvert.SerializeObject(positionsInQueues, new JsonSerializerSettings { Formatting = Formatting.Indented }));
@@ -96,6 +98,23 @@ namespace BookLib.API.Controllers
                 queueLength = a.BookNavigation.QueuesOnBook.Count
             }).ToList();
             return new OkObjectResult(JsonConvert.SerializeObject(booksCount, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
+        // GET: api/Lib/BooksOnHands
+        [HttpGet]
+        [Route("booksonhands")]
+        [Authorize]
+        public IActionResult GetBooksOnHands(string username)
+        {
+            var books = _context.BookOnHands.Where(b => b.UserNavigation.UserName == username && b.ReturnDate == null).Select(b => new
+            {
+                id = b.BookId,
+                name = b.BookNavigation.Name,
+                author = b.BookNavigation.AuthorNavigation.Name,
+                getDate = b.TakingDate,
+                returnDate = b.TakingDate.AddMonths(2)
+            }).ToList();
+            return new OkObjectResult(JsonConvert.SerializeObject(books, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
         // GET: api/Lib/BookGiven
