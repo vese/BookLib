@@ -2,13 +2,15 @@
   <a class="nav" [routerLink]="" [matMenuTriggerFor]="menu" (click)="refresh()">
     <span *ngIf="count === 0;else notify"><mat-icon inline="true">notifications_none</mat-icon></span>
     <ng-template #notify>
-      <span><mat-icon inline="true">notifications</mat-icon>{{count}}</span>
+      <span><mat-icon inline="true">notifications</mat-icon>&nbsp;{{count}}</span>
     </ng-template>
   </a>
 
   <mat-menu #menu="matMenu">
-    <button mat-menu-item *ngFor="let n of notifications.queue">{{n.name}} - доступна книга для получения</button>
-    <button mat-menu-item *ngFor="let n of notifications.onHands">{{n.name}} - до возврата осталось {{n.days}}</button>
+    <div class="menu">
+    <a class="text" routerLink="/list" *ngFor="let n of notifications.queue">Книга <strong>&laquo;{{n.name}}&raquo;</strong> доступна</a>
+    <a class="text" routerLink="/list" *ngFor="let n of notifications.onHands">Книга <strong>&laquo;{{n.name}}&raquo;</strong>: срок возврата {{n.days}}</a>
+    </div>
   </mat-menu>
 </span>
 

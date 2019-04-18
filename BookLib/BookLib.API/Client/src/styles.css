@@ -10,6 +10,11 @@ h2 {
   margin: .5em 0 .5em 0;
 }
 
+h6 {
+  margin: .5em 0 .5em 0;
+  color: #5b1c17;
+}
+
 .books li {
   cursor: pointer;
   list-style-type: square;
