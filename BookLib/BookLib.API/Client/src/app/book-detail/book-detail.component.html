@@ -32,15 +32,15 @@
 	        <span><a class="text" [routerLink]="" (click)="openDeleteBookDialog()">&#215;&nbsp;&nbsp;Удалить</a></span>
 	      </span>
 	      <span *ngIf="!isAdmin">
-	        <span *ngIf="!inScheduled"><a class="text" [routerLink]="" (click)="addToScheduled()">+&nbsp;&nbsp;Добавить в избранные</a></span>
-	        <span *ngIf="inScheduled"><a class="text" [routerLink]="" (click)="removeFromScheduled()">&#215;&nbsp;&nbsp;Убрать из избранных</a></span>
-	        <span *ngIf="!inRead"><a class="text" [routerLink]="" (click)="addToRead()">&uarr;&nbsp;&nbsp;Добавить в прочитанные</a></span>
-	        <span *ngIf="inRead"><a class="text" [routerLink]="" (click)="removeFromRead()">&darr;&nbsp;&nbsp;Удалить из прочитанных</a></span>
+	        <span *ngIf="!inScheduled"><a class="text" [routerLink]="" (click)="addToScheduled()">&hearts;&nbsp;&nbsp;Добавить в избранное</a></span>
+	        <span *ngIf="inScheduled"><a class="text" [routerLink]="" (click)="removeFromScheduled()">&#215;&nbsp;&nbsp;Удалить из избранного</a></span>
+	        <span *ngIf="!inRead"><a class="text" [routerLink]="" (click)="addToRead()">+&nbsp;&nbsp;Добавить в прочитанные</a></span>
+	        <span *ngIf="inRead"><a class="text" [routerLink]="" (click)="removeFromRead()">&#215;&nbsp;&nbsp;Удалить из прочитанных</a></span>
 	      </span>
 	      <div *ngIf="!isAdmin && !this.hasBook">
-	        <div *ngIf="inQueue">Вы {{position}} в очереди за книгой. Книг свободно {{book.freeCount}}.</div>
-	        <div *ngIf="!inQueue"><a class="text" [routerLink]="" (click)="putInQueue()">Встать в очередь</a></div>
-	        <div *ngIf="inQueue"><a class="text" [routerLink]="" (click)="removeFromQueue()">Выйти из очереди</a></div>
+	        <span *ngIf="inQueue">Вы <strong>{{position}}-й</strong> в очереди (свободно <strong>{{book.freeCount}}</strong> книг)</span>
+	        <span *ngIf="!inQueue"><a class="text" [routerLink]="" (click)="putInQueue()">&rarr;&nbsp;&nbsp;Встать в очередь</a></span>
+	        <span *ngIf="inQueue"><a class="text" [routerLink]="" (click)="removeFromQueue()">&larr;&nbsp;&nbsp;Выйти из очереди</a></span>
 	      </div>
 	  	</div>
     </div>

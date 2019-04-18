@@ -5,10 +5,10 @@
       <span><a class="nav" routerLink="/books">Поиск</a></span>
       <span *ngIf="loggedIn">
         <span *ngIf="isAdmin">
-          <span><a class="nav" routerLink="/book/add">+&nbsp;Добавить</a></span>
-          <span><a class="nav" routerLink="/lib">&#167;&nbsp;Библиотека</a></span>
+          <span><a class="nav" routerLink="/book/add">+&nbsp;&nbsp;Добавить</a></span>
+          <span><a class="nav" routerLink="/lib">&#167;&nbsp;&nbsp;Библиотека</a></span>
         </span>
-        <span><a class="nav" *ngIf="!isAdmin" routerLink="/list">≡&nbsp;Списки</a></span>
+        <span><a class="nav" *ngIf="!isAdmin" routerLink="/list">≡&nbsp;&nbsp;Мои книги</a></span>
       </span>
     </div>
     <div class="col-5 text-right">
