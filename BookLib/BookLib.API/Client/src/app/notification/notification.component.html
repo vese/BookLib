@@ -7,7 +7,7 @@
     </ng-template>   
   
   <mat-menu #menu="matMenu">
-    <button mat-menu-item *ngFor="let n of notifications.queue">{{n.name}}</button>
+    <button mat-menu-item *ngFor="let n of notifications.queue">{{n.name}} - доступна книга для получения</button>
     <button mat-menu-item *ngFor="let n of notifications.onHands">{{n.name}} - до возврата осталось {{n.days}}</button>
   </mat-menu>
 </span>

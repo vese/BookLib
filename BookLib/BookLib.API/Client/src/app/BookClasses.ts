@@ -2,12 +2,6 @@ export class ListBook {
   id: number
   name: string
   author: string
-  publisher: string
-  croppedDescription: string
-  category: string
-  genre: string
-  series: string
-  commentsCount: number
   averageMark: number
   releaseYear: number
   freeCount: number

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LibUser, QueueOnBook, LibBook, Notifications } from './LibClasses';
+import { LibUser, QueueOnBook, LibBook, Notifications, InQueue } from './LibClasses';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ConfigService } from './config.service';
 
@@ -26,12 +26,15 @@ export class LibService {
     return this.http.get<LibUser[]>(this.baseUrl + this.contrUrl + "users", { headers: headers });
   }
 
-  getUserQueues(): Observable<QueueOnBook[]> {
+  getUserQueues(username: string): Observable<QueueOnBook[]> {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
     let authToken = localStorage.getItem('auth_token');
     headers = headers.append('Authorization', `Bearer ${authToken}`);
-    return this.http.get<QueueOnBook[]>(this.baseUrl + this.contrUrl + "userqueues", { headers: headers });
+    return this.http.get<QueueOnBook[]>(this.baseUrl + this.contrUrl + "userqueues", {
+      params: new HttpParams().set("username", username),
+      headers: headers
+    });
   }
 
   getBooks(): Observable<LibBook[]> {
@@ -64,10 +67,39 @@ export class LibService {
     });
   }
 
-  putInQueueBook(username: string, bookId: number): any {
-    throw new Error("Method not implemented.");
+  putInQueue(username: string, bookId: number): Observable<number> {
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+    return this.http.post<number>(this.baseUrl + this.contrUrl + "queue", {}, {
+      params: new HttpParams().set("username", username).set("bookId", "" + bookId),
+      headers: headers
+    });
   }
-  
+
+  removeFromQueue(username: string, bookId: number): any {
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+    return this.http.delete(this.baseUrl + this.contrUrl + "queue", {
+      params: new HttpParams().set("username", username).set("bookId", "" + bookId),
+      headers: headers
+    });
+  }
+
+  userInQueue(username: string, bookId: number): Observable<InQueue> {
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+    return this.http.get<InQueue>(this.baseUrl + this.contrUrl + "queue", {
+      params: new HttpParams().set("username", username).set("bookId", "" + bookId),
+      headers: headers
+    });
+  }
+
   userHasBook(username: string, bookId: number): Observable<boolean> {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');

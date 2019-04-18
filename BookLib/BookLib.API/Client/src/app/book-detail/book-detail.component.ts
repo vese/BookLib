@@ -8,8 +8,10 @@ import { CommentService } from '../comment.service';
 import { DeleteBookDialogComponent } from '../delete-book-dialog/delete-book-dialog.component';
 import { Subscription } from 'rxjs';
 import { UserService } from '../user.service';
-import { FormControl, Validators} from '@angular/forms';
+
+import { FormControl, Validators } from '@angular/forms';
 import { ListService } from '../list.service';
+import { LibService } from '../lib.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -42,14 +44,20 @@ export class BookDetailComponent implements OnInit, OnDestroy {
 
   defaultErrorMsg: string = "Поле обязательно для заполнения!";
   commentFC = new FormControl("", [Validators.required]);
+
   inScheduled: boolean;
   inRead: boolean;
+  inQueue: boolean;
+  position: number;
+  hasBook: boolean;
+
   constructor(
     private route: ActivatedRoute,
     private bookService: BookService,
     private commentService: CommentService,
     private userService: UserService,
     private listService: ListService,
+    private libService: LibService,
     public dialog: MatDialog,
     private location: Location) {
     this.subscription = this.userService.logChanged$.subscribe(
@@ -60,8 +68,18 @@ export class BookDetailComponent implements OnInit, OnDestroy {
           this.name = localStorage.getItem("name");
           this.commentService.commentExists(this.name, this.id).subscribe(ex => this.commentExists = ex.exists);
           if (!this.isAdmin) {
+
             this.listService.inScheduled(this.name, this.id).subscribe(res => this.inScheduled = res);
             this.listService.inRead(this.name, this.id).subscribe(res => this.inRead = res);
+            this.libService.userHasBook(this.name, this.id).subscribe(res => {
+              this.hasBook = res;
+              if (!res) {
+                this.libService.userInQueue(this.name, this.id).subscribe(res => {
+                  this.inQueue = res.inQueue;
+                  this.position = res.position;
+                });
+              }
+            });
           }
         }
       });
@@ -106,10 +124,10 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   addComment(): void {
 
     if (this.loggedIn && this.commentFC.valid && this.mark > 0) {
-      this.commentService.addComment(this.text, this.mark, this.name, this.id).subscribe(res =>
-      {
-          this.getComments(this.pageEvent); this.commentExists = true;
-       });
+
+      this.commentService.addComment(this.text, this.mark, this.name, this.id).subscribe(res => {
+        this.getComments(this.pageEvent); this.commentExists = true;
+      });
     } else {
       this.needMark = true;
     }
@@ -140,6 +158,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+
   addToScheduled(): void {
     this.listService.addToScheduled(this.name, this.id).subscribe(res => this.inScheduled = true);
   }
@@ -148,11 +167,13 @@ export class BookDetailComponent implements OnInit, OnDestroy {
     this.listService.addToRead(this.name, this.id).subscribe(res => this.inRead = true);
   }
 
-  removeFromScheduled(): void {
-    this.listService.removeFromScheduled(this.name, this.id).subscribe(res => this.inScheduled = false);
   }
 
   removeFromRead(): void {
     this.listService.removeFromRead(this.name, this.id).subscribe(res => this.inRead = false);
+  }
+
+  removeFromQueue(): void {
+    this.libService.removeFromQueue(this.name, this.id).subscribe(res => this.inQueue = false);
   }
 }

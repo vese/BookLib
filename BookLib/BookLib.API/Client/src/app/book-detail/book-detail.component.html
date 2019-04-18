@@ -36,6 +36,11 @@
         <span *ngIf="!inRead"><a class="text" [routerLink]="" (click)="addToRead()">&uarr;&nbsp;&nbsp;Добавить в прочитанные</a></span>
         <span *ngIf="inRead"><a class="text" [routerLink]="" (click)="removeFromRead()">&darr;&nbsp;&nbsp;Удалить из прочитанных</a></span>
       </span>
+      <div *ngIf="!isAdmin && !this.hasBook">
+        <div *ngIf="inQueue">Вы {{position}} в очереди за книгой. Книг свободно {{book.freeCount}}.</div>
+        <div *ngIf="!inQueue"><a class="text" [routerLink]="" (click)="putInQueue()">Встать в очередь</a></div>
+        <div *ngIf="inQueue"><a class="text" [routerLink]="" (click)="removeFromQueue()">Выйти из очереди</a></div>
+      </div>
     </div>
     <div class="col-3 text-right">
       <a class="text" [routerLink]="" (click)="goBack()">&larr;&nbsp;&nbsp;Назад</a>

@@ -71,7 +71,7 @@ namespace BookLib.API.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult GetUserQueues(string username)
         {
-            var positionsInQueues = _context.QueueOnBook.Where(q => q.UserId == username).Select(q => new
+            var positionsInQueues = _context.QueueOnBook.Where(q => q.UserNavigation.UserName == username).Select(q => new
             {
                 id = q.BookId,
                 name = q.BookNavigation.Name,
@@ -101,7 +101,7 @@ namespace BookLib.API.Controllers
         // GET: api/Lib/BookGiven
         [HttpGet]
         [Route("bookgiven")]
-        [Authorize(Roles = "admin")]
+        [Authorize]
         public IActionResult BookGiven(string username, int bookId)
         {
             var given = _context.BookOnHands.Any(b => b.BookId == bookId && b.UserNavigation.UserName == username && b.ReturnDate == null);
@@ -147,10 +147,10 @@ namespace BookLib.API.Controllers
             {
                 try
                 {
-                    //из очереди
+                    var userInQueue = queue.FirstOrDefault(q => q.UserNavigation.UserName == username);
+
                     if (queue.Count >= availability.FreeCount)
                     {
-                        var userInQueue = queue.FirstOrDefault(q => q.UserNavigation.UserName == username);
                         if (userInQueue == null)
                         {
                             ModelState.TryAddModelError("Model", "Пользователь не в очереди");
@@ -161,6 +161,10 @@ namespace BookLib.API.Controllers
                             ModelState.TryAddModelError("Model", "Пользователь далеко в очереди");
                             return BadRequest(ModelState);
                         }
+                    }
+                    //из очереди
+                    if (userInQueue != null && userInQueue.Position <= availability.FreeCount)
+                    {
                         var pos = userInQueue.Position;
                         _context.QueueOnBook.Remove(userInQueue);
                         queue.Where(q => q.Position > pos).ToList().ForEach(q => q.Position--);
@@ -230,51 +234,80 @@ namespace BookLib.API.Controllers
             return new OkResult();
         }
 
+        // GET: api/Lib/Queue
+        [HttpGet]
+        [Route("queue")]
+        [Authorize]
+        public IActionResult UserInQueue(string username, int bookId)
+        {
+            var res = new
+            {
+                inQueue = _context.QueueOnBook.Any(q => q.BookId == bookId && q.UserNavigation.UserName == username),
+                position = _context.QueueOnBook.FirstOrDefault(q => q.BookId == bookId && q.UserNavigation.UserName == username)?.Position
+            };
+            return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
+        // POST: api/Lib/Queue
         [HttpPost]
+        [Route("queue")]
+        [Authorize]
         public IActionResult GetInQueue(string username, int bookId)
         {
-            if (_context.QueueOnBook.Any(q => q.BookId == bookId && q.UserId == username))
+
+            if (_context.QueueOnBook.Any(q => q.BookId == bookId && q.UserNavigation.UserName == username))
             {
-                ModelState.TryAddModelError("Model", $"Пользователь уже в очереди на эту книгу");
+                ModelState.TryAddModelError("Model", "Пользователь уже в очереди на эту книгу");
                 return BadRequest(ModelState);
             }
 
-            using (var transaction = _context.Database.BeginTransaction())
+            int maxPosition = _context.QueueOnBook.Any(q => q.BookId == bookId) ? _context.QueueOnBook.Where(q => q.BookId == bookId).Max(q => q.Position) : 0;
+            try
             {
-                try
+                _context.QueueOnBook.Add(new QueueOnBook()
                 {
-                    int maxPosition = _context.QueueOnBook.Where(q => q.BookId == bookId).Max(q => q.Position);
-                    _context.QueueOnBook.Add(new QueueOnBook()
-                    {
-                        BookId = bookId,
-                        UserId = username,
-                        Position = maxPosition + 1
-                    });
-                    _context.SaveChanges();
-                    transaction.Commit();
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                    ModelState.TryAddModelError("Queue", "Ошибка при попытке встать в очередь на книгу");
-                    return BadRequest(ModelState);
-                }
+                    BookId = bookId,
+                    UserId = _context.Users.First(u => u.UserName == username).Id,
+                    Position = ++maxPosition
+                });
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                ModelState.TryAddModelError("Model", "Ошибка при попытке встать в очередь на книгу");
+                return BadRequest(ModelState);
+            }
+
+            return new OkObjectResult(JsonConvert.SerializeObject(maxPosition, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
+        // DELETE: api/Lib/Queue
+        [HttpDelete]
+        [Route("queue")]
+        [Authorize]
+        public IActionResult GetOutOfQueue(string username, int bookId)
+        {
+            var userInQueue = _context.QueueOnBook.FirstOrDefault(q => q.BookId == bookId && q.UserNavigation.UserName == username);
+            if (userInQueue == null)
+            {
+                ModelState.TryAddModelError("Model", "Пользователь не в очереди");
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var pos = userInQueue.Position;
+                _context.QueueOnBook.Remove(userInQueue);
+                _context.QueueOnBook.Where(q => q.BookId == bookId && q.Position > pos).ToList().ForEach(q => q.Position--);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                ModelState.TryAddModelError("Model", "Ошибка при выйти из очереди на книгу");
+                return BadRequest(ModelState);
             }
 
             return new OkResult();
         }
-
-        [HttpGet]
-        [Authorize(Roles = "user")]
-        public IActionResult GetBooksWhereUserFirstInQueue(string username)
-        {
-            var books = _context.QueueOnBook.Select(q => new
-            {
-                id = q.BookId,
-                name = _context.Book.Find(q.BookId).Name
-            }).ToList();
-            return new OkObjectResult(JsonConvert.SerializeObject(books, new JsonSerializerSettings { Formatting = Formatting.Indented }));
-        }
-
     }
 }
