@@ -19,13 +19,13 @@
 </div>
 
 <div class="list" *ngIf="userQueues">
-  <p></p>
+  <p>Очередь на книги</p>
   <ol>
     <li *ngFor="let queue of userQueues">
       <p>
         {{queue.name}}: Место в очереди {{queue.position}}
       </p>
-      <a (click)="giveBook(queue.id)">Выдать</a>
+      <button mat-raised-button (click)="giveBook(queue.id)">Выдать</button>
     </li>
   </ol>
 </div>
@@ -51,5 +51,6 @@
 <div *ngIf="users && books">
   <button mat-raised-button (click)="giveBook(selectedBook.id)" *ngIf="!giveDisabled">Выдать</button>
   <button mat-raised-button (click)="returnBook()" *ngIf="!returnDisabled">Вернуть</button>
-  <button mat-raised-button (click)="putInQueueBook()" *ngIf="!putInDisabled">Поставить в очередь</button>
+  <button mat-raised-button (click)="putInQueue()" *ngIf="!putInDisabled">Поставить в очередь</button>
+  <button mat-raised-button (click)="removeFromQueue()" *ngIf="!removeFromDisabled">Убрать из очереди</button>
 </div>

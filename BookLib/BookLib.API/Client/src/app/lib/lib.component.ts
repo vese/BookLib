@@ -19,6 +19,7 @@ export class LibComponent implements OnInit {
   giveDisabled: boolean;
   returnDisabled: boolean;
   putInDisabled: boolean;
+  removeFromDisabled: boolean;
 
   constructor(private libService: LibService) { }
 
@@ -27,7 +28,7 @@ export class LibComponent implements OnInit {
   }
 
   getUserQueues(): void {
-    this.libService.getUserQueues().subscribe(res => {
+    this.libService.getUserQueues(this.selectedUser.name).subscribe(res => {
       this.userQueues = res;
       if (this.books) {
         this.checkDisabled();
@@ -45,7 +46,7 @@ export class LibComponent implements OnInit {
         this.selectedUser = this.users[0];
       }
 
-      this.libService.getUserQueues().subscribe(res => {
+      this.libService.getUserQueues(this.selectedUser.name).subscribe(res => {
         this.userQueues = res;
         this.libService.getBooks().subscribe(res => {
           this.books = res;
@@ -69,8 +70,12 @@ export class LibComponent implements OnInit {
     this.libService.returnBook(this.selectedUser.name, this.selectedBook.id).subscribe(r => this.refresh());
   }
 
-  putInQueueBook(): void {
-    this.libService.putInQueueBook(this.selectedUser.name, this.selectedBook.id).subscribe(r => this.refresh());
+  putInQueue(): void {
+    this.libService.putInQueue(this.selectedUser.name, this.selectedBook.id).subscribe(r => this.refresh());
+  }
+
+  removeFromQueue(): void {
+    this.libService.removeFromQueue(this.selectedUser.name, this.selectedBook.id).subscribe(r => this.refresh());
   }
 
   checkDisabled(): void {
@@ -78,7 +83,10 @@ export class LibComponent implements OnInit {
       let queue = this.userQueues.find(q => q.id === this.selectedBook.id);
       this.giveDisabled = res || this.selectedUser.notReturned > 0 || (queue && queue.position > 1) || this.books.find(b => b.id == this.selectedBook.id).free === 0;
       this.returnDisabled = !res;
-      this.putInDisabled = res || this.selectedUser.notReturned > 0;
+      this.libService.userInQueue(this.selectedUser.name, this.selectedBook.id).subscribe(q => {
+        this.putInDisabled = res || q || this.selectedUser.notReturned > 0;
+        this.removeFromDisabled = !q;
+      });
     });
   }
 }
