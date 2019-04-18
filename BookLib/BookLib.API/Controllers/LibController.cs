@@ -22,6 +22,34 @@ namespace BookLib.API.Controllers
             _userManager = userManager;
         }
 
+        // POST: api/Lib/NotReturned
+        [HttpPost]
+        [Route("notreturned")]
+        [Authorize(Roles = "admin")]
+        public IActionResult CheckNotReturned()
+        {
+            var list = _context.BookOnHands.Where(b => b.ReturnDate == null && !b.Expired && BookLibOptions.GetReturnDate(b.TakingDate) < DateTime.UtcNow).ToList();
+
+            try
+            {
+                list.ForEach(b =>
+                {
+                    b.Expired = true;
+                    b.UserNavigation.NotReturned++;
+                });
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                ModelState.TryAddModelError("BookOnHand", "Ошибка при обнаружении невозвращенных книг");
+                return BadRequest(ModelState);
+            }
+
+
+            return new OkObjectResult(JsonConvert.SerializeObject(list.Count, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+        }
+
         // GET: api/Lib/Notifications
         [HttpGet]
         [Route("notifications")]
@@ -82,7 +110,11 @@ namespace BookLib.API.Controllers
                 name = q.BookNavigation.Name,
                 author = q.BookNavigation.AuthorNavigation.Name,
                 position = q.Position,
-                available = q.BookNavigation.AvailabilityNavigation.FreeCount >= q.Position
+                available = q.BookNavigation.AvailabilityNavigation.FreeCount >= q.Position,
+                giveDisabled = q.BookNavigation.BooksOnHands.Any(b => b.UserNavigation.UserName == username && b.ReturnDate == null)
+                || q.UserNavigation.NotReturned > 0
+                || q.BookNavigation.AvailabilityNavigation.FreeCount < q.Position
+                || q.BookNavigation.AvailabilityNavigation.FreeCount == 0
             }).ToList();
 
             return new OkObjectResult(JsonConvert.SerializeObject(positionsInQueues, new JsonSerializerSettings { Formatting = Formatting.Indented }));
@@ -227,14 +259,14 @@ namespace BookLib.API.Controllers
                 ModelState.TryAddModelError("BookOnHands", "Такой книги нет у данного человека");
                 return BadRequest(ModelState);
             }
-
-
+            
             var bookOnHands = _context.BookOnHands.First(b => b.BookId == bookId && b.UserNavigation.UserName == username && b.ReturnDate == null);
             var aviability = _context.Availability.First(a => a.BookId == bookId);
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
+
                     bookOnHands.ReturnDate = DateTime.UtcNow;
                     if (BookLibOptions.GetReturnDate(bookOnHands.TakingDate) < bookOnHands.ReturnDate)
                     {
@@ -242,6 +274,10 @@ namespace BookLib.API.Controllers
                     }
                     bookOnHands.UserNavigation.Returned++;
                     bookOnHands.UserNavigation.OnHands--;
+                    if (bookOnHands.Expired)
+                    {
+                        bookOnHands.UserNavigation.NotReturned--;
+                    }
                     aviability.FreeCount++;
                     aviability.OnHandsCount--;
                     _context.SaveChanges();

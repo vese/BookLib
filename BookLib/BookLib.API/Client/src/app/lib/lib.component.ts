@@ -9,6 +9,8 @@ import { LibService } from '../lib.service';
 })
 export class LibComponent implements OnInit {
 
+  checked: number;
+
   users: LibUser[];
   selectedUser: LibUser;
   userQueues: QueueOnBook[];
@@ -87,6 +89,13 @@ export class LibComponent implements OnInit {
         this.putInDisabled = res || q.inQueue || this.selectedUser.notReturned > 0;
         this.removeFromDisabled = !q.inQueue;
       });
+    });
+  }
+
+  checkNotReturned(): void {
+    this.libService.checkNotReturned().subscribe(res => {
+      this.checked = res;
+      this.refresh();
     });
   }
 }

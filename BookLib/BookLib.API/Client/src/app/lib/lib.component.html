@@ -1,4 +1,8 @@
 <p>Работа с книгами</p>
+
+<div *ngIf="checked">Книги проверены. Найдено {{checked}} новых невозвращенных книг.</div>
+<button mat-raised-button (click)="checkNotReturned()">Проверить невозвращенные книги</button>
+
 <div class="row" *ngIf="users">
   <div>
     <mat-form-field>
@@ -25,8 +29,7 @@
       <p>
         {{queue.name}}: Место в очереди {{queue.position}}
       </p>
-      <button mat-raised-button (click)="giveBook(queue.id)" *ngIf="!giveDisabled">Выдать</button>
-      <button mat-raised-button (click)="putInQueue(queue.id)" *ngIf="!putInDisabled">Поставить в очередь</button>
+      <button mat-raised-button (click)="giveBook(queue.id)" *ngIf="!queue.giveDisabled">Выдать</button>
     </li>
   </ol>
 </div>

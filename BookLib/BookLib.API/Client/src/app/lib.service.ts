@@ -132,4 +132,12 @@ export class LibService {
       headers: headers
     });
   }
+
+  checkNotReturned(): Observable<number> {
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers = headers.append('Authorization', `Bearer ${authToken}`);
+    return this.http.post<number>(this.baseUrl + this.contrUrl + "notreturned", {}, { headers: headers });
+  }
 }
