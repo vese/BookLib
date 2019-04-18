@@ -57,7 +57,7 @@ namespace BookLib.API.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult GetUsers()
         {
-            var userRoleId = _context.Roles.First(r => r.Name == "user").Id;
+            var userRoleId = _context.Roles.First(r => r.Name == BookLibOptions.User).Id;
             var users = _context.Users.Where(u => _context.UserRoles.Any(r => r.RoleId == userRoleId && r.UserId == u.Id)).Select(u => new
             {
                 name = u.UserName,

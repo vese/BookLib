@@ -70,8 +70,8 @@ export class LibComponent implements OnInit {
     this.libService.returnBook(this.selectedUser.name, this.selectedBook.id).subscribe(r => this.refresh());
   }
 
-  putInQueue(): void {
-    this.libService.putInQueue(this.selectedUser.name, this.selectedBook.id).subscribe(r => this.refresh());
+  putInQueue(id: number): void {
+    this.libService.putInQueue(this.selectedUser.name, id).subscribe(r => this.refresh());
   }
 
   removeFromQueue(): void {

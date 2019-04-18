@@ -25,7 +25,8 @@
       <p>
         {{queue.name}}: Место в очереди {{queue.position}}
       </p>
-      <button mat-raised-button (click)="giveBook(queue.id)">Выдать</button>
+      <button mat-raised-button (click)="giveBook(queue.id)" *ngIf="!giveDisabled">Выдать</button>
+      <button mat-raised-button (click)="putInQueue(queue.id)" *ngIf="!putInDisabled">Поставить в очередь</button>
     </li>
   </ol>
 </div>
@@ -51,6 +52,6 @@
 <div *ngIf="users && books">
   <button mat-raised-button (click)="giveBook(selectedBook.id)" *ngIf="!giveDisabled">Выдать</button>
   <button mat-raised-button (click)="returnBook()" *ngIf="!returnDisabled">Вернуть</button>
-  <button mat-raised-button (click)="putInQueue()" *ngIf="!putInDisabled">Поставить в очередь</button>
+  <button mat-raised-button (click)="putInQueue(selectedBook.id)" *ngIf="!putInDisabled">Поставить в очередь</button>
   <button mat-raised-button (click)="removeFromQueue()" *ngIf="!removeFromDisabled">Убрать из очереди</button>
 </div>

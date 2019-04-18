@@ -1,4 +1,5 @@
-﻿using BookLib.Data.ViewModels;
+﻿using BookLib.Data;
+using BookLib.Data.ViewModels;
 using BookLib.Models.DBModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -102,7 +103,7 @@ namespace BookLib.API.Controllers
                 ModelState.TryAddModelError("Model", "Произошла ошибка при создании пользователя!");
                 return BadRequest(ModelState);
             }
-            result = await _userManager.AddToRoleAsync(user, "user");
+            result = await _userManager.AddToRoleAsync(user, BookLibOptions.User);
             if (!result.Succeeded)
             {
                 ModelState.TryAddModelError("Model", "Произошла ошибка при создании пользователя!");
@@ -110,8 +111,7 @@ namespace BookLib.API.Controllers
             }
             return new OkResult();
         }
-
-        #region Check
+        
         // GET: api/Auth
         [HttpGet]
         [Authorize]
@@ -119,24 +119,5 @@ namespace BookLib.API.Controllers
         {
             return new OkResult();
         }
-
-        // GET: api/Auth/Admin
-        [HttpGet]
-        [Route("admin")]
-        [Authorize(Roles = "admin")]
-        public ActionResult<string> GetAdmin()
-        {
-            return new OkResult();
-        }
-
-        // GET: api/Auth/User
-        [HttpGet]
-        [Route("user")]
-        [Authorize(Roles = "user")]
-        public ActionResult<string> GetUser()
-        {
-            return new OkResult();
-        }
-        #endregion
     }
 }

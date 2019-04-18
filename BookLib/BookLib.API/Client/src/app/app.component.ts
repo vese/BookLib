@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UserService } from './user.service';
+import { Roles } from './roles';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,7 @@ export class AppComponent {
       res => {
         this.loggedIn = res;
         if (res) {
-          this.isAdmin = localStorage.getItem("role") === "admin";
+          this.isAdmin = localStorage.getItem("role") === Roles.Admin;
         }
       });
     this.userService.checkLogged();

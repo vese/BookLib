@@ -3,6 +3,7 @@ import { LibService } from '../lib.service';
 import { Notifications } from '../LibClasses';
 import { Subscription } from 'rxjs';
 import { UserService } from '../user.service';
+import { Roles } from '../roles';
 
 @Component({
   selector: 'app-notification',
@@ -29,7 +30,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   refresh(): void {
-    if (localStorage.getItem("role") != "admin") {
+    if (localStorage.getItem("role") != Roles.Admin) {
       this.libService.getNotifications(localStorage.getItem("name")).subscribe(not => {
         this.notifications = not;
         this.count = not.queue.length + not.onHands.filter(o => o.notificationLevel > 1).length;

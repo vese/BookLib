@@ -12,6 +12,7 @@ import { UserService } from '../user.service';
 import { FormControl, Validators } from '@angular/forms';
 import { ListService } from '../list.service';
 import { LibService } from '../lib.service';
+import { Roles } from '../roles';
 
 @Component({
   selector: 'app-book-detail',
@@ -36,8 +37,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   comments: BookComment[];
 
   filterParams: Params;
-
-  text: string;
+  
   mark: number = 0;
   needMark: boolean = false;
   commentExists: boolean;
@@ -64,7 +64,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
       res => {
         this.loggedIn = res;
         if (res) {
-          this.isAdmin = localStorage.getItem("role") === "admin";
+          this.isAdmin = localStorage.getItem("role") === Roles.Admin;
           this.name = localStorage.getItem("name");
           this.commentService.commentExists(this.name, this.id).subscribe(ex => this.commentExists = ex.exists);
           if (!this.isAdmin) {
@@ -125,7 +125,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
 
     if (this.loggedIn && this.commentFC.valid && this.mark > 0) {
 
-      this.commentService.addComment(this.text, this.mark, this.name, this.id).subscribe(res => {
+      this.commentService.addComment(this.commentFC.value, this.mark, this.name, this.id).subscribe(res => {
         this.getComments(this.pageEvent); this.commentExists = true;
       });
     } else {

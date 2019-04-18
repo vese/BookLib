@@ -5,6 +5,9 @@ namespace BookLib.Data
     public static class BookLibOptions
     {
         public const int GetingBookTime = 2; //Срок выдачи книги - 2 месяца
+        public const int DaysLeftToWarning = 5; //За сколько дней до конца срока выдачи книги показывать предупреждение
+        public const string Admin = "admin"; //Название роли администраторов
+        public const string User = "user"; //Название роли читателей
 
         public static DateTime GetReturnDate(DateTime takingDate)
         {
