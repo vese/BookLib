@@ -18,12 +18,12 @@ export class ListService {
     this.contrUrl = "list/";
   }
 
-  getSheduledList(username: string): Observable<Param[]> {
+  getScheduledList(username: string): Observable<Param[]> {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
     let authToken = localStorage.getItem('auth_token');
     headers = headers.append('Authorization', `Bearer ${authToken}`);
-    return this.http.get<Param[]>(this.baseUrl + this.contrUrl + "sheduled", {
+    return this.http.get<Param[]>(this.baseUrl + this.contrUrl + "scheduled", {
       params: new HttpParams().set("username", username),
       headers: headers
     });
@@ -40,12 +40,12 @@ export class ListService {
     });
   }
 
-  inSheduled(username: string, bookId: number): Observable<boolean> {
+  inScheduled(username: string, bookId: number): Observable<boolean> {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
     let authToken = localStorage.getItem('auth_token');
     headers = headers.append('Authorization', `Bearer ${authToken}`);
-    return this.http.get<boolean>(this.baseUrl + this.contrUrl + "insheduled", {
+    return this.http.get<boolean>(this.baseUrl + this.contrUrl + "inscheduled", {
       params: new HttpParams().set("username", username).set("bookId", "" + bookId),
       headers: headers
     });
@@ -62,12 +62,12 @@ export class ListService {
     });
   }
 
-  addToSheduled(username: string, bookId: number): any {
+  addToScheduled(username: string, bookId: number): any {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
     let authToken = localStorage.getItem('auth_token');
     headers = headers.append('Authorization', `Bearer ${authToken}`);
-    return this.http.post(this.baseUrl + this.contrUrl + "sheduled", {}, {
+    return this.http.post(this.baseUrl + this.contrUrl + "scheduled", {}, {
       params: new HttpParams().set("username", username).set("bookId", "" + bookId),
       headers: headers
     });
@@ -84,12 +84,12 @@ export class ListService {
     });
   }
 
-  removeFromSheduled(username: string, bookId: number): any {
+  removeFromScheduled(username: string, bookId: number): any {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
     let authToken = localStorage.getItem('auth_token');
     headers = headers.append('Authorization', `Bearer ${authToken}`);
-    return this.http.delete(this.baseUrl + this.contrUrl + "sheduled", {
+    return this.http.delete(this.baseUrl + this.contrUrl + "scheduled", {
       params: new HttpParams().set("username", username).set("bookId", "" + bookId),
       headers: headers
     });

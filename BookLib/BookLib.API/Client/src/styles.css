@@ -1,13 +1,42 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+.main {
+  height:100%;
+  text-align:center;
+  margin-top: 6em;
+}
+
 h2 {
   margin: .5em 0 .5em 0;
 }
 
+.books li {
+  cursor: pointer;
+  list-style-type: square;
+  margin-left: -1.5em;
+  padding: .5em .5em;
+  height: 3em;
+  width: 100%;
+}
+
+.books li:hover {
+  background-color: #efefef;
+}
+
+.books a {
+  color: #444;
+  text-decoration: none;
+  position: relative;
+  display: block;
+}
+
+.books a:hover {
+  color: #5b1c17;
+}
+
 div.select {
-  border-style: solid;
-  border-color: #bbb;
-  border-width: 1px;
+  border: 1px solid #bbb;
+
   padding: 0 1em 0 1em;
   margin-bottom: 1em;
 }
@@ -46,6 +75,16 @@ a.text {
     text-decoration: none;
     background-color: #ffe1bd;
   }
+
+a {
+  color:#5b1c17;
+  text-decoration: none;
+}
+
+a:hover {
+  color:#b3272c;
+  text-decoration: none;
+}
 
 span {
   margin-right: .5em;

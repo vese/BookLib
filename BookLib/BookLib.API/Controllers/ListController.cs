@@ -19,20 +19,20 @@ namespace BookLib.API.Controllers
             _context = context;
         }
 
-        // POST: api/List/Sheduled
+        // POST: api/List/Scheduled
         [HttpPost]
-        [Route("sheduled")]
+        [Route("scheduled")]
         [Authorize(Roles = "user")]
-        public IActionResult AddBookInSheduled(string username, int bookId)
+        public IActionResult AddBookInScheduled(string username, int bookId)
         {
-            if (_context.SheduledBook.Any(s => s.BookId == bookId && s.UserNavigation.UserName == username))
+            if (_context.ScheduledBook.Any(s => s.BookId == bookId && s.UserNavigation.UserName == username))
             {
-                ModelState.TryAddModelError("SheduledBook", "Книга уже находится в запланированных");
+                ModelState.TryAddModelError("ScheduledBook", "Книга уже находится в очереди");
                 return BadRequest(ModelState);
             }
             try
             {
-                _context.SheduledBook.Add(new SheduledBook
+                _context.ScheduledBook.Add(new ScheduledBook
                 {
                     BookId = bookId,
                     UserId = _context.Users.First(u => u.UserName == username).Id
@@ -41,7 +41,7 @@ namespace BookLib.API.Controllers
             }
             catch (Exception)
             {
-                ModelState.TryAddModelError("SheduledBook", "Ошибка при попытке сохранить книгу в рекомендации");
+                ModelState.TryAddModelError("ScheduledBook", "Ошибка при попытке сохранить книгу в рекомендации");
                 return BadRequest(ModelState);
             }
 
@@ -77,19 +77,20 @@ namespace BookLib.API.Controllers
             return new OkResult();
         }
 
-        // GET: api/List/Sheduled
+        // GET: api/List/Scheduled
         [HttpGet]
-        [Route("sheduled")]
+        [Route("scheduled")]
         [Authorize(Roles = "user")]
-        public IActionResult GetSheduledBooks(string username)
+        public IActionResult GetScheduledBooks(string username)
         {
-            var sheduledBooks = _context.SheduledBook.Where(s => s.UserNavigation.UserName == username).Select(s => new
+            var scheduledBooks = _context.ScheduledBook.Where(s => s.UserNavigation.UserName == username).Select(s => new
             {
                 id = s.BookId,
+                author = s.BookNavigation.AuthorNavigation.Name,
                 name = s.BookNavigation.Name,
             }).ToList();
 
-            return new OkObjectResult(JsonConvert.SerializeObject(sheduledBooks, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+            return new OkObjectResult(JsonConvert.SerializeObject(scheduledBooks, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
         // GET: api/List/Read
@@ -101,20 +102,21 @@ namespace BookLib.API.Controllers
             var readBooks = _context.ReadBook.Where(r => r.UserNavigation.UserName == username).Select(r => new
             {
                 id = r.BookId,
+                author = r.BookNavigation.AuthorNavigation.Name,
                 name = r.BookNavigation.Name,
             }).ToList();
 
             return new OkObjectResult(JsonConvert.SerializeObject(readBooks, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
-        // DELETE: api/List/Sheduled
+        // DELETE: api/List/Scheduled
         [HttpDelete]
-        [Route("sheduled")]
+        [Route("scheduled")]
         [Authorize(Roles = "user")]
-        public IActionResult DeleteSheduledBook(string username, int bookId)
+        public IActionResult DeleteScheduledBook(string username, int bookId)
         {
-            var sheduledBook = _context.SheduledBook.FirstOrDefault(s => s.UserNavigation.UserName == username && s.BookId == bookId);
-            _context.SheduledBook.Remove(sheduledBook);
+            var scheduledBook = _context.ScheduledBook.FirstOrDefault(s => s.UserNavigation.UserName == username && s.BookId == bookId);
+            _context.ScheduledBook.Remove(scheduledBook);
             _context.SaveChanges();
             return new OkResult();
         }
@@ -131,13 +133,13 @@ namespace BookLib.API.Controllers
             return new OkResult();
         }
 
-        // GET: api/List/InSheduled
+        // GET: api/List/InScheduled
         [HttpGet]
-        [Route("insheduled")]
+        [Route("inscheduled")]
         [Authorize(Roles = "user")]
-        public IActionResult BookInSheduled(string username, int bookId)
+        public IActionResult BookInScheduled(string username, int bookId)
         {
-            var res = _context.SheduledBook.Any(s => s.UserNavigation.UserName == username && s.BookId == bookId);
+            var res = _context.ScheduledBook.Any(s => s.UserNavigation.UserName == username && s.BookId == bookId);
 
             return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }

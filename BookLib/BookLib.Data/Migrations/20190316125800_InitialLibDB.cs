@@ -218,7 +218,7 @@ namespace BookLib.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SheduledBook",
+                name: "ScheduledBook",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -228,15 +228,15 @@ namespace BookLib.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SheduledBook", x => x.Id);
+                    table.PrimaryKey("PK_ScheduledBook", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SheduledBook_Book_IdBook",
+                        name: "FK_ScheduledBook_Book_IdBook",
                         column: x => x.IdBook,
                         principalTable: "Book",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SheduledBook_AspNetUsers_IdUser",
+                        name: "FK_ScheduledBook_AspNetUsers_IdUser",
                         column: x => x.IdUser,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -376,13 +376,13 @@ namespace BookLib.Data.Migrations
                 column: "IdUser");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SheduledBook_IdBook",
-                table: "SheduledBook",
+                name: "IX_ScheduledBook_IdBook",
+                table: "ScheduledBook",
                 column: "IdBook");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SheduledBook_IdUser",
-                table: "SheduledBook",
+                name: "IX_ScheduledBook_IdUser",
+                table: "ScheduledBook",
                 column: "IdUser");
         }
 
@@ -401,7 +401,7 @@ namespace BookLib.Data.Migrations
                 name: "ReadBook");
 
             migrationBuilder.DropTable(
-                name: "SheduledBook");
+                name: "ScheduledBook");
 
             migrationBuilder.DropTable(
                 name: "Availability");

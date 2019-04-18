@@ -42,7 +42,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
 
   defaultErrorMsg: string = "Поле обязательно для заполнения!";
   commentFC = new FormControl("", [Validators.required]);
-  inSheduled: boolean;
+  inScheduled: boolean;
   inRead: boolean;
   constructor(
     private route: ActivatedRoute,
@@ -60,7 +60,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
           this.name = localStorage.getItem("name");
           this.commentService.commentExists(this.name, this.id).subscribe(ex => this.commentExists = ex.exists);
           if (!this.isAdmin) {
-            this.listService.inSheduled(this.name, this.id).subscribe(res => this.inSheduled = res);
+            this.listService.inScheduled(this.name, this.id).subscribe(res => this.inScheduled = res);
             this.listService.inRead(this.name, this.id).subscribe(res => this.inRead = res);
           }
         }
@@ -140,16 +140,16 @@ export class BookDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  addToSheduled(): void {
-    this.listService.addToSheduled(this.name, this.id).subscribe(res => this.inSheduled = true);
+  addToScheduled(): void {
+    this.listService.addToScheduled(this.name, this.id).subscribe(res => this.inScheduled = true);
   }
 
   addToRead(): void {
     this.listService.addToRead(this.name, this.id).subscribe(res => this.inRead = true);
   }
 
-  removeFromSheduled(): void {
-    this.listService.removeFromSheduled(this.name, this.id).subscribe(res => this.inSheduled = false);
+  removeFromScheduled(): void {
+    this.listService.removeFromScheduled(this.name, this.id).subscribe(res => this.inScheduled = false);
   }
 
   removeFromRead(): void {

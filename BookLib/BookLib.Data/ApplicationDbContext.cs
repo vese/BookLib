@@ -19,7 +19,7 @@ namespace BookLib.Data
         public virtual DbSet<QueueOnBook> QueueOnBook { get; set; }
         public virtual DbSet<ReadBook> ReadBook { get; set; }
         public virtual DbSet<Series> Series { get; set; }
-        public virtual DbSet<SheduledBook> SheduledBook { get; set; }
+        public virtual DbSet<ScheduledBook> ScheduledBook { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -102,11 +102,11 @@ namespace BookLib.Data
                 entity.Property(e => e.Name).IsRequired();
             });
 
-            modelBuilder.Entity<SheduledBook>(entity =>
+            modelBuilder.Entity<ScheduledBook>(entity =>
             {
-                entity.HasOne(d => d.UserNavigation).WithMany(p => p.SheduledBooks).HasForeignKey(d => d.UserId);
+                entity.HasOne(d => d.UserNavigation).WithMany(p => p.ScheduledBooks).HasForeignKey(d => d.UserId);
 
-                entity.HasOne(d => d.BookNavigation).WithMany(p => p.SheduledBooks).HasForeignKey(d => d.BookId);
+                entity.HasOne(d => d.BookNavigation).WithMany(p => p.ScheduledBooks).HasForeignKey(d => d.BookId);
             });
         }
     }

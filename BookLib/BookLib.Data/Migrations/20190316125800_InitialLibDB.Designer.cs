@@ -251,7 +251,7 @@ namespace BookLib.Data.Migrations
                     b.ToTable("Series");
                 });
 
-            modelBuilder.Entity("BookLib.Models.DBModels.SheduledBook", b =>
+            modelBuilder.Entity("BookLib.Models.DBModels.ScheduledBook", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -267,7 +267,7 @@ namespace BookLib.Data.Migrations
 
                     b.HasIndex("IdUser");
 
-                    b.ToTable("SheduledBook");
+                    b.ToTable("ScheduledBook");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -540,15 +540,15 @@ namespace BookLib.Data.Migrations
                         .HasForeignKey("IdUser");
                 });
 
-            modelBuilder.Entity("BookLib.Models.DBModels.SheduledBook", b =>
+            modelBuilder.Entity("BookLib.Models.DBModels.ScheduledBook", b =>
                 {
                     b.HasOne("BookLib.Models.DBModels.Book", "IdBookNavigation")
-                        .WithMany("SheduledBooks")
+                        .WithMany("ScheduledBooks")
                         .HasForeignKey("IdBook")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BookLib.Models.DBModels.ApplicationUser", "IdUserNavigation")
-                        .WithMany("SheduledBooks")
+                        .WithMany("ScheduledBooks")
                         .HasForeignKey("IdUser");
                 });
 

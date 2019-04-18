@@ -8,7 +8,7 @@ namespace BookLib.Models.DBModels
         {
             Comments = new HashSet<Comment>();
             ReadBooks = new HashSet<ReadBook>();
-            SheduledBooks = new HashSet<SheduledBook>();
+            ScheduledBooks = new HashSet<ScheduledBook>();
             QueuesOnBook = new HashSet<QueueOnBook>();
             BooksOnHands = new HashSet<BookOnHands>();
         }
@@ -31,7 +31,7 @@ namespace BookLib.Models.DBModels
         public virtual Availability Availability { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<ReadBook> ReadBooks { get; set; }
-        public virtual ICollection<SheduledBook> SheduledBooks { get; set; }
+        public virtual ICollection<ScheduledBook> ScheduledBooks { get; set; }
         public virtual ICollection<QueueOnBook> QueuesOnBook { get; set; }
         public virtual ICollection<BookOnHands> BooksOnHands { get; set; }
     }

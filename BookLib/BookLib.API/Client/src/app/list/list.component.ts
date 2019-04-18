@@ -10,14 +10,14 @@ import { Param } from '../BookClasses';
 export class ListComponent implements OnInit {
 
   username: string;
-  sheduledList: Param[];
+  scheduledList: Param[];
   readList: Param[];
 
   constructor(private listService: ListService) { }
 
   ngOnInit() {
     this.username = localStorage.getItem("name");
-    this.listService.getSheduledList(this.username).subscribe(res => this.sheduledList = res);
+    this.listService.getScheduledList(this.username).subscribe(res => this.scheduledList = res);
     this.listService.getReadList(this.username).subscribe(res => this.readList = res);
   }
 

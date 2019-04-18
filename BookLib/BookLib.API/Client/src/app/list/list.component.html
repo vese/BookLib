@@ -1,46 +1,42 @@
-<mat-accordion>
-  <mat-expansion-panel *ngIf="sheduledList">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Список запланированных ({{sheduledList.length}})
-      </mat-panel-title>
-      <mat-panel-description *ngIf="sheduledList.length === 0">
-        Список пуст
-      </mat-panel-description>
-      <mat-panel-description *ngIf="sheduledList.length > 0">
-        Раскройте, чтобы посмотреть книги в списке запланированных
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <div class="list">
-      <ol>
-        <li *ngFor="let b of sheduledList">
-          <a routerLink="/book/{{b.id}}">
-            <span><strong>&laquo;{{b.name}}&raquo;</strong></span>
-          </a>
-        </li>
-      </ol>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h2>Книжная полка</h2>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel *ngIf="readList">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Список прочитанных ({{readList.length}})
-      </mat-panel-title>
-      <mat-panel-description *ngIf="readList.length === 0">
-        Список пуст
-      </mat-panel-description>
-      <mat-panel-description *ngIf="readList.length > 0">
-        Раскройте, чтобы посмотреть книги в списке прочитанных
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <div class="list">
-      <ol>
-        <li *ngFor="let b of readList">
-          <a routerLink="/book/{{b.id}}">
-            <span><strong>&laquo;{{b.name}}&raquo;</strong></span>
-          </a>
-        </li>
-      </ol>
+  </div>
+
+  <div class="row" *ngIf="scheduledList">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+      <h6>Спикок книг в очереди
+        <span *ngIf="scheduledList.length === 0"> пуст</span>
+        <span *ngIf="scheduledList.length > 0"> ({{scheduledList.length}})</span>
+      </h6>
+
+      <div class="bordertop">
+        <div class="scrolled">
+          <ul class="books">
+            <li *ngFor="let b of scheduledList">
+              <a routerLink="/book/{{b.id}}"><span>{{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong></span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </mat-expansion-panel>
-</mat-accordion>
+
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+      <h6>Список прочитанных книг
+        <span *ngIf="readList.length === 0"> пуст</span>
+        <span *ngIf="readList.length > 0"> ({{readList.length}})</span>
+      </h6>
+      <div class="bordertop">
+        <div class="scrolled">
+          <ul class="books">
+            <li *ngFor="let b of readList">
+              <a routerLink="/book/{{b.id}}"><span>{{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong></span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

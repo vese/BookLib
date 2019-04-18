@@ -172,6 +172,7 @@ namespace BookLib.API.Controllers
                 description = libBook.Description,
                 releaseYear = libBook.ReleaseYear,
                 author = libBook.AuthorNavigation.Name,
+                authorId = libBook.AuthorId,
                 publisher = libBook.PublisherNavigation.Name,
                 category = libBook.CategoryNavigation.Name,
                 genre = libBook.GenreNavigation.Name,
