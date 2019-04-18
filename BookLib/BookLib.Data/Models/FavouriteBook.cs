@@ -1,6 +1,6 @@
 ﻿namespace BookLib.Models.DBModels
 {
-    public partial class ScheduledBook
+    public partial class FavouriteBook
     {
         public int Id { get; set; }
         public int BookId { get; set; }

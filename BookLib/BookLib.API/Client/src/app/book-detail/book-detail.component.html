@@ -32,8 +32,8 @@
 	        <span><a class="text" [routerLink]="" (click)="openDeleteBookDialog()">&#215;&nbsp;&nbsp;Удалить</a></span>
 	      </span>
 	      <span *ngIf="!isAdmin">
-	        <span *ngIf="!inScheduled"><a class="text" [routerLink]="" (click)="addToScheduled()">+&nbsp;&nbsp;Добавить в запланированные</a></span>
-	        <span *ngIf="inScheduled"><a class="text" [routerLink]="" (click)="removeFromScheduled()">&#215;&nbsp;&nbsp;Убрать из запланированных</a></span>
+	        <span *ngIf="!inScheduled"><a class="text" [routerLink]="" (click)="addToScheduled()">+&nbsp;&nbsp;Добавить в избранные</a></span>
+	        <span *ngIf="inScheduled"><a class="text" [routerLink]="" (click)="removeFromScheduled()">&#215;&nbsp;&nbsp;Убрать из избранных</a></span>
 	        <span *ngIf="!inRead"><a class="text" [routerLink]="" (click)="addToRead()">&uarr;&nbsp;&nbsp;Добавить в прочитанные</a></span>
 	        <span *ngIf="inRead"><a class="text" [routerLink]="" (click)="removeFromRead()">&darr;&nbsp;&nbsp;Удалить из прочитанных</a></span>
 	      </span>

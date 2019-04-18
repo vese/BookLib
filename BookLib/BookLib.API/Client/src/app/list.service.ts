@@ -23,7 +23,7 @@ export class ListService {
     headers = headers.append('Content-Type', 'application/json');
     let authToken = localStorage.getItem('auth_token');
     headers = headers.append('Authorization', `Bearer ${authToken}`);
-    return this.http.get<Param[]>(this.baseUrl + this.contrUrl + "scheduled", {
+      return this.http.get<Param[]>(this.baseUrl + this.contrUrl + "favourite", {
       params: new HttpParams().set("username", username),
       headers: headers
     });
@@ -45,7 +45,7 @@ export class ListService {
     headers = headers.append('Content-Type', 'application/json');
     let authToken = localStorage.getItem('auth_token');
     headers = headers.append('Authorization', `Bearer ${authToken}`);
-    return this.http.get<boolean>(this.baseUrl + this.contrUrl + "inscheduled", {
+    return this.http.get<boolean>(this.baseUrl + this.contrUrl + "infavourite", {
       params: new HttpParams().set("username", username).set("bookId", "" + bookId),
       headers: headers
     });
@@ -67,7 +67,7 @@ export class ListService {
     headers = headers.append('Content-Type', 'application/json');
     let authToken = localStorage.getItem('auth_token');
     headers = headers.append('Authorization', `Bearer ${authToken}`);
-    return this.http.post(this.baseUrl + this.contrUrl + "scheduled", {}, {
+    return this.http.post(this.baseUrl + this.contrUrl + "favourite", {}, {
       params: new HttpParams().set("username", username).set("bookId", "" + bookId),
       headers: headers
     });
@@ -89,7 +89,7 @@ export class ListService {
     headers = headers.append('Content-Type', 'application/json');
     let authToken = localStorage.getItem('auth_token');
     headers = headers.append('Authorization', `Bearer ${authToken}`);
-    return this.http.delete(this.baseUrl + this.contrUrl + "scheduled", {
+    return this.http.delete(this.baseUrl + this.contrUrl + "favourite", {
       params: new HttpParams().set("username", username).set("bookId", "" + bookId),
       headers: headers
     });

@@ -19,20 +19,20 @@ namespace BookLib.API.Controllers
             _context = context;
         }
 
-        // POST: api/List/Scheduled
+        // POST: api/List/Favourite
         [HttpPost]
-        [Route("scheduled")]
+        [Route("favourite")]
         [Authorize(Roles = "user")]
-        public IActionResult AddBookInScheduled(string username, int bookId)
+        public IActionResult AddBookInFavourite(string username, int bookId)
         {
-            if (_context.ScheduledBook.Any(s => s.BookId == bookId && s.UserNavigation.UserName == username))
+            if (_context.FavouriteBook.Any(s => s.BookId == bookId && s.UserNavigation.UserName == username))
             {
                 ModelState.TryAddModelError("ScheduledBook", "Книга уже находится в очереди");
                 return BadRequest(ModelState);
             }
             try
             {
-                _context.ScheduledBook.Add(new ScheduledBook
+                _context.FavouriteBook.Add(new FavouriteBook
                 {
                     BookId = bookId,
                     UserId = _context.Users.First(u => u.UserName == username).Id
@@ -79,18 +79,18 @@ namespace BookLib.API.Controllers
 
         // GET: api/List/Scheduled
         [HttpGet]
-        [Route("scheduled")]
+        [Route("favourite")]
         [Authorize(Roles = "user")]
         public IActionResult GetScheduledBooks(string username)
         {
-            var scheduledBooks = _context.ScheduledBook.Where(s => s.UserNavigation.UserName == username).Select(s => new
+            var favouriteBooks = _context.FavouriteBook.Where(s => s.UserNavigation.UserName == username).Select(s => new
             {
                 id = s.BookId,
                 author = s.BookNavigation.AuthorNavigation.Name,
                 name = s.BookNavigation.Name,
             }).ToList();
 
-            return new OkObjectResult(JsonConvert.SerializeObject(scheduledBooks, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+            return new OkObjectResult(JsonConvert.SerializeObject(favouriteBooks, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
         // GET: api/List/Read
@@ -111,12 +111,12 @@ namespace BookLib.API.Controllers
 
         // DELETE: api/List/Scheduled
         [HttpDelete]
-        [Route("scheduled")]
+        [Route("favourite")]
         [Authorize(Roles = "user")]
         public IActionResult DeleteScheduledBook(string username, int bookId)
         {
-            var scheduledBook = _context.ScheduledBook.FirstOrDefault(s => s.UserNavigation.UserName == username && s.BookId == bookId);
-            _context.ScheduledBook.Remove(scheduledBook);
+            var favouriteBook = _context.FavouriteBook.FirstOrDefault(s => s.UserNavigation.UserName == username && s.BookId == bookId);
+            _context.FavouriteBook.Remove(favouriteBook);
             _context.SaveChanges();
             return new OkResult();
         }
@@ -135,11 +135,11 @@ namespace BookLib.API.Controllers
 
         // GET: api/List/InScheduled
         [HttpGet]
-        [Route("inscheduled")]
+        [Route("infavourite")]
         [Authorize(Roles = "user")]
         public IActionResult BookInScheduled(string username, int bookId)
         {
-            var res = _context.ScheduledBook.Any(s => s.UserNavigation.UserName == username && s.BookId == bookId);
+            var res = _context.FavouriteBook.Any(s => s.UserNavigation.UserName == username && s.BookId == bookId);
 
             return new OkObjectResult(JsonConvert.SerializeObject(res, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
