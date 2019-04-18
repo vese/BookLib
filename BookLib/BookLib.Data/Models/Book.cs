@@ -22,6 +22,7 @@ namespace BookLib.Models.DBModels
         public int? SeriesId { get; set; }
         public int CategoryId { get; set; }
         public int GenreId { get; set; }
+        public string CoverImage { get; set; }
 
         public virtual Author AuthorNavigation { get; set; }
         public virtual Category CategoryNavigation { get; set; }
