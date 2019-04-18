@@ -29,6 +29,7 @@ export class Notifications {
   onHands: {
     name: string
     days: number
+    notificationLevel: number
   }[]
 }
 

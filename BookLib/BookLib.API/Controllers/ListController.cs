@@ -77,7 +77,7 @@ namespace BookLib.API.Controllers
             return new OkResult();
         }
 
-        // GET: api/List/Scheduled
+        // GET: api/List/Favourite
         [HttpGet]
         [Route("favourite")]
         [Authorize(Roles = "user")]
@@ -109,7 +109,7 @@ namespace BookLib.API.Controllers
             return new OkObjectResult(JsonConvert.SerializeObject(readBooks, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
-        // DELETE: api/List/Scheduled
+        // DELETE: api/List/Favourite
         [HttpDelete]
         [Route("favourite")]
         [Authorize(Roles = "user")]
@@ -133,11 +133,11 @@ namespace BookLib.API.Controllers
             return new OkResult();
         }
 
-        // GET: api/List/InScheduled
+        // GET: api/List/InFavourite
         [HttpGet]
         [Route("infavourite")]
         [Authorize(Roles = "user")]
-        public IActionResult BookInScheduled(string username, int bookId)
+        public IActionResult BookInFavourite(string username, int bookId)
         {
             var res = _context.FavouriteBook.Any(s => s.UserNavigation.UserName == username && s.BookId == bookId);
 
