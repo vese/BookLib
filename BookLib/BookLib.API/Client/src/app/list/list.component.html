@@ -44,8 +44,8 @@
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" *ngIf="queuesList">
       <h6>
         Список книг в очереди
-        <span *ngIf="readList.length === 0"> пуст</span>
-        <span *ngIf="readList.length > 0"> ({{queuesList.length}})</span>
+        <span *ngIf="queuesList.length === 0"> пуст</span>
+        <span *ngIf="queuesList.length > 0"> ({{queuesList.length}})</span>
       </h6>
       <div class="bordertop">
         <div class="scrolled">
@@ -66,8 +66,8 @@
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" *ngIf="booksOnHands">
       <h6>
         Список взятых книг
-        <span *ngIf="readList.length === 0"> пуст</span>
-        <span *ngIf="readList.length > 0"> ({{booksOnHands.length}})</span>
+        <span *ngIf="booksOnHands.length === 0"> пуст</span>
+        <span *ngIf="booksOnHands.length > 0"> ({{booksOnHands.length}})</span>
       </h6>
       <div class="bordertop">
         <div class="scrolled">

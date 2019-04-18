@@ -36,10 +36,15 @@ namespace BookLib.API.Controllers
                     id = q.BookNavigation.Id,
                     name = q.BookNavigation.Name
                 }),
-                onHands = user.BooksOnHands.Where(b => b.ReturnDate == null).Select(b => new
+                onHands = user.BooksOnHands.Where(b => b.ReturnDate == null).Select(b =>
                 {
-                    name = b.BookNavigation.Name,
-                    days = (b.TakingDate.AddMonths(2) - DateTime.UtcNow).Days
+                    var days = (BookLibOptions.GetReturnDate(b.TakingDate) - DateTime.UtcNow).Days;
+                    return new
+                    {
+                        name = b.BookNavigation.Name,
+                        days = days,
+                        notificationLevel = BookLibOptions.GetNotificationLevel(days)
+                    };
                 }).OrderBy(b => b.days)
             };
 
@@ -112,7 +117,7 @@ namespace BookLib.API.Controllers
                 name = b.BookNavigation.Name,
                 author = b.BookNavigation.AuthorNavigation.Name,
                 getDate = b.TakingDate,
-                returnDate = b.TakingDate.AddMonths(2)
+                returnDate = BookLibOptions.GetReturnDate(b.TakingDate)
             }).ToList();
             return new OkObjectResult(JsonConvert.SerializeObject(books, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
@@ -231,7 +236,7 @@ namespace BookLib.API.Controllers
                 try
                 {
                     bookOnHands.ReturnDate = DateTime.UtcNow;
-                    if (bookOnHands.TakingDate.AddMonths(2) < bookOnHands.ReturnDate)
+                    if (BookLibOptions.GetReturnDate(bookOnHands.TakingDate) < bookOnHands.ReturnDate)
                     {
                         bookOnHands.UserNavigation.Expired++;
                     }

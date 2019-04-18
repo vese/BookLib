@@ -32,7 +32,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     if (localStorage.getItem("role") != "admin") {
       this.libService.getNotifications(localStorage.getItem("name")).subscribe(not => {
         this.notifications = not;
-        this.count = not.queue.length + not.onHands.filter(o => o.days < 5).length;
+        this.count = not.queue.length + not.onHands.filter(o => o.notificationLevel > 1).length;
         this.allCount = not.queue.length + not.onHands.length;
       });
     }

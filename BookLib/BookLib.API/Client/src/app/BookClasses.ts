@@ -21,6 +21,7 @@ export class BookComment {
 export class Book {
   name: string
   author: string
+  authorId: number
   publisher: string
   description: string
   category: string
