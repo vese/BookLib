@@ -70,12 +70,12 @@ namespace BookLib.Data.Migrations
                 table: "ReadBook");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_ScheduledBook_Book_IdBook",
-                table: "ScheduledBook");
+                name: "FK_SheduledBook_Book_IdBook",
+                table: "SheduledBook");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_ScheduledBook_AspNetUsers_IdUser",
-                table: "ScheduledBook");
+                name: "FK_SheduledBook_AspNetUsers_IdUser",
+                table: "SheduledBook");
 
             migrationBuilder.DropIndex(
                 name: "IX_Book_IdGenre",
@@ -83,23 +83,23 @@ namespace BookLib.Data.Migrations
 
             migrationBuilder.RenameColumn(
                 name: "IdUser",
-                table: "ScheduledBook",
+                table: "SheduledBook",
                 newName: "UserId");
 
             migrationBuilder.RenameColumn(
                 name: "IdBook",
-                table: "ScheduledBook",
+                table: "SheduledBook",
                 newName: "BookId");
 
             migrationBuilder.RenameIndex(
-                name: "IX_ScheduledBook_IdUser",
-                table: "ScheduledBook",
-                newName: "IX_ScheduledBook_UserId");
+                name: "IX_SheduledBook_IdUser",
+                table: "SheduledBook",
+                newName: "IX_SheduledBook_UserId");
 
             migrationBuilder.RenameIndex(
-                name: "IX_ScheduledBook_IdBook",
-                table: "ScheduledBook",
-                newName: "IX_ScheduledBook_BookId");
+                name: "IX_SheduledBook_IdBook",
+                table: "SheduledBook",
+                newName: "IX_SheduledBook_BookId");
 
             migrationBuilder.RenameColumn(
                 name: "IdUser",
@@ -431,16 +431,16 @@ namespace BookLib.Data.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ScheduledBook_Book_BookId",
-                table: "ScheduledBook",
+                name: "FK_SheduledBook_Book_BookId",
+                table: "SheduledBook",
                 column: "BookId",
                 principalTable: "Book",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ScheduledBook_AspNetUsers_UserId",
-                table: "ScheduledBook",
+                name: "FK_SheduledBook_AspNetUsers_UserId",
+                table: "SheduledBook",
                 column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
@@ -510,12 +510,12 @@ namespace BookLib.Data.Migrations
                 table: "ReadBook");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_ScheduledBook_Book_BookId",
-                table: "ScheduledBook");
+                name: "FK_SheduledBook_Book_BookId",
+                table: "SheduledBook");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_ScheduledBook_AspNetUsers_UserId",
-                table: "ScheduledBook");
+                name: "FK_SheduledBook_AspNetUsers_UserId",
+                table: "SheduledBook");
 
             migrationBuilder.DropIndex(
                 name: "IX_Book_GenreId",
@@ -539,23 +539,23 @@ namespace BookLib.Data.Migrations
 
             migrationBuilder.RenameColumn(
                 name: "UserId",
-                table: "ScheduledBook",
+                table: "SheduledBook",
                 newName: "IdUser");
 
             migrationBuilder.RenameColumn(
                 name: "BookId",
-                table: "ScheduledBook",
+                table: "SheduledBook",
                 newName: "IdBook");
 
             migrationBuilder.RenameIndex(
-                name: "IX_ScheduledBook_UserId",
-                table: "ScheduledBook",
-                newName: "IX_ScheduledBook_IdUser");
+                name: "IX_SheduledBook_UserId",
+                table: "SheduledBook",
+                newName: "IX_SheduledBook_IdUser");
 
             migrationBuilder.RenameIndex(
-                name: "IX_ScheduledBook_BookId",
-                table: "ScheduledBook",
-                newName: "IX_ScheduledBook_IdBook");
+                name: "IX_SheduledBook_BookId",
+                table: "SheduledBook",
+                newName: "IX_SheduledBook_IdBook");
 
             migrationBuilder.RenameColumn(
                 name: "UserId",
@@ -867,16 +867,16 @@ namespace BookLib.Data.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ScheduledBook_Book_IdBook",
-                table: "ScheduledBook",
+                name: "FK_SheduledBook_Book_IdBook",
+                table: "SheduledBook",
                 column: "IdBook",
                 principalTable: "Book",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ScheduledBook_AspNetUsers_IdUser",
-                table: "ScheduledBook",
+                name: "FK_SheduledBook_AspNetUsers_IdUser",
+                table: "SheduledBook",
                 column: "IdUser",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
