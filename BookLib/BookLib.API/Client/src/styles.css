@@ -53,11 +53,11 @@ a.nav {
   display: inline;
 }
 
-  a.nav:hover {
-    color: #5b1c17;
-    text-decoration: none;
-    background-color: #ffe1bd;
-  }
+a.nav:hover {
+  color: #5b1c17;
+  text-decoration: none;
+  background-color: #ffe1bd;
+}
 
 a.text {
   color: #ffe1bd;
