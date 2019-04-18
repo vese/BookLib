@@ -19,8 +19,8 @@
   <div class="row">
     <div class="col-12">
       <mat-form-field>
-        <input matInput placeholder="Название" [(formControl)]="nameFormControl">
-        <mat-error *ngIf="nameFormControl.invalid">{{getNameErrorMessage()}}</mat-error>
+        <input matInput placeholder="Название" [(formControl)]="nameFC">
+        <mat-error>{{getErrorMessage(nameFC)}}</mat-error>
       </mat-form-field>
     </div>
   </div>
@@ -30,7 +30,7 @@
       <div class="select">
       <mat-form-field>
         <mat-label>Автор</mat-label>
-        <mat-select [(value)]="selectedAuthorId">
+        <mat-select [(value)]="authorId">
           <mat-option>Новый автор</mat-option>
           <mat-option *ngFor="let author of filterParams.authors" [value]="author.id">
             {{author.name}}
@@ -38,9 +38,9 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field *ngIf="!selectedAuthorId">
-        <input matInput placeholder="Новый автор" [(formControl)]="authorFormControl">
-        <mat-error *ngIf="authorFormControl.invalid">{{getAuthorErrorMessage()}}</mat-error>
+      <mat-form-field *ngIf="!authorId">
+        <input matInput placeholder="Новый автор" [(formControl)]="authorFC">
+        <mat-error>{{getErrorMessage(authorFC)}}</mat-error>
       </mat-form-field>
       </div>
     </div>
@@ -48,16 +48,16 @@
       <div class="select">
       <mat-form-field>
         <mat-label>Издатель</mat-label>
-        <mat-select [(value)]="selectedPublisherId">
+        <mat-select [(value)]="publisherId">
           <mat-option>Новый издатель</mat-option>
           <mat-option *ngFor="let publisher of filterParams.publishers" [value]="publisher.id">
             {{publisher.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field *ngIf="!selectedPublisherId">
-        <input matInput placeholder="Новый издатель" [(formControl)]="publisherFormControl">
-        <mat-error *ngIf="publisherFormControl.invalid">{{getPublisherErrorMessage()}}</mat-error>
+      <mat-form-field *ngIf="!publisherId">
+        <input matInput placeholder="Новый издатель" [(formControl)]="publisherFC">
+        <mat-error>{{getErrorMessage(publisherFC)}}</mat-error>
       </mat-form-field>
       </div>
     </div>
@@ -66,8 +66,8 @@
   <div class="row">
     <div class="col-12">
       <mat-form-field>
-        <textarea  matInput rows="8" placeholder="Описание" [(formControl)]="descriptionFormControl"></textarea>
-        <mat-error *ngIf="descriptionFormControl.invalid">{{getDescriptionErrorMessage()}}</mat-error>
+        <textarea  matInput rows="8" placeholder="Описание" [(formControl)]="descrFC"></textarea>
+        <mat-error>{{getErrorMessage(descrFC)}}</mat-error>
       </mat-form-field>
     </div>
   </div>
@@ -79,7 +79,7 @@
       <div *ngIf="hasSeries" class="select">
       <mat-form-field>
         <mat-label>Серия</mat-label>
-        <mat-select [(value)]="selectedSeriesId">
+        <mat-select [(value)]="seriesId">
           <mat-option>Новая серия</mat-option>
           <mat-option *ngFor="let series of filterParams.series" [value]="series.id">
             {{series.name}}
@@ -87,9 +87,9 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field *ngIf="hasSeries && !selectedSeriesId">
-        <input matInput placeholder="Новая серия" [(formControl)]="seriesFormControl">
-        <mat-error *ngIf="seriesFormControl.invalid">{{getSeriesErrorMessage()}}</mat-error>
+      <mat-form-field *ngIf="hasSeries && !seriesId">
+        <input matInput placeholder="Новая серия" [(formControl)]="seriesFC">
+        <mat-error>{{getErrorMessage(seriesFC)}}</mat-error>
       </mat-form-field>
       </div>
     </div>
@@ -100,7 +100,7 @@
       <div class="select">
       <mat-form-field>
         <mat-label>Категория</mat-label>
-        <mat-select [(value)]="selectedCategoryId" (selectionChange)="getCategoryGenres();setDisableGenre()">
+        <mat-select [(value)]="categoryId" (selectionChange)="getCategoryGenres();setDisableGenre()">
           <mat-option>Новая категория</mat-option>
           <mat-option *ngFor="let category of filterParams.categories" [value]="category.category.id">
             {{category.category.name}}
@@ -108,9 +108,9 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field *ngIf="!selectedCategoryId">
-        <input matInput placeholder="Новая категория" [(formControl)]="categoryFormControl" (change)="setDisableGenre()">
-        <mat-error *ngIf="categoryFormControl.invalid">{{getCategoryErrorMessage()}}</mat-error>
+      <mat-form-field *ngIf="!categoryId">
+        <input matInput placeholder="Новая категория" [(formControl)]="categoryFC" (change)="setDisableGenre()">
+        <mat-error>{{getErrorMessage(categoryFC)}}</mat-error>
       </mat-form-field>
     </div>
     </div>
@@ -118,17 +118,17 @@
       <div class="select">
       <mat-form-field>
         <mat-label>Жанр</mat-label>
-        <mat-select [(value)]="selectedGenreId" [disabled]="disableGenre">
+        <mat-select [(value)]="genreId" [disabled]="disableGenre">
           <mat-option>Новый жанр</mat-option>
-          <mat-option *ngFor="let genre of selectedCategoryGenres" [value]="genre.id">
+          <mat-option *ngFor="let genre of categoryGenres" [value]="genre.id">
             {{genre.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field  *ngIf="!selectedGenreId || !selectedCategoryId">
-        <input matInput placeholder="Новый жанр" [(formControl)]="genreFormControl">
-        <mat-error *ngIf="genreFormControl.invalid">{{getGenreErrorMessage()}}</mat-error>
+      <mat-form-field  *ngIf="!genreId || !categoryId">
+        <input matInput placeholder="Новый жанр" [(formControl)]="genreFC">
+        <mat-error>{{getErrorMessage(genreFC)}}</mat-error>
       </mat-form-field>
     </div>
     </div>
@@ -137,15 +137,15 @@
   <div class="row">
     <div class="col-3">
       <mat-form-field>
-        <input matInput placeholder="Год издания" type="number" [(formControl)]="releaseYearFormControl">
-        <mat-error *ngIf="releaseYearFormControl.invalid">{{getReleaseYearErrorMessage()}}</mat-error>
+        <input matInput placeholder="Год издания" type="number" [(formControl)]="yearFC">
+        <mat-error>{{getErrorMessage(yearFC)}}</mat-error>
       </mat-form-field>
     </div>
   </div>
 
   <div class="row">
     <div class="col-12">
-      <a class="text" [routerLink]="" (click)="editBook()">Изменить книгу</a>
+      <a class="text" [routerLink]="" (click)="editBook()">&rarr;&nbsp;&nbsp;Сохранить</a>
     </div>
   </div>
 

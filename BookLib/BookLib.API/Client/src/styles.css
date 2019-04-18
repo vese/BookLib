@@ -34,13 +34,6 @@ h2 {
   color: #5b1c17;
 }
 
-div.select {
-  border: 1px solid #bbb;
-
-  padding: 0 1em 0 1em;
-  margin-bottom: 1em;
-}
-
 div.nav {
   padding: 1em 0em 1em 0em;
   color: #ffe1bd;
@@ -70,11 +63,11 @@ a.text {
   display: inline-block;
 }
 
-  a.text:hover {
-    color: #5b1c17;
-    text-decoration: none;
-    background-color: #ffe1bd;
-  }
+a.text:hover {
+  color: #fff;
+  text-decoration: none;
+  background-color: #b79371;
+}
 
 a {
   color:#5b1c17;
