@@ -1,5 +1,5 @@
 <span *ngIf="notifications">
-  <a class="nav" [routerLink]="" [matMenuTriggerFor]="menu">
+  <a class="nav" [routerLink]="" [matMenuTriggerFor]="menu" (click)="refresh()">
     <span *ngIf="count === 0;else notify"><mat-icon inline="true">notifications_none</mat-icon></span>
     <ng-template #notify><span><mat-icon inline="true">notifications</mat-icon>{{count}}</span></ng-template>   
   </a>
