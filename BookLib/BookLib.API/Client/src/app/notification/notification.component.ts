@@ -22,14 +22,20 @@ export class NotificationComponent implements OnInit, OnDestroy {
     private userService: UserService) {
     this.subscription = this.userService.logChanged$.subscribe(
       res => {
-        if (res && localStorage.getItem("role") != "admin") {
-          this.libService.getNotifications(localStorage.getItem("name")).subscribe(not => {
-            this.notifications = not;
-            this.count = not.queue.length + not.onHands.filter(o => o.days < 5).length;
-            this.allCount = not.queue.length + not.onHands.length;
-          });
+        if (res) {
+          this.refresh();
         }
       });
+  }
+
+  refresh(): void {
+    if (localStorage.getItem("role") != "admin") {
+      this.libService.getNotifications(localStorage.getItem("name")).subscribe(not => {
+        this.notifications = not;
+        this.count = not.queue.length + not.onHands.filter(o => o.days < 5).length;
+        this.allCount = not.queue.length + not.onHands.length;
+      });
+    }
   }
 
   ngOnInit() {
