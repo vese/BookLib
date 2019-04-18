@@ -7,11 +7,18 @@ div.list {
   overflow: auto
 }
 
+.paginator {
+  display: flex;
+  justify-content: flex-start;
+}
+
 .books {
 }
 
 .books li {
   cursor: pointer;
+  list-style-type: square;
+  margin-left: -2em;
   padding: .5em .5em;
   height: 2.5em;
   width: 100%;

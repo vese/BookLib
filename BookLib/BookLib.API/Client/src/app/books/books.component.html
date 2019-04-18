@@ -98,31 +98,36 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" *ngIf="sortProperty">
-      <mat-checkbox [(ngModel)]="sortOrderValue" (change)="getSortOrder();getBooks()">По возрастанию</mat-checkbox>
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+      <span *ngIf="sortProperty">
+        <mat-checkbox [(ngModel)]="sortOrderValue" (change)="getSortOrder();getBooks()">По возрастанию</mat-checkbox>
+      </span>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6 text-right">
+      <span *ngIf="inNameString || releaseYear || authorId || publisherId || seriesId || categoryId || genreId || hasFree!=null || sortProperty || sortOrder">
+        <a class="text" [routerLink]="" (click)="clearFilters()">Сбросить фильтры</a>
+      </span>
     </div>
   </div>
-
-  <span *ngIf="inNameString || releaseYear || authorId || publisherId || seriesId || categoryId || genreId || hasFree!=null || sortProperty || sortOrder">
-    <a class="text" [routerLink]="" (click)="clearFilters()">Сбросить фильтры</a>
-  </span>
-
   <div class="row">
-    <div class="col-12">
-      <div class="list">
-        <ol class="books">
-          <li *ngFor="let b of books">
-            <a routerLink="/book/{{b.id}}"><span>{{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong> ({{b.releaseYear}})</span></a>
-          </li>
-        </ol>
-      </div>
-      <mat-paginator *ngIf="length > 5"
+    <div class="col-12 paginator">
+      <mat-paginator *ngIf="length > 10"
                      [length]="length"
                      [pageSize]="pageSize"
                      [pageSizeOptions]="pageSizeOptions"
-                     showFirstLastButtons
                      (page)="getBooks($event)">
       </mat-paginator>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div>
+        <ul class="books">
+          <li *ngFor="let b of books">
+            <a routerLink="/book/{{b.id}}"><span>{{b.author}} <strong>&laquo;{{b.name}}&raquo;</strong> ({{b.releaseYear}})</span></a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
   

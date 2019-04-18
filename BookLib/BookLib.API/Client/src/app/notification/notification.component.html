@@ -1,17 +1,11 @@
 <span *ngIf="notifications">
-  <span>
-    <a class="nav" [routerLink]="" [matMenuTriggerFor]="menu">
-      <span *ngIf="count > 0">
-        <mat-icon inline="true">notifications</mat-icon>
-        {{count}}
-      </span>
-      <span *ngIf="count === 0">
-        <mat-icon inline="true">notifications_none</mat-icon>
-      </span>
-    </a>
-  </span>
+  <a class="nav" [routerLink]="" [matMenuTriggerFor]="menu">
+    <span *ngIf="count === 0;else notify"><mat-icon inline="true">notifications_none</mat-icon></span>
+    <ng-template #notify><span><mat-icon inline="true">notifications</mat-icon>{{count}}</span></ng-template>   
+  </a>
   <mat-menu #menu="matMenu">
     <button mat-menu-item *ngFor="let n of notifications.queue">{{n.name}}</button>
     <button mat-menu-item *ngFor="let n of notifications.onHands">{{n.name}} - до возврата осталось {{n.days}}</button>
   </mat-menu>
 </span>
+

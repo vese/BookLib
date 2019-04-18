@@ -20,7 +20,16 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { UserService } from './user.service';
 import { LibComponent } from './lib/lib.component';
 import { ListComponent } from './list/list.component';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material';
 
+export class CustomPaginator extends MatPaginatorIntl {
+  constructor() {
+    super();
+    this.nextPageLabel = 'Следующая';
+    this.previousPageLabel = 'Предыдущая';
+    this.itemsPerPageLabel = 'Книг на странице';
+  }
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -67,7 +76,10 @@ import { ListComponent } from './list/list.component';
     RegisterDialogComponent,
     DeleteBookDialogComponent
   ],
-  providers: [UserService],
+  providers: [UserService, {
+      provide: MatPaginatorIntl,
+      useClass: CustomPaginator
+    }], 
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,20 +1,21 @@
-<div class="row nav">
-  <div class="col-9">
-    <span><a class="nav" routerLink="">Главная</a></span>
-    <span><a class="nav" routerLink="/filter">Поиск</a></span>
-    <span *ngIf="loggedIn">
-      <span *ngIf="isAdmin">
-        <span><a class="nav" routerLink="/book/add">+&nbsp;Добавить</a></span>
-        <span><a class="nav" routerLink="/lib">&#167;&nbsp;Библиотека</a></span>
+<div class="container-fluid">
+  <div class="row nav">
+    <div class="col-7">
+      <span><a class="nav" routerLink="">Главная</a></span>
+      <span><a class="nav" routerLink="/filter">Поиск</a></span>
+      <span *ngIf="loggedIn">
+        <span *ngIf="isAdmin">
+          <span><a class="nav" routerLink="/book/add">+&nbsp;Добавить</a></span>
+          <span><a class="nav" routerLink="/lib">&#167;&nbsp;Библиотека</a></span>
+        </span>
+        <span><a class="nav" *ngIf="!isAdmin" routerLink="/list"><u>=</u>&nbsp;Списки</a></span>
       </span>
-      <span><a class="nav" *ngIf="!isAdmin" routerLink="/list"><u>=</u>&nbsp;Списки</a></span>
-    </span>
+    </div>
+    <div class="col-5 text-right">
+      <app-user></app-user>
+    </div>
   </div>
-  <div class="col-3 text-right">
-    <app-notification *ngIf="loggedIn && !isAdmin"></app-notification>
-    <app-user></app-user>
+  <div>
+    <router-outlet></router-outlet>
   </div>
-</div>
-<div class="content">
-  <router-outlet></router-outlet>
 </div>

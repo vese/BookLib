@@ -13,26 +13,14 @@ div.select {
 }
 
 div.nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
   padding: 1em 0em 1em 0em;
   color: #ffe1bd;
   background-color: #5b1c17;
 }
 
-div.content {
-  position: absolute;
-  top: 60px;
-  left: 0;
-  right: 0;
-}
-
 a.nav {
   color: #ffe1bd;
-  padding: 8px 15px;
+  padding: 5px 10px;
   text-decoration: none;
   margin-top: 0px;
   display: inline;
@@ -47,7 +35,7 @@ a.nav {
 a.text {
   color: #ffe1bd;
   background-color: #5b1c17;
-  padding: 8px 15px;
+  padding: 5px 10px;
   text-decoration: none;
   margin: 1em 0 1em 0;
   display: inline-block;
@@ -68,7 +56,7 @@ mat-form-field {
 }
 
 body {
-  font-size: 90%;
+  font-size: 85%;
 }
 
 input[type="text"], button {

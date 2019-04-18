@@ -2,7 +2,8 @@
 	<a class="nav" [routerLink]="" (click)="openLoginDialog()">Вход</a>
 	<a class="nav" [routerLink]="" (click)="openRegisterDialog()">Регистрация</a>
 </span>
-<span *ngIf="loggedIn">
+<div *ngIf="loggedIn">
 	<span><strong>{{name}}</strong></span>
+    <app-notification *ngIf="loggedIn && !isAdmin"></app-notification>
 	<span><a class="nav" [routerLink]="" (click)="logout()">Выход</a></span>
-</span>
+</div>

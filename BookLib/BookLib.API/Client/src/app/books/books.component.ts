@@ -10,6 +10,8 @@ import { PageEvent } from '@angular/material';
   styleUrls: ['./books.component.css']
 })
 
+
+
 export class BooksComponent implements OnInit {
 
   filterParams: FilterParams;
@@ -17,8 +19,8 @@ export class BooksComponent implements OnInit {
 
   pageEvent: PageEvent;
   length: number;
-  pageSize: number = 5;
-  pageSizeOptions: number[] = [5, 10, 25, 100];
+  pageSize: number = 10;
+  pageSizeOptions: number[] = [5, 10, 25, 50];
 
   inNameString: string;
   releaseYear: number;

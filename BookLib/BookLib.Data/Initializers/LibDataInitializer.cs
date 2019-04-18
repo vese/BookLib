@@ -7,23 +7,23 @@ namespace BookLib.Initializers
 {
     public class LibDataInitializer
     {
-        public static void Initialize(ApplicationDbContext db)
+        public static void Initialize(ApplicationDbContext _context)
         {
-            if (!db.Category.Any())
+            if (!_context.Category.Any())
             {
-                db.Category.AddRange(
+                _context.Category.AddRange(
                     new Category { Name = "Художественная литература" },
                     new Category { Name = "Документальная литература" },
                     new Category { Name = "Научная литература" },
                     new Category { Name = "Справочная литература" },
                     new Category { Name = "Учебная литература" }
                     );
-                db.SaveChanges();
+                _context.SaveChanges();
             }
-            int categoryId = db.Category.FirstOrDefault(c => c.Name == "Художественная литература").Id;
-            if (!db.Genre.Any())
+            int categoryId = _context.Category.FirstOrDefault(c => c.Name == "Художественная литература").Id;
+            if (!_context.Genre.Any())
             {
-                db.Genre.AddRange(
+                _context.Genre.AddRange(
                     new Genre { Name = "Детектив", CategoryId = categoryId },
                     new Genre { Name = "Триллер", CategoryId = categoryId },
                     new Genre { Name = "Комедия", CategoryId = categoryId },
@@ -33,11 +33,11 @@ namespace BookLib.Initializers
                     new Genre { Name = "Фантастика", CategoryId = categoryId },
                     new Genre { Name = "Фэнтези", CategoryId = categoryId }
                 );
-                db.SaveChanges();
+                _context.SaveChanges();
             }
-            if (!db.Author.Any())
+            if (!_context.Author.Any())
             {
-                db.Author.AddRange(
+                _context.Author.AddRange(
                     new Author { Name = "Вирджиния Вулф" },
                     new Author { Name = "Фёдор Достоевский" },
                     new Author { Name = "Габриэль Гарсиа Маркес" },
@@ -46,36 +46,36 @@ namespace BookLib.Initializers
                     new Author { Name = "Уильям Фолкнер" },
                     new Author { Name = "Уильям Шекспир" }
                 );
-                db.SaveChanges();
+                _context.SaveChanges();
             }
 
-            if (!db.Publisher.Any())
+            if (!_context.Publisher.Any())
             {
-                db.Publisher.AddRange(
+                _context.Publisher.AddRange(
                     new Publisher { Name = "Просвещение" },
                     new Publisher { Name = "Азбука" },
                     new Publisher { Name = "Центрполиграф" },
                     new Publisher { Name = "Дрофа" },
                     new Publisher { Name = "Эксмо" }
                 );
-                db.SaveChanges();
+                _context.SaveChanges();
             }
-            if (!db.Series.Any())
+            if (!_context.Series.Any())
             {
-                db.Series.AddRange(
+                _context.Series.AddRange(
                     new Series { Name = "Уильям Шекспир - Собрание сочинений" },
                     new Series { Name = "Фёдор Достоевский - Антология" },
                     new Series { Name = "Лев Толстой - Трехтомник" }
                 );
-                db.SaveChanges();
+                _context.SaveChanges();
             }
-            List<int> seriesId = db.Series.Select(s => s.Id).ToList();
-            List<int> genreId = db.Genre.Select(s => s.Id).ToList();
-            List<int> authorId = db.Author.Select(s => s.Id).ToList();
-            List<int> publisherId = db.Publisher.Select(s => s.Id).ToList();
-            if (!db.Book.Any())
+            List<int> seriesId = _context.Series.Select(s => s.Id).ToList();
+            List<int> genreId = _context.Genre.Select(s => s.Id).ToList();
+            List<int> authorId = _context.Author.Select(s => s.Id).ToList();
+            List<int> publisherId = _context.Publisher.Select(s => s.Id).ToList();
+            if (!_context.Book.Any())
             {
-                db.Book.AddRange(
+                _context.Book.AddRange(
                     new Book
                     {
                         Name = "Миссис Дэллоуэй",
@@ -277,11 +277,11 @@ namespace BookLib.Initializers
                         Description = "Отелло, мавр, снискал себе славу как великолепный полководец. Он знакомится с Дездемоной, дочерью Брабанцио. Поражённая его рассказами о военных кампаниях, девушка влюбляется в Отелло и тайно с ним венчается. Брабанцио обращается к дожу Венеции, полагая, что мавр влюбил в себя Дездемону посредством колдовства. Однако Отелло удаётся убедить всех, что Дездемона совершенно свободна в своей воле: «Она меня за муки полюбила, а я её — за состраданье к ним». Он получает назначение принять командование отдалённым гарнизоном и уезжает туда с молодой женой. Его помощник Яго и дворянин Родриго, влюблённый в Дездемону и чуть было не покончивший жизнь самоубийством, готовят заговор.Они хотят убрать Отелло и занять его место.Яго убеждает Отелло, что Дездемона — любовница Кассио, молодого подчинённого Отелло.Яго заводит с Кассио разговор о его девушке, прохаживаясь по двору мимо места, где спрятался Отелло.У мавра, который слышит лишь часть фраз, складывается впечатление, что речь идёт о его жене.Он начинает верить Яго и ревновать Дездемону.Для того, чтобы окончательно уверить Отелло в неверности Дездемоны, Яго подкладывает Кассио её платок, подарок мужа.Отелло находит у молодого человека это «доказательство измены». Яго советует Отелло убить Дездемону во сне.А Отелло приказывает Яго убить Кассио.Вынеся приговор неверной заранее, Отелло обвиняет Дездемону.Он не слушает ни её, ни Эмилию, жену Яго, которая пытается уверить ревнивца в том, что жена его — невинней ангела, что она и в мыслях не держала ничего подобного.Яго и Родриго идут к Кассио, и Родриго ранит Кассио в ногу, а потом хитрый Яго убивает наивного Родриго. Приходит охрана, другие люди и забирают Кассио и труп Родриго.Яго говорит, что защищал Кассио, а Родриго он не убивал."
                     }
                 );
-                db.SaveChanges();
+                _context.SaveChanges();
             }
-            if (!db.Availability.Any())
+            if (!_context.Availability.Any())
             {
-                db.Book.ToList().ForEach(b => db.Availability.Add(
+                _context.Book.ToList().ForEach(b => _context.Availability.Add(
                     new Availability
                     {
                         TotalCount = 10,
@@ -291,7 +291,7 @@ namespace BookLib.Initializers
                         BookId = b.Id
                     }
                 ));
-                db.SaveChanges();
+                _context.SaveChanges();
             }
         }
     }
