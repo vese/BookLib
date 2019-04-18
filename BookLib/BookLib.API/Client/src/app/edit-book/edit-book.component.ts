@@ -14,64 +14,41 @@ export class EditBookComponent implements OnInit {
 
   filterParams: FilterParams;
 
-  selectedAuthorId: number;
-  selectedPublisherId: number;
+  authorId: number;
+  publisherId: number;
   hasSeries: boolean = false;
-  selectedSeriesId: number;
-  selectedCategoryId: number;
-  selectedCategoryGenres: Param[];
-  selectedGenreId: number;
+  seriesId: number;
+  categoryId: number;
+  categoryGenres: Param[];
+  genreId: number;
+  failureMessages: string[];
   failtureMessages: string[];
   disableGenre: boolean;
 
-  nameFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  descriptionFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  releaseYearFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  authorFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  publisherFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  seriesFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  categoryFormControl = new FormControl("", [
-    Validators.required
-  ]);
-  genreFormControl = new FormControl("", [
-    Validators.required
-  ]);
+  defaultErrorMsg: string = 'Поле обязательно для заполнения!';
 
-  getNameErrorMessage() {
-    return this.nameFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getDescriptionErrorMessage() {
-    return this.descriptionFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getReleaseYearErrorMessage() {
-    return this.releaseYearFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getAuthorErrorMessage() {
-    return this.authorFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getPublisherErrorMessage() {
-    return this.publisherFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getSeriesErrorMessage() {
-    return this.seriesFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getCategoryErrorMessage() {
-    return this.categoryFormControl.hasError('required') ? 'Введите значение' : '';
-  }
-  getGenreErrorMessage() {
-    return this.genreFormControl.hasError('required') ? 'Введите значение' : '';
+  nameFC = new FormControl("", [Validators.required]);
+  authorFC = new FormControl("", [Validators.required]);
+  publisherFC = new FormControl("", [Validators.required]);
+  descrFC = new FormControl("", [Validators.required]);
+  seriesFC = new FormControl("", [Validators.required]);
+  categoryFC = new FormControl("", [Validators.required]);
+  genreFC = new FormControl({ value: "", disabled: this.disableGenre }, [Validators.required]);
+  yearFC = new FormControl("", [Validators.required]);
+
+  forms: FormControl[] = [
+    this.nameFC,
+    this.authorFC,
+    this.publisherFC,
+    this.descrFC,
+    this.seriesFC,
+    this.categoryFC,
+    this.genreFC,
+    this.yearFC
+  ];
+
+  getErrorMessage(formControl: FormControl) {
+    return formControl.hasError('required') ? this.defaultErrorMsg : '';
   }
   
   constructor(
@@ -86,43 +63,43 @@ export class EditBookComponent implements OnInit {
   getBook(): void {
     this.id = +this.route.snapshot.paramMap.get('id');
     this.bookService.getBook(this.id).subscribe(book => {
-      this.nameFormControl.setValue(book.name);
-      this.descriptionFormControl.setValue(book.description);
-      this.releaseYearFormControl.setValue(book.releaseYear);
-      this.selectedAuthorId = this.filterParams.authors.find(a => a.name === book.author).id;
-      this.selectedPublisherId = this.filterParams.publishers.find(a => a.name === book.publisher).id;
+      this.nameFC.setValue(book.name);
+      this.descrFC.setValue(book.description);
+      this.yearFC.setValue(book.releaseYear);
+      this.authorId = this.filterParams.authors.find(a => a.name === book.author).id;
+      this.publisherId = this.filterParams.publishers.find(a => a.name === book.publisher).id;
       this.hasSeries = !!book.series;
       if (this.hasSeries) {
-        this.selectedSeriesId = this.filterParams.series.find(a => a.name === book.series).id;
+        this.seriesId = this.filterParams.series.find(a => a.name === book.series).id;
       }
-      this.selectedCategoryId = this.filterParams.categories.find(a => a.category.name === book.category).category.id;
-      if (this.selectedCategoryId) {
+      this.categoryId = this.filterParams.categories.find(a => a.category.name === book.category).category.id;
+      if (this.categoryId) {
         this.getCategoryGenres();
-        this.selectedGenreId = this.filterParams.categories.find(a => a.category.id === this.selectedCategoryId).genres.find(a => a.name === book.genre).id;
+        this.genreId = this.filterParams.categories.find(a => a.category.id === this.categoryId).genres.find(a => a.name === book.genre).id;
       }
     });
   }
 
   editBook(): void {
     this.failtureMessages = [];
-    if (this.nameFormControl.valid && this.descriptionFormControl.valid && this.releaseYearFormControl.valid &&
-      this.authorFormControl.valid && this.publisherFormControl.valid &&
-      this.seriesFormControl.valid && this.categoryFormControl.valid && this.genreFormControl.valid) { } if (true) {
+    if (this.nameFC.valid && this.descrFC.valid && this.yearFC.valid &&
+      this.authorFC.valid && this.publisherFC.valid &&
+      this.seriesFC.valid && this.categoryFC.valid && this.genreFC.valid) { } if (true) {
         let data: ViewBook = {
-          name: this.nameFormControl.value,
-          description: this.descriptionFormControl.value,
-          releaseYear: this.releaseYearFormControl.value,
-          authorId: this.selectedAuthorId,
-          author: this.authorFormControl.value,
-          publisherId: this.selectedPublisherId,
-          publisher: this.publisherFormControl.value,
+          name: this.nameFC.value,
+          description: this.descrFC.value,
+          releaseYear: this.yearFC.value,
+          authorId: this.authorId,
+          author: this.authorFC.value,
+          publisherId: this.publisherId,
+          publisher: this.publisherFC.value,
           hasSeries: this.hasSeries,
-          seriesId: this.selectedSeriesId,
-          series: this.seriesFormControl.value,
-          categoryId: this.selectedCategoryId,
-          category: this.categoryFormControl.value,
-          genreId: this.selectedGenreId,
-          genre: this.genreFormControl.value
+          seriesId: this.seriesId,
+          series: this.seriesFC.value,
+          categoryId: this.categoryId,
+          category: this.categoryFC.value,
+          genreId: this.genreId,
+          genre: this.genreFC.value
         }
         this.bookService.editBook(this.id, data).subscribe(res => {
           this.failtureMessages.push("Книга успешно изменена!")
@@ -141,22 +118,22 @@ export class EditBookComponent implements OnInit {
   }
 
   getCategoryGenres(): void {
-    if (this.selectedCategoryId) {
-      this.selectedCategoryGenres = this.filterParams.categories.find(category => category.category.id === this.selectedCategoryId).genres;
+    if (this.categoryId) {
+      this.categoryGenres = this.filterParams.categories.find(category => category.category.id === this.categoryId).genres;
     }
     else {
-      this.selectedGenreId = null;
-      this.selectedCategoryGenres = [];
+      this.genreId = null;
+      this.categoryGenres = [];
     }
   }
 
   setDisableGenre(): void {
-    this.disableGenre = !this.selectedCategoryId && (!this.categoryFormControl.value || this.categoryFormControl.invalid);
+    this.disableGenre = !this.categoryId && (!this.categoryFC.value || this.categoryFC.invalid);
     if (this.disableGenre) {
-      this.genreFormControl.disable();
+      this.genreFC.disable();
     }
     else {
-      this.genreFormControl.enable();
+      this.genreFC.enable();
     }
   }
 }

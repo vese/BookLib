@@ -11,14 +11,21 @@ a.stars:hover {
   text-decoration: none;
 }
 
-
 div.description {
   width:100%;
-  height: 100%;
+  height: 200px;
   text-align:justify;
   padding-right: 1em;
   overflow: auto
 }
+
+div.select {
+  border-top: 1px solid #bbb;
+  border-bottom: 1px solid #bbb;
+  padding: 0 1em 0 1em;
+  margin-bottom: 1em;
+}
+
 
 .comments {
   list-style-type:none;
