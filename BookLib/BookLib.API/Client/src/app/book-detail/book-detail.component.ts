@@ -167,6 +167,15 @@ export class BookDetailComponent implements OnInit, OnDestroy {
     this.listService.addToRead(this.name, this.id).subscribe(res => this.inRead = true);
   }
 
+  putInQueue(): void {
+    this.libService.putInQueue(this.name, this.id).subscribe(res => {
+      this.inQueue = true;
+      this.position = res;
+    });
+  }
+
+  removeFromScheduled(): void {
+    this.listService.removeFromScheduled(this.name, this.id).subscribe(res => this.inScheduled = false);
   }
 
   removeFromRead(): void {
@@ -176,4 +185,5 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   removeFromQueue(): void {
     this.libService.removeFromQueue(this.name, this.id).subscribe(res => this.inQueue = false);
   }
+
 }
