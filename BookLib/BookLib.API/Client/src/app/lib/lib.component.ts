@@ -43,6 +43,7 @@ export class LibComponent implements OnInit, OnDestroy {
       this.userService.redirectToHome();
     }
     this.refresh();
+    this.checkNotReturned();
   }
 
   ngOnDestroy(): void {
