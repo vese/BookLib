@@ -29,11 +29,9 @@
 	    <h6>Не возвращено: {{selectedUser.notReturned}}</h6>
 	</div>
  </div>
-
- <div class="row" *ngIf="users">
+ <div class="row" *ngIf="userQueues">
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<h6>≡&nbsp;&nbsp;Очередь: {{userQueues.lenght}}</h6>
-		<div class="list" *ngIf="userQueues">
 		  <ol>
 		    <li *ngFor="let queue of userQueues">
 		        &laquo;{{queue.name}}&raquo;

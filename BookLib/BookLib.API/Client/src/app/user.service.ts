@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { ConfigService } from './config.service';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginResult } from './AuthClasses';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 export interface UserDialogData {
   name: string;
@@ -27,13 +28,15 @@ export class UserService {
     this.contrUrl = "auth/";
   }
 
-  isLoggedIn(): boolean {
-    return this.loggedIn;
-  }
-
   getToken(): string {
     let token: string = localStorage.getItem("auth_token");
     return token;
+  }
+
+  public isAuthenticated(): any {
+    const token = this.getToken();
+    const helper = new JwtHelperService();
+    return !helper.isTokenExpired(token);
   }
 
   checkLogged(): Observable<any> {

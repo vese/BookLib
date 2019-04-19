@@ -122,7 +122,6 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   }
 
   addComment(): void {
-
     if (this.loggedIn && this.commentFC.valid && this.mark > 0) {
 
       this.commentService.addComment(this.commentFC.value, this.mark, this.name, this.id).subscribe(res => {
@@ -143,22 +142,25 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   }
 
   openDeleteBookDialog() {
-    const dialogRef = this.dialog.open(DeleteBookDialogComponent, {
-      width: '400px',
-      data: {
-        id: this.id,
-        name: this.book.name
-      }
-    });
+    if (!this.userService.isAuthenticated()) {
+      this.userService.checkLogged();
+    }
+    else {
+      const dialogRef = this.dialog.open(DeleteBookDialogComponent, {
+        width: '400px',
+        data: {
+          id: this.id,
+          name: this.book.name
+        }
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (!result) {
-        this.goBack();
-      }
-    });
+      dialogRef.afterClosed().subscribe(result => {
+        if (!result) {
+          this.goBack();
+        }
+      });
+    }
   }
-
-
   addToScheduled(): void {
     this.listService.addToScheduled(this.name, this.id).subscribe(res => this.inScheduled = true);
   }
@@ -185,5 +187,4 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   removeFromQueue(): void {
     this.libService.removeFromQueue(this.name, this.id).subscribe(res => this.inQueue = false);
   }
-
 }

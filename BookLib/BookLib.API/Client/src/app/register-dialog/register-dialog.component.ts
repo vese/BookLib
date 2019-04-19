@@ -58,7 +58,7 @@ export class RegisterDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<RegisterDialogComponent>,
     private userService: UserService) {
-    this.loggedIn = this.userService.isLoggedIn();
+    this.loggedIn = this.userService.isAuthenticated();
     if (this.loggedIn == null) {
       this.userService.checkLogged().subscribe(res => this.loggedIn = true, error => this.loggedIn = false);
     }

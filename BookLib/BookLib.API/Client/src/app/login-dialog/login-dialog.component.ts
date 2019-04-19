@@ -49,7 +49,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userService.isLoggedIn();
+    this.userService.isAuthenticated();
   }
 
   ngOnDestroy(): void {
