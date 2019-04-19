@@ -8,6 +8,8 @@ import { EditBookComponent } from './edit-book/edit-book.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LibComponent } from './lib/lib.component';
 import { ListComponent } from './list/list.component';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
 
 const routes: Routes =
   [{
