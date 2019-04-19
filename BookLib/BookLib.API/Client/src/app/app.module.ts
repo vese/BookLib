@@ -9,9 +9,13 @@ import { HomeComponent } from './home/home.component';
 import { AddBookComponent } from './add-book/add-book.component';
 import { EditBookComponent } from './edit-book/edit-book.component';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './token.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSelectModule, MatInputModule, MatIconModule, MatButtonModule, MatCheckboxModule, MatDialogModule, MatListModule, MatPaginatorModule, MatExpansionModule, MatMenuModule } from '@angular/material';
+import {
+  MatSelectModule, MatInputModule, MatIconModule, MatButtonModule, MatCheckboxModule, MatDialogModule, MatListModule,
+  MatPaginatorModule, MatExpansionModule, MatMenuModule, MatPaginatorIntl
+} from '@angular/material';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
 import { UserComponent } from './user/user.component';
@@ -20,7 +24,6 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { UserService } from './user.service';
 import { LibComponent } from './lib/lib.component';
 import { ListComponent } from './list/list.component';
-import { MatPaginator, MatPaginatorIntl } from '@angular/material';
 
 export class CustomPaginator extends MatPaginatorIntl {
   constructor() {
@@ -76,10 +79,16 @@ export class CustomPaginator extends MatPaginatorIntl {
     RegisterDialogComponent,
     DeleteBookDialogComponent
   ],
-  providers: [UserService, {
+  providers: [UserService,
+    {
       provide: MatPaginatorIntl,
       useClass: CustomPaginator
-    }], 
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

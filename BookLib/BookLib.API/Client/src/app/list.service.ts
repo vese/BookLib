@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ConfigService } from './config.service';
 import { Observable } from 'rxjs';
 import { Param } from './BookClasses';
@@ -19,90 +19,50 @@ export class ListService {
   }
 
   getScheduledList(username: string): Observable<Param[]> {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('auth_token');
-    headers = headers.append('Authorization', `Bearer ${authToken}`);
       return this.http.get<Param[]>(this.baseUrl + this.contrUrl + "favourite", {
-      params: new HttpParams().set("username", username),
-      headers: headers
+      params: new HttpParams().set("username", username)
     });
   }
 
   getReadList(username: string): Observable<Param[]> {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('auth_token');
-    headers = headers.append('Authorization', `Bearer ${authToken}`);
     return this.http.get<Param[]>(this.baseUrl + this.contrUrl + "read", {
-      params: new HttpParams().set("username", username),
-      headers: headers
+      params: new HttpParams().set("username", username)
     });
   }
 
   inScheduled(username: string, bookId: number): Observable<boolean> {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('auth_token');
-    headers = headers.append('Authorization', `Bearer ${authToken}`);
     return this.http.get<boolean>(this.baseUrl + this.contrUrl + "infavourite", {
-      params: new HttpParams().set("username", username).set("bookId", "" + bookId),
-      headers: headers
+      params: new HttpParams().set("username", username).set("bookId", "" + bookId)
     });
   }
 
   inRead(username: string, bookId: number): Observable<boolean> {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('auth_token');
-    headers = headers.append('Authorization', `Bearer ${authToken}`);
     return this.http.get<boolean>(this.baseUrl + this.contrUrl + "inread", {
-      params: new HttpParams().set("username", username).set("bookId", "" + bookId),
-      headers: headers
+      params: new HttpParams().set("username", username).set("bookId", "" + bookId)
     });
   }
 
   addToScheduled(username: string, bookId: number): any {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('auth_token');
-    headers = headers.append('Authorization', `Bearer ${authToken}`);
     return this.http.post(this.baseUrl + this.contrUrl + "favourite", {}, {
-      params: new HttpParams().set("username", username).set("bookId", "" + bookId),
-      headers: headers
+      params: new HttpParams().set("username", username).set("bookId", "" + bookId)
     });
   }
 
   addToRead(username: string, bookId: number): any {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('auth_token');
-    headers = headers.append('Authorization', `Bearer ${authToken}`);
     return this.http.post(this.baseUrl + this.contrUrl + "read", {}, {
-      params: new HttpParams().set("username", username).set("bookId", "" + bookId),
-      headers: headers
+      params: new HttpParams().set("username", username).set("bookId", "" + bookId)
     });
   }
 
   removeFromScheduled(username: string, bookId: number): any {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('auth_token');
-    headers = headers.append('Authorization', `Bearer ${authToken}`);
     return this.http.delete(this.baseUrl + this.contrUrl + "favourite", {
-      params: new HttpParams().set("username", username).set("bookId", "" + bookId),
-      headers: headers
+      params: new HttpParams().set("username", username).set("bookId", "" + bookId)
     });
   }
 
   removeFromRead(username: string, bookId: number): any {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('auth_token');
-    headers = headers.append('Authorization', `Bearer ${authToken}`);
     return this.http.delete(this.baseUrl + this.contrUrl + "read", {
-      params: new HttpParams().set("username", username).set("bookId", "" + bookId),
-      headers: headers
+      params: new HttpParams().set("username", username).set("bookId", "" + bookId)
     });
   }
 }

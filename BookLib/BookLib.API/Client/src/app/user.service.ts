@@ -31,12 +31,13 @@ export class UserService {
     return this.loggedIn;
   }
 
+  getToken(): string {
+    let token: string = localStorage.getItem("auth_token");
+    return token;
+  }
+
   checkLogged(): Observable<any> {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('auth_token');
-    headers = headers.append('Authorization', `Bearer ${authToken}`);
-    let res = this.http.get(this.baseUrl + this.contrUrl, { headers });
+    let res = this.http.get(this.baseUrl + this.contrUrl);
     res.subscribe(res => {
       this.loggedIn = true;
       this.logChangedSource.next(true);

@@ -10,6 +10,7 @@
     <None Remove="Client\src\app\BookClasses.ts" />
     <None Remove="Client\src\app\LibClasses.ts" />
     <None Remove="Client\src\app\roles.ts" />
+    <None Remove="Client\src\app\token.interceptor.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +34,7 @@
     <TypeScriptCompile Include="Client\src\app\BookClasses.ts" />
     <TypeScriptCompile Include="Client\src\app\LibClasses.ts" />
     <TypeScriptCompile Include="Client\src\app\roles.ts" />
+    <TypeScriptCompile Include="Client\src\app\token.interceptor.ts" />
   </ItemGroup>
 
 </Project>

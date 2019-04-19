@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ConfigService } from './config.service';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BookComment } from './BookClasses';
 import { Observable } from 'rxjs';
 
@@ -28,15 +28,8 @@ export class CommentService {
   }
 
   addComment(text: string, mark: number, name: string, id: number): any {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('auth_token');
-    headers = headers.append('Authorization', `Bearer ${authToken}`);
-    console.log(headers);
-    console.log();
     return this.http.post(this.baseUrl + this.contrUrl, {}, {
-      params: new HttpParams().set("text", "" + text).set("mark", "" + mark).set("username", "" + name).set("bookId", "" + id),
-      headers: headers
+      params: new HttpParams().set("text", "" + text).set("mark", "" + mark).set("username", "" + name).set("bookId", "" + id)
     });
   }
 

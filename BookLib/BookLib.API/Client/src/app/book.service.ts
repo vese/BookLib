@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Book, FilterParams, ViewBook, BooksList } from './BookClasses';
 import { Observable } from 'rxjs';
 import { ConfigService } from './config.service';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -79,38 +79,20 @@ export class BookService {
   }
 
   addBook(count: number, data: ViewBook): any {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('auth_token');
-    headers = headers.append('Authorization', `Bearer ${authToken}`);
-
     return this.http.post(this.baseUrl + this.contrUrl, data, {
-      params: new HttpParams().set("count", "" + count),
-      headers: headers
+      params: new HttpParams().set("count", "" + count)
     });
   }
 
   editBook(id: number, data: ViewBook): any {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('auth_token');
-    headers = headers.append('Authorization', `Bearer ${authToken}`);
-
     return this.http.put(this.baseUrl + this.contrUrl, data, {
-      params: new HttpParams().set("id", "" + id),
-      headers: headers
+      params: new HttpParams().set("id", "" + id)
     });
   }
 
   deleteBook(id: number): any {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('auth_token');
-    headers = headers.append('Authorization', `Bearer ${authToken}`);
-
     return this.http.delete(this.baseUrl + this.contrUrl, {
-      params: new HttpParams().set("id", "" + id),
-      headers: headers
+      params: new HttpParams().set("id", "" + id)
     });
   }
 }
