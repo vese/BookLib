@@ -1,4 +1,5 @@
 <div class="container-fluid">
+
   <div class="row">
     <div class="col-12">
     	<h2>Библиотека</h2>
@@ -29,18 +30,20 @@
 	    <h6>Не возвращено: {{selectedUser.notReturned}}</h6>
 	</div>
  </div>
+
  <div class="row" *ngIf="userQueues">
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<h6>≡&nbsp;&nbsp;Очередь: {{userQueues.lenght}}</h6>
+    	<div class="list">
 		  <ol>
 		    <li *ngFor="let queue of userQueues">
 		        &laquo;{{queue.name}}&raquo;
 		      <a class="text" [routerLink]="" (click)="giveBook(queue.id)" *ngIf="!queue.giveDisabled">&uarr;&nbsp;{{queue.position}}&nbsp;&nbsp;Выдать</a>
 		    </li>
 		  </ol>
-		</div>
+		 </div>
+	</div>
 
-    </div>
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<h6>&#182;&nbsp;&nbsp;Операции с книгами:</h6>
 		<div class="list" *ngIf="books">
@@ -67,5 +70,7 @@
 
 	</div>
 </div>
+ </div>
+
 
 
