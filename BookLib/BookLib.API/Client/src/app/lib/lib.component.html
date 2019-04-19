@@ -2,15 +2,11 @@
   <div class="row">
     <div class="col-12">
     	<h2>Библиотека</h2>
-		<span><a class="text" [routerLink]="" (click)="checkNotReturned()">&#182;&nbsp;&nbsp;Проверить невозвращенные книги</a></span>
-		<span *ngIf="checked">Книги проверены. Найдено {{checked}} новых невозвращенных книг.</span>
     </div>
   </div>
 
-
  <div class="row" *ngIf="users">
     <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-    	<h5>Пользователь: {{selectedUser.name}}</h5>
 	    <mat-form-field>
 	      <mat-label>Выбрать пользователя</mat-label>
 	      <mat-select [(value)]="selectedUser" (selectionChange)="getUserQueues();checkDisabled()">
@@ -19,6 +15,7 @@
 	        </mat-option>
 	      </mat-select>
 	    </mat-form-field>
+    	<h5>Пользователь: {{selectedUser.name}}</h5>
     </div>
     <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
     </div>
@@ -26,7 +23,6 @@
 
  <div class="row" *ngIf="users">
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-
 	    <h6>На руках: {{selectedUser.onHands}}</h6>
 	    <h6>Возвращено: {{selectedUser.returned}}</h6>
 	    <h6>Просрочено: {{selectedUser.expired}}</h6>
@@ -36,7 +32,7 @@
 
  <div class="row" *ngIf="users">
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-		<h6>Очередь: {{userQueues.lenght}}</h6>
+		<h6>≡&nbsp;&nbsp;Очередь: {{userQueues.lenght}}</h6>
 		<div class="list" *ngIf="userQueues">
 		  <ol>
 		    <li *ngFor="let queue of userQueues">
@@ -48,7 +44,7 @@
 
     </div>
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-		<h6>Операции с книгами:</h6>
+		<h6>&#182;&nbsp;&nbsp;Операции с книгами:</h6>
 		<div class="list" *ngIf="books">
 	    <mat-form-field>
 	      <mat-label>Выбрать книгу</mat-label>
@@ -72,31 +68,7 @@
 		</div>
 
 	</div>
-  <div class="row" *ngIf="users">
-    <div class="col-12">
-    	<h2>&nbsp;</h2>
-    </div>
-	</div>
 </div>
-<!--
-  <div class="row" *ngIf="books">
-	<div class="col-12">
-
-	<div class="list">
-        <ul class="books">
-          <li *ngFor="let b of books">
-          	<a [routerLink]="" (click)="checkDisabled()">
-            {{b.author}} &laquo;{{b.name}}&raquo; (свободно: {{selectedBook.free}}, на руках: {{selectedBook.onHands}}, очередь: {{selectedBook.queueLength}}
-		    <p *ngIf="selectedBook.free === 0">Длина очереди: {{selectedBook.queueLength}}</p>
-			</a>
-          </li>
-        </ul>
-     </div>
-
-  </div>
-  </div>
--->
-
 
 </div>
 

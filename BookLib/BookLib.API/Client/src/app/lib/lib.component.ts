@@ -27,6 +27,7 @@ export class LibComponent implements OnInit {
 
   ngOnInit() {
     this.refresh();
+    checkNotReturned();
   }
 
   getUserQueues(): void {
