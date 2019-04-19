@@ -1,0 +1,33 @@
+div.list {
+  border: 1px solid #bbb;
+  padding: .5em .5em 0 .5em;
+  width:100%;
+}
+
+
+ol li {
+  margin-left: -1.5em;
+}
+
+.books li {
+  list-style-type: square;
+  margin-left: -1.5em;
+  padding: .5em .5em;
+  height: 3em;
+  width: 100%;
+}
+
+.books li:hover {
+  background-color: #efefef;
+}
+
+.books a {
+  color: #444;
+  text-decoration: none;
+  position: relative;
+  display: block;
+}
+
+.books a:hover {
+  color: #5b1c17;
+}

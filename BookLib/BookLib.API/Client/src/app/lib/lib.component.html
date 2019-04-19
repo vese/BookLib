@@ -1,60 +1,103 @@
-<p>Работа с книгами</p>
-
-<div *ngIf="checked">Книги проверены. Найдено {{checked}} новых невозвращенных книг.</div>
-<button mat-raised-button (click)="checkNotReturned()">Проверить невозвращенные книги</button>
-
-<div class="row" *ngIf="users">
-  <div>
-    <mat-form-field>
-      <mat-label>Пользователь</mat-label>
-      <mat-select [(value)]="selectedUser" (selectionChange)="getUserQueues();checkDisabled()">
-        <mat-option *ngFor="let user of users" [value]="user">
-          {{user.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+    	<h2>Библиотека</h2>
+		<span><a class="text" [routerLink]="" (click)="checkNotReturned()">&#182;&nbsp;&nbsp;Проверить невозвращенные книги</a></span>
+		<span *ngIf="checked">Книги проверены. Найдено {{checked}} новых невозвращенных книг.</span>
+    </div>
   </div>
-  <div>
-    <p>Книг на руках: {{selectedUser.onHands}}</p>
-    <p>Книг возвращено: {{selectedUser.returned}}</p>
-    <p>Книг просрочено: {{selectedUser.expired}}</p>
-    <p>Книг не возвращено: {{selectedUser.notReturned}}</p>
-  </div>
+
+
+ <div class="row" *ngIf="users">
+    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+    	<h5>Пользователь: {{selectedUser.name}}</h5>
+	    <mat-form-field>
+	      <mat-label>Выбрать пользователя</mat-label>
+	      <mat-select [(value)]="selectedUser" (selectionChange)="getUserQueues();checkDisabled()">
+	        <mat-option *ngFor="let user of users" [value]="user">
+	          {{user.name}}
+	        </mat-option>
+	      </mat-select>
+	    </mat-form-field>
+    </div>
+    <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+    </div>
 </div>
 
-<div class="list" *ngIf="userQueues">
-  <p>Очередь на книги</p>
-  <ol>
-    <li *ngFor="let queue of userQueues">
-      <p>
-        {{queue.name}}: Место в очереди {{queue.position}}
-      </p>
-      <button mat-raised-button (click)="giveBook(queue.id)" *ngIf="!queue.giveDisabled">Выдать</button>
-    </li>
-  </ol>
+ <div class="row" *ngIf="users">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+
+	    <h6>На руках: {{selectedUser.onHands}}</h6>
+	    <h6>Возвращено: {{selectedUser.returned}}</h6>
+	    <h6>Просрочено: {{selectedUser.expired}}</h6>
+	    <h6>Не возвращено: {{selectedUser.notReturned}}</h6>
+	</div>
+ </div>
+
+ <div class="row" *ngIf="users">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+		<h6>Очередь: {{userQueues.lenght}}</h6>
+		<div class="list" *ngIf="userQueues">
+		  <ol>
+		    <li *ngFor="let queue of userQueues">
+		        &laquo;{{queue.name}}&raquo;
+		      <a class="text" [routerLink]="" (click)="giveBook(queue.id)" *ngIf="!queue.giveDisabled">&uarr;&nbsp;{{queue.position}}&nbsp;&nbsp;Выдать</a>
+		    </li>
+		  </ol>
+		</div>
+
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+		<h6>Операции с книгами:</h6>
+		<div class="list" *ngIf="books">
+	    <mat-form-field>
+	      <mat-label>Выбрать книгу</mat-label>
+	      <mat-select [(value)]="selectedBook" (selectionChange)="checkDisabled()">
+	        <mat-option *ngFor="let book of books" [value]="book">
+	          &laquo;{{book.name}}&raquo;
+	        </mat-option>
+	      </mat-select>
+	    </mat-form-field>
+
+	    <h6>Свободно: {{selectedBook.free}}</h6>
+	    <h6>На руках: {{selectedBook.onHands}}</h6>
+	    <p *ngIf="selectedBook.free === 0">Длина очереди: {{selectedBook.queueLength}}</p>
+
+		<div *ngIf="users && books">
+		  <span><a class="text" [routerLink]="" (click)="giveBook(selectedBook.id)" *ngIf="!giveDisabled">&uarr;&nbsp;&nbsp;Выдать</a></span>
+		  <span><a class="text" [routerLink]="" (click)="returnBook()" *ngIf="!returnDisabled">&darr;&nbsp;&nbsp;Вернуть</a></span>
+		  <span><a class="text" [routerLink]="" (click)="putInQueue(selectedBook.id)" *ngIf="!putInDisabled">&rarr;&nbsp;&nbsp;Поставить в очередь</a></span>
+		  <span><a class="text" [routerLink]="" (click)="removeFromQueue()" *ngIf="!removeFromDisabled">&larr;&nbsp;&nbsp;Убрать из очереди</a></span>
+		</div>
+		</div>
+
+	</div>
+  <div class="row" *ngIf="users">
+    <div class="col-12">
+    	<h2>&nbsp;</h2>
+    </div>
+	</div>
+</div>
+<!--
+  <div class="row" *ngIf="books">
+	<div class="col-12">
+
+	<div class="list">
+        <ul class="books">
+          <li *ngFor="let b of books">
+          	<a [routerLink]="" (click)="checkDisabled()">
+            {{b.author}} &laquo;{{b.name}}&raquo; (свободно: {{selectedBook.free}}, на руках: {{selectedBook.onHands}}, очередь: {{selectedBook.queueLength}}
+		    <p *ngIf="selectedBook.free === 0">Длина очереди: {{selectedBook.queueLength}}</p>
+			</a>
+          </li>
+        </ul>
+     </div>
+
+  </div>
+  </div>
+-->
+
+
 </div>
 
-<div class="row" *ngIf="books">
-  <div>
-    <mat-form-field>
-      <mat-label>Книга</mat-label>
-      <mat-select [(value)]="selectedBook" (selectionChange)="checkDisabled()">
-        <mat-option *ngFor="let book of books" [value]="book">
-          {{book.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div>
-    <p>Книг свободно: {{selectedBook.free}}</p>
-    <p>Книг на руках: {{selectedBook.onHands}}</p>
-    <p *ngIf="selectedBook.free === 0">Длина очереди: {{selectedBook.queueLength}}</p>
-  </div>
-</div>
 
-<div *ngIf="users && books">
-  <button mat-raised-button (click)="giveBook(selectedBook.id)" *ngIf="!giveDisabled">Выдать</button>
-  <button mat-raised-button (click)="returnBook()" *ngIf="!returnDisabled">Вернуть</button>
-  <button mat-raised-button (click)="putInQueue(selectedBook.id)" *ngIf="!putInDisabled">Поставить в очередь</button>
-  <button mat-raised-button (click)="removeFromQueue()" *ngIf="!removeFromDisabled">Убрать из очереди</button>
-</div>
