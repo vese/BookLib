@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FilterParams, Param, ViewBook } from '../BookClasses';
 import { BookService } from '../book.service';
-import { FormControl, Validators, FormArray } from '@angular/forms';
+import { FormControl, Validators, } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-add-book',
@@ -9,7 +11,10 @@ import { FormControl, Validators, FormArray } from '@angular/forms';
   styleUrls: ['./add-book.component.css']
 })
 
-export class AddBookComponent implements OnInit {
+export class AddBookComponent implements OnInit, OnDestroy {
+
+  subscription: Subscription;
+
   filterParams: FilterParams;
 
   authorId: number;
@@ -57,10 +62,26 @@ export class AddBookComponent implements OnInit {
       '';
   }
 
-  constructor(private bookService: BookService) { }
+  constructor(
+    private bookService: BookService,
+    private userService: UserService) {
+    this.subscription = this.userService.logChanged$.subscribe(
+      res => {
+        if (!res || !this.userService.isAdmin()) {
+          this.userService.redirectToHome();
+        }
+      });
+  }
 
   ngOnInit() {
+    if (!this.userService.isAuthenticated() || !this.userService.isAdmin()) {
+      this.userService.redirectToHome();
+    }
     this.getFilterParams();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   formsIsValid(): boolean {

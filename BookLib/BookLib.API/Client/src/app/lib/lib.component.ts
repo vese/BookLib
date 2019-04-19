@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LibUser, QueueOnBook, LibBook } from '../LibClasses';
 import { LibService } from '../lib.service';
+import { Subscription } from 'rxjs';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-lib',
   templateUrl: './lib.component.html',
   styleUrls: ['./lib.component.css']
 })
-export class LibComponent implements OnInit {
+export class LibComponent implements OnInit, OnDestroy {
+
+  subscription: Subscription;
 
   checked: number;
 
@@ -23,10 +27,26 @@ export class LibComponent implements OnInit {
   putInDisabled: boolean;
   removeFromDisabled: boolean;
 
-  constructor(private libService: LibService) { }
+  constructor(
+    private libService: LibService,
+    private userService: UserService) {
+    this.subscription = this.userService.logChanged$.subscribe(
+      res => {
+        if (!res || !this.userService.isAdmin()) {
+          this.userService.redirectToHome();
+        }
+      });
+  }
 
   ngOnInit() {
+    if (!this.userService.isAuthenticated() || !this.userService.isAdmin()) {
+      this.userService.redirectToHome();
+    }
     this.refresh();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   getUserQueues(): void {

@@ -37,7 +37,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   comments: BookComment[];
 
   filterParams: Params;
-  
+
   mark: number = 0;
   needMark: boolean = false;
   commentExists: boolean;
@@ -60,33 +60,34 @@ export class BookDetailComponent implements OnInit, OnDestroy {
     private libService: LibService,
     public dialog: MatDialog,
     private location: Location) {
-    this.subscription = this.userService.logChanged$.subscribe(
-      res => {
-        this.loggedIn = res;
-        if (res) {
-          this.isAdmin = localStorage.getItem("role") === Roles.Admin;
-          this.name = localStorage.getItem("name");
-          this.commentService.commentExists(this.name, this.id).subscribe(ex => this.commentExists = ex.exists);
-          if (!this.isAdmin) {
+    this.subscription = this.userService.logChanged$.subscribe(res => this.logChanged(res));
+  }
 
-            this.listService.inScheduled(this.name, this.id).subscribe(res => this.inScheduled = res);
-            this.listService.inRead(this.name, this.id).subscribe(res => this.inRead = res);
-            this.libService.userHasBook(this.name, this.id).subscribe(res => {
-              this.hasBook = res;
-              if (!res) {
-                this.libService.userInQueue(this.name, this.id).subscribe(res => {
-                  this.inQueue = res.inQueue;
-                  this.position = res.position;
-                });
-              }
+  logChanged(res: boolean): void {
+    this.loggedIn = res;
+    if (res) {
+      this.isAdmin = localStorage.getItem("role") === Roles.Admin;
+      this.name = localStorage.getItem("name");
+      this.commentService.commentExists(this.name, this.id).subscribe(ex => this.commentExists = ex.exists);
+      if (!this.isAdmin) {
+
+        this.listService.inScheduled(this.name, this.id).subscribe(res => this.inScheduled = res);
+        this.listService.inRead(this.name, this.id).subscribe(res => this.inRead = res);
+        this.libService.userHasBook(this.name, this.id).subscribe(res => {
+          this.hasBook = res;
+          if (!res) {
+            this.libService.userInQueue(this.name, this.id).subscribe(res => {
+              this.inQueue = res.inQueue;
+              this.position = res.position;
             });
           }
-        }
-      });
+        });
+      }
+    }
   }
 
   ngOnInit() {
-    this.userService.checkLogged();
+    this.logChanged(this.userService.isAuthenticated());
     this.getBook();
     this.getComments(null);
   }
@@ -143,7 +144,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
 
   openDeleteBookDialog() {
     if (!this.userService.isAuthenticated()) {
-      this.userService.checkLogged();
+      this.logChanged(false);
     }
     else {
       const dialogRef = this.dialog.open(DeleteBookDialogComponent, {

@@ -24,6 +24,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { UserService } from './user.service';
 import { LibComponent } from './lib/lib.component';
 import { ListComponent } from './list/list.component';
+import { UnauthorizedInterceptor } from './unauthorized.interceptor';
 
 export class CustomPaginator extends MatPaginatorIntl {
   constructor() {
@@ -87,6 +88,11 @@ export class CustomPaginator extends MatPaginatorIntl {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: UnauthorizedInterceptor,
       multi: true
     }],
   bootstrap: [AppComponent]

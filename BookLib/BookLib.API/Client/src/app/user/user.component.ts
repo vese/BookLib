@@ -19,13 +19,15 @@ export class UserComponent implements OnDestroy {
   constructor(private userService: UserService,
     public dialog: MatDialog) {
     this.subscription = this.userService.logChanged$.subscribe(
-      res => {
-        this.loggedIn = res;
-        if (res) {
-          this.name = localStorage.getItem("name");
-        }
-      });
-    this.userService.checkLogged();
+      res => this.logChanged(res));
+    this.logChanged(this.userService.isAuthenticated());
+  }
+
+  logChanged(res: boolean): void {
+    this.loggedIn = res;
+    if (res) {
+      this.name = localStorage.getItem("name");
+    }
   }
 
   openLoginDialog(): void {

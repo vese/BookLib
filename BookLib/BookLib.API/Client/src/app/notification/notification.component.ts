@@ -40,7 +40,9 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userService.checkLogged();
+    if (this.userService.isAuthenticated()) {
+      this.refresh();
+    }
   }
 
   ngOnDestroy(): void {

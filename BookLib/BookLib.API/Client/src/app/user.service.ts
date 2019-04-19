@@ -4,6 +4,8 @@ import { ConfigService } from './config.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginResult } from './AuthClasses';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
+import { Roles } from './roles';
 
 export interface UserDialogData {
   name: string;
@@ -23,7 +25,10 @@ export class UserService {
   private logChangedSource = new Subject<boolean>();
   logChanged$ = this.logChangedSource.asObservable();
 
-  constructor(private http: HttpClient, private configService: ConfigService) {
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService,
+    private router: Router) {
     this.baseUrl = this.configService.getApiURI();
     this.contrUrl = "auth/";
   }
@@ -33,23 +38,22 @@ export class UserService {
     return token;
   }
 
-  public isAuthenticated(): any {
+  public isAuthenticated(): boolean {
     const token = this.getToken();
     const helper = new JwtHelperService();
-    return !helper.isTokenExpired(token);
+    let logged = !helper.isTokenExpired(token);
+    if (this.loggedIn && !logged) {
+      this.logout();
+    }
+    return logged;
   }
 
-  checkLogged(): Observable<any> {
-    let res = this.http.get(this.baseUrl + this.contrUrl);
-    res.subscribe(res => {
-      this.loggedIn = true;
-      this.logChangedSource.next(true);
-    }, error => {
-      if (this.loggedIn) {
-        this.logout();
-      }
-    });
-    return res;
+  public isAdmin(): boolean {
+    return localStorage.getItem("role") === Roles.Admin;
+  }
+
+  redirectToHome(): void {
+    this.router.navigate(['/home']);
   }
 
   logout() {
