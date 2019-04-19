@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ListService } from '../list.service';
-import { Param } from '../BookClasses';
-import { QueueOnBook, BookOnHands } from '../LibClasses';
+import { Param } from '../bookclasses';
+import { QueueOnBook, BookOnHands } from '../libclasses';
 import { LibService } from '../lib.service';
 import { Subscription } from 'rxjs';
 import { UserService } from '../user.service';

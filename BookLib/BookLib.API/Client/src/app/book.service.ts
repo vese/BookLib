@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Book, FilterParams, ViewBook, BooksList } from './BookClasses';
+import { Book, FilterParams, ViewBook, BooksList } from './bookclasses';
 import { Observable } from 'rxjs';
 import { ConfigService } from './config.service';
 import { HttpClient, HttpParams } from '@angular/common/http';

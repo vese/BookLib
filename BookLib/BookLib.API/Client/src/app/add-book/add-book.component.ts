@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FilterParams, Param, ViewBook } from '../BookClasses';
+import { FilterParams, Param, ViewBook } from '../bookclasses';
 import { BookService } from '../book.service';
 import { FormControl, Validators, } from '@angular/forms';
 import { Subscription } from 'rxjs';

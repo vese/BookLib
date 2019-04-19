@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LibService } from '../lib.service';
-import { Notifications } from '../LibClasses';
+import { Notifications } from '../libclasses';
 import { Subscription } from 'rxjs';
 import { UserService } from '../user.service';
 import { Roles } from '../roles';

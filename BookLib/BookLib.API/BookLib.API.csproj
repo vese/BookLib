@@ -31,9 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="Client\src\app\AuthClasses.ts" />
-    <TypeScriptCompile Include="Client\src\app\BookClasses.ts" />
-    <TypeScriptCompile Include="Client\src\app\LibClasses.ts" />
+    <TypeScriptCompile Include="Client\src\app\authclasses.ts" />
+    <TypeScriptCompile Include="Client\src\app\bookclasses.ts" />
+    <TypeScriptCompile Include="Client\src\app\libclasses.ts" />
     <TypeScriptCompile Include="Client\src\app\roles.ts" />
     <TypeScriptCompile Include="Client\src\app\token.interceptor.ts" />
     <TypeScriptCompile Include="Client\src\app\unauthorized.interceptor.ts" />

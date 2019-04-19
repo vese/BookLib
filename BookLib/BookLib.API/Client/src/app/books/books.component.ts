@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { ListBook, FilterParams, Param } from '../BookClasses';
+import { ListBook, FilterParams, Param } from '../bookclasses';
 import { BookService } from '../book.service';
 import { PageEvent } from '@angular/material';
 

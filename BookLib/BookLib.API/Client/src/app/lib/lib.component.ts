@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LibUser, QueueOnBook, LibBook } from '../LibClasses';
+import { LibUser, QueueOnBook, LibBook } from '../libclasses';
 import { LibService } from '../lib.service';
 import { Subscription } from 'rxjs';
 import { UserService } from '../user.service';

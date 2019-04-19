@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FilterParams, Param, ViewBook, Book } from '../BookClasses';
+import { FilterParams, Param, ViewBook, Book } from '../bookclasses';
 import { BookService } from '../book.service';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LibUser, QueueOnBook, LibBook, Notifications, InQueue, BookOnHands } from './LibClasses';
+import { LibUser, QueueOnBook, LibBook, Notifications, InQueue, BookOnHands } from './libclasses';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ConfigService } from './config.service';
 

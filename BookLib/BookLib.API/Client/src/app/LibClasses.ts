@@ -1,4 +1,4 @@
-import { Param } from './BookClasses';
+import { Param } from './bookclasses';
 
 export class LibUser {
   name: string

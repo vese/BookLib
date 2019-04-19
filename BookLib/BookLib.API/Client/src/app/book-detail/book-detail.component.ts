@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Book, BookComment } from '../BookClasses';
+import { Book, BookComment } from '../bookclasses';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { BookService } from '../book.service';
